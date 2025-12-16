@@ -8,7 +8,6 @@ import ma.foxhound.medmanager.DTO.TokenDto;
 import ma.foxhound.medmanager.service.AuthService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
