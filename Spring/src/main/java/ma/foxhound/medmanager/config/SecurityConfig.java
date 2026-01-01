@@ -33,10 +33,12 @@ public class SecurityConfig {
                     .frameOptions(frame -> frame.sameOrigin()) // for H2
                 )
                 .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/v1/auth/login").permitAll()
                     .requestMatchers("/api/v1/auth/testauth").hasAuthority("ROLE_DOCTOR")
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated())
+                    .requestMatchers("/api/v1/search/patient/**").hasAuthority("ROLE_DOCTOR")
+                    .requestMatchers("/api/v1/patients/search/**").authenticated()
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
