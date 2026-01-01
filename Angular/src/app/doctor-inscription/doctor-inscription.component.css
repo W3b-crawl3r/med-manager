@@ -1,0 +1,32 @@
+.inscription-container {
+  max-width: 520px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.inscription-container h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.success { color: green; margin-top: 0.5rem; }
+.error { color: red; margin-top: 0.5rem; }
