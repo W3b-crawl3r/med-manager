@@ -9,6 +9,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   registerDoctor(payload: any): Observable<any> {
+    // Payload may be FormData (multipart) or plain JSON depending on caller
     return this.http.post(`${this.base}/register-doctor`, payload);
   }
 }
