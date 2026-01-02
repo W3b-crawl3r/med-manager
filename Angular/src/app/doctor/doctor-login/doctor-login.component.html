@@ -1,0 +1,29 @@
+<div class="login-shell">
+  <div class="login-card">
+    <h2>Doctor Sign In</h2>
+    <p class="muted">Enter your email and password to access your account.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="field">
+        <span>Email</span>
+        <input formControlName="email" type="email" placeholder="you@hospital.com" />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input formControlName="password" type="password" placeholder="Your password" />
+      </label>
+
+      <div class="actions">
+        <button class="btn primary" type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Sign In' }}</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    </form>
+
+    <div class="footer">
+      <a [routerLink]="['/']">Back to home</a>
+      <a [routerLink]="['/doctor-inscription']">Create an account</a>
+    </div>
+  </div>
+</div>
