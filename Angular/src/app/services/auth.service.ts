@@ -12,4 +12,21 @@ export class AuthService {
     // Payload may be FormData (multipart) or plain JSON depending on caller
     return this.http.post(`${this.base}/register-doctor`, payload);
   }
+   private role: 'SECRETARY' | 'DOCTOR' | null = null;
+
+  loginAsSecretary() {
+    this.role = 'SECRETARY';
+  }
+
+  loginAsDoctor() {
+    this.role = 'DOCTOR';
+  }
+
+  getRole() {
+    return this.role;
+  }
+
+  isSecretary(): boolean {
+    return this.role === 'SECRETARY';
+  }
 }

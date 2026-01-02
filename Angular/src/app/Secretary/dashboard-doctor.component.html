@@ -1,0 +1,92 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Med Manager</h2>
+
+    <div class="user">
+      <div class="avatar">E</div>
+      <div>
+        <strong>Emily Roberts</strong>
+        <span class="role">SECRETARY</span>
+      </div>
+    </div>
+
+    <nav>
+      <a routerLink="/secretary/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/patients" routerLinkActive="active">Patients</a>
+      <a routerLink="/secretary/appointments" routerLinkActive="active">Appointments</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Doctor Dashboard</h1>
+    <p class="subtitle">Overview of your practice</p>
+
+    <div class="date-select">
+      <label>Choose date: <input type="date" [value]="selectedDate" (change)="onDateChange($any($event.target).value)" /></label>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="cards">
+      <div class="card">
+        <p>Total Patients</p>
+        <h2>{{ totalPatients }}</h2>
+      </div>
+
+      <div class="card">
+        <p>Appointments (selected date)</p>
+        <h2>{{ todayAppointments }}</h2>
+      </div>
+
+      <div class="card">
+        <p>Pending Visits</p>
+        <h2>{{ pendingVisits }}</h2>
+      </div>
+
+      <div class="card">
+        <p>Active Patients</p>
+        <h2>{{ activePatients }}</h2>
+      </div>
+    </div>
+
+    <!-- TODAY APPOINTMENTS -->
+    <section class="appointments">
+      <h3>Appointments for {{ todayStr }}</h3>
+      <p class="date">Showing appointments for {{ todayStr }}</p>
+
+      <div *ngIf="appointments.length === 0" class="empty-state">
+        <p>No appointments for this date</p>
+      </div>
+
+      <div class="appointment"
+           *ngFor="let app of appointments">
+
+        <div class="info">
+          <div class="avatar-circle">
+            {{ app.patientName.charAt(0) }}
+          </div>
+          <div class="appointment-details">
+            <strong>{{ app.patientName }}</strong>
+            <p class="appointment-type">{{ app.type }}</p>
+            <p class="patient-age">Age: {{ getPatientAge(app.patientName) }} years</p>
+          </div>
+        </div>
+
+        <div class="right">
+          <span class="time">{{ app.time }}</span>
+          <span class="status"
+                [ngClass]="app.status.toLowerCase()">
+            {{ app.status }}
+          </span>
+          <button class="btn-view" [routerLink]="['/patient-detail', getPatientId(app.patientName)]">
+            View Details
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>

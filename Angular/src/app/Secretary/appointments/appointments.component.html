@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="header">
+    <h2>Appointments</h2>
+    <p>Manage your appointment schedule</p>
+  </div>
+
+  <div class="filters">
+    <label>Filter by Date:
+      <input type="date" [(ngModel)]="selectedDate" (change)="filterAppointments()" />
+    </label>
+  </div>
+
+  <div *ngIf="showForm" class="appointment-form">
+    <h3>Add New Appointment</h3>
+    <div class="form-group">
+      <label>Patient</label>
+      <select [(ngModel)]="newPatientId" class="form-input" title="Select a patient">
+        <option value="">Select a patient</option>
+        <option *ngFor="let p of patients" [value]="p.id">{{ p.fullName }} ({{ p.age }} years)</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Time</label>
+        <input type="time" [(ngModel)]="newTime" class="form-input" title="Appointment time" />
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <input [(ngModel)]="newType" placeholder="Consultation" class="form-input" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select [(ngModel)]="newStatus" class="form-input" title="Appointment status">
+        <option>Scheduled</option>
+        <option>Confirmed</option>
+        <option>Pending</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button (click)="add()" class="btn-primary">Add Appointment</button>
+      <button (click)="showForm = false" class="btn-secondary">Cancel</button>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <div class="appointments-list">
+    <div *ngIf="filteredAppointments.length === 0" class="empty-state">
+      <p>No appointments for this date</p>
+    </div>
+    <div *ngFor="let appointment of filteredAppointments" class="appointment-card">
+      <div class="appointment-time">{{ appointment.time }}</div>
+      <div class="appointment-info">
+        <strong>{{ appointment.patientName }}</strong>
+        <p class="appointment-type">{{ appointment.type }}</p>
+        <p class="patient-age">Age: {{ getPatientAge(appointment.patientName) }} years</p>
+      </div>
+      <div class="appointment-status">
+        <span [ngClass]="'status-' + appointment.status.toLowerCase()">
+          {{ appointment.status }}
+        </span>
+      </div>
+      <div class="appointment-actions">
+        <button class="btn-view" [routerLink]="['/patient-detail', getPatientId(appointment.patientName)]">
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-add-appointment" (click)="showForm = !showForm">
+    {{ showForm ? '✕ Close' : '+ New Appointment' }}
+  </button>
+</div>
