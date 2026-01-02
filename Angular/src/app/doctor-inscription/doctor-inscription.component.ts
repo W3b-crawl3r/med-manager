@@ -151,6 +151,10 @@ export class DoctorInscriptionComponent {
     this.currentUser = user;
     this.userMenuOpen = false;
   }
+
+  goBack() {
+    this.router.navigate(['/']);
+  }
  
 
   onSubmit() {

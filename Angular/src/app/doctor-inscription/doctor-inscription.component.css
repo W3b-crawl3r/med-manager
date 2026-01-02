@@ -230,6 +230,24 @@ input:focus {
 }
 .user-item:hover { background: rgba(0,168,255,0.06); }
 
+/* Back link */
+.back-to-home {
+  position: absolute;
+  top: 4.4rem;
+  left: 1.6rem;
+  z-index: 11;
+  display: inline-block;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #052f2c;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.06);
+}
+.back-to-home:hover { transform: translateY(-2px) }
+
 /* Safety: ensure action button and existing-account link are visible */
 .actions button { display: inline-block !important; visibility: visible !important; background: linear-gradient(90deg, #00b894, #00a8ff) !important; color: #fff !important; box-shadow: 0 16px 40px rgba(0,168,255,0.35) !important; border-radius: 16px !important; padding: 0.85rem !important; z-index: 50 !important; }
 .existing-account { margin-top: 1rem; z-index: 60; display: block !important; }
