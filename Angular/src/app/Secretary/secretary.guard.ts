@@ -7,11 +7,11 @@ export const secretaryGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isSecretary()) {
+  if (authService.isSecretary() && authService.getToken()) {
     return true; // ✅ accès autorisé
   }
 
   // ❌ accès refusé
-  router.navigate(['/login']);
+  router.navigate(['/secretary-login']);
   return false;
 };

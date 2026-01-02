@@ -158,7 +158,10 @@ import { PatientService, Patient } from '../../services/patient.service';
     }
 
     .tab-content {
-      padding: 2rem;
+      
+          flex: 1;
+        padding: 30px;
+        overflow-y: auto;
     }
 
     .info-group {

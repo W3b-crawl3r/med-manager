@@ -1,23 +1,94 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<style>
-  .app-header { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1rem; background: linear-gradient(90deg,#00b894,#00a8ff); color:#fff; }
-  .app-title { font-weight:700; font-size:1.1rem }
-  .nav a{ color:#fff; margin-left:1rem; text-decoration:none; font-weight:600 }
-  main{ padding:1rem }
-</style>
+<!-- ================= HEADER ================= -->
+<header class="app-header" *ngIf="!isDoctorRoute()">
 
-<header class="app-header">
-  <div class="app-title">MedManager</div>
-  <nav class="nav">
-    <a href="/doctor-inscription">Doctor Registration</a>
-  </nav>
+  <!-- LEFT : Logo -->
+  <div class="header-left">
+    <img
+      src="assets/medMan-white.png"
+      alt="MedManager Logo"
+      class="logo"
+    />
+  </div>
+
+  <!-- RIGHT : Actions -->
+  <div class="header-right">
+
+    <!-- Language switch -->
+    <button class="icon-btn" title="Change language">
+      🌍
+    </button>
+
+    <!-- Theme switch -->
+    <button class="icon-btn" title="Toggle theme">
+      🌙
+    </button>
+    
+    <!-- register menu will appear under the Register button -->
+
+    <!-- Authentication -->
+    <button
+      class="text-btn"
+      (click)="toggleSignInMenu()"
+      aria-haspopup="true"
+      [attr.aria-expanded]="signInMenuOpen()"
+    >
+      Sign In
+    </button>
+
+    <div *ngIf="signInMenuOpen()" class="signin-menu">
+      <div class="menu-title">Choose role</div>
+      <div class="menu-roles">
+        <button class="role" (click)="onSignInRoleClick('doctor')">Doctor</button>
+        <button class="role" (click)="onSignInRoleClick('secretaire')">Secretaire</button>
+      </div>
+      <div class="menu-actions">
+        <button class="btn" (click)="signInMenuOpen.set(false)">Cancel</button>
+      </div>
+    </div>
+
+    <div class="register-wrap">
+       <button 
+         class="primary-btn"
+        (click)="toggleRegisterMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="registerMenuOpen()"
+      >
+        Register
+      </button>
+
+      <div *ngIf="registerMenuOpen()" class="register-menu">
+        <div class="menu-title">Choose role</div>
+        <div class="menu-roles">
+          <button class="role" (click)="onRegisterRoleClick('doctor')">Doctor</button>
+          <button class="role" (click)="onRegisterRoleClick('patient')">Patient</button>
+          <button class="role" (click)="onRegisterRoleClick('secretaire')">Secretaire</button>
+        </div>
+        <div class="menu-actions">
+          <button class="btn" (click)="registerMenuOpen.set(false)">Cancel</button>
+        </div>
+        <div *ngIf="registerNotice()" class="menu-notice">{{ registerNotice() }}</div>
+      </div>
+    </div>
+
+  </div>
 </header>
 
-<main>
-  <router-outlet></router-outlet>
+<!-- ================= HERO / PRESENTATION ================= -->
+<main class="hero" *ngIf="!isDoctorRoute()">
+
+  <div class="hero-content">
+    <h1>Manage healthcare, simply.</h1>
+
+    <p>
+      MedManager is a modern platform built to simplify
+      medical management for doctors, patients,
+      and healthcare staff.
+    </p>
+  </div>
+
 </main>
+
+<!-- Doctor inscription is a separate route; it will render in the router-outlet -->
+
+<!-- ================= ROUTER ================= -->
+<router-outlet></router-outlet>

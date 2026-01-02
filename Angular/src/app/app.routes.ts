@@ -5,23 +5,30 @@ export const routes: Routes = [
   {
     path: 'doctor-inscription',
     loadComponent: () =>
-      import('./doctor-inscription/doctor-inscription.component')
+      import('./doctor/doctor-inscription/doctor-inscription.component')
       .then(m => m.DoctorInscriptionComponent)
   },
 
-   {
+  {
+    path: 'secretary-inscription',
+    loadComponent: () =>
+      import('./Secretary/secretary-inscription/secretary-inscription.component')
+      .then(m => m.SecretaryInscriptionComponent)
+  },
+
+  {
+    path: 'secretary-login',
+    loadComponent: () =>
+      import('./Secretary/secretary-login/secretary-login.component')
+      .then(m => m.SecretaryLoginComponent)
+  },
+
+  {
     path: 'secretary/dashboard',
     loadComponent: () =>
       import('./Secretary/dashboard-doctor.component')
       .then(m => m.DashboardDoctorComponent),
     canActivate: [secretaryGuard] // 🔐 PROTECTION
-  },
-
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./login/login.component')
-      .then(m => m.LoginComponent)
   },
 
   {

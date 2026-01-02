@@ -1,6 +1,99 @@
+    .patients-container {
+      display: flex;
+      min-height: 70vh;
+      background: #f9fafb;
+    }
+
+    .sidebar {
+    background: #fff;
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .logo {
+      margin: 0 0 2rem 0;
+      color: #1f2937;
+      font-size: 1.5rem;
+    }
+
+    .user {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      background: #f3f4f6;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .patients-container > .content {
+      /*flex: 1;
+      padding: 1.25rem 2rem;*/
+      box-sizing: border-box;
+    }
+
+    .user strong {
+      display: block;
+      width: 100%;
+      padding: 0;
+    }
+    .role {
+      display: block;
+      background: #10b981;
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-weight: bold;
+      margin-top: 0.2rem;
+      width: fit-content;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    nav a {
+      padding: 0.75rem 1rem;
+      color: #6b7280;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    nav a:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    nav a.active {
+      background: #3b82f6;
+      color: white;
+    }
+
 .container {
   padding: 2rem;
-  max-width: 1000px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
@@ -98,7 +191,7 @@
 
 .appointment-card {
   display: grid;
-  grid-template-columns: 60px 1fr auto auto;
+  grid-template-columns: 80px 1fr auto auto;
   gap: 1rem;
   align-items: center;
   padding: 1rem;
@@ -168,17 +261,14 @@
   background: #fef3c7;
   color: #92400e;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.appointment-actions {
-  text-align: right;
-}
-
-.btn-primary {
-  background: #3b82f6;
+        background: #0d6efd;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+  /* background: #3b82f6;
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -186,7 +276,7 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
-}
+} */
 
 .btn-primary:hover {
   background: #2563eb;
@@ -241,6 +331,11 @@
 
 .btn-add-appointment:hover {
   background: #2563eb;
+}
+
+.actions-bottom {
+  text-align: right;
+  margin-top: 1rem;
 }
 
 .empty-state {

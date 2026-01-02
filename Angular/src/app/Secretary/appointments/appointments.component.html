@@ -1,7 +1,26 @@
-<div class="container">
+<div class="patients-container">
+      <div class="sidebar">
+        <h2 class="logo">Med Manager</h2>
+        <div class="user">
+          <div class="avatar">E</div>
+          <div>
+            <strong>Emily Roberts</strong>
+            <span class="role">SECRETARY</span>
+          </div>
+        </div>
+        <nav>
+          <a routerLink="/secretary/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/patients" routerLinkActive="active" class="active">Patients</a>
+          <a routerLink="/secretary/appointments" routerLinkActive="active">Appointments</a>
+        </nav>
+      </div>
+  <main class="content">
+  <div class="container">
   <div class="header">
-    <h2>Appointments</h2>
-    <p>Manage your appointment schedule</p>
+    <div>
+      <h2>Appointments</h2>
+      <p>Manage your appointment schedule</p>
+    </div>
   </div>
 
   <div class="filters">
@@ -69,7 +88,12 @@
     </div>
   </div>
 
-  <button class="btn-add-appointment" (click)="showForm = !showForm">
-    {{ showForm ? '✕ Close' : '+ New Appointment' }}
-  </button>
+    <div class="actions-bottom">
+      <button class="btn-add-appointment" (click)="showForm = !showForm">
+        {{ showForm ? '✕ Close' : '+ New Appointment' }}
+      </button>
+    </div>
+
+  </div>
+  </main>
 </div>
