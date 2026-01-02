@@ -28,23 +28,10 @@
     <!-- Authentication -->
     <button
       class="text-btn"
-      (click)="toggleSignInMenu()"
-      aria-haspopup="true"
-      [attr.aria-expanded]="signInMenuOpen()"
+      (click)="toggleRegisterMenu()"
     >
       Sign In
     </button>
-
-    <div *ngIf="signInMenuOpen()" class="signin-menu">
-      <div class="menu-title">Choose role</div>
-      <div class="menu-roles">
-        <button class="role" (click)="onSignInRoleClick('doctor')">Doctor</button>
-        <button class="role" (click)="onSignInRoleClick('secretaire')">Secretaire</button>
-      </div>
-      <div class="menu-actions">
-        <button class="btn" (click)="signInMenuOpen.set(false)">Cancel</button>
-      </div>
-    </div>
 
     <div class="register-wrap">
        <button 
