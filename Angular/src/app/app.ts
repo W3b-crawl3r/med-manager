@@ -1,12 +1,11 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { DoctorInscriptionComponent } from './doctor-inscription/doctor-inscription.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, DoctorInscriptionComponent],
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
