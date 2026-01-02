@@ -26,6 +26,9 @@ public class SearchController {
 
     @GetMapping("/patient/{keyword}")
     public ResponseEntity<List<PatientSummaryDto>> searchPatients(@PathVariable String keyword, Authentication authentication) {
+        if(!(authentication.getPrincipal() instanceof DoctorModel)) {
+            return ResponseEntity.status(403).build();
+        }
         DoctorModel doctor = (DoctorModel) authentication.getPrincipal();
         List<PatientModel> patients = searchService.searchPatients(doctor,keyword);
         List<PatientSummaryDto> summaries = patients.stream()
