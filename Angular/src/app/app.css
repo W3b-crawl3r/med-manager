@@ -1,0 +1,200 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* ================= HEADER ================= */
+.app-header {
+  display: flex;
+  justify-content: space-between; /* logo left / actions right */
+  align-items: center;
+
+  padding: 16px 32px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* LEFT */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 40px;
+  height: auto;
+}
+
+.app-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* RIGHT */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+/* ================= BUTTONS ================= */
+
+/* Icon buttons (language / theme) */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+
+  cursor: pointer;
+  font-size: 16px;
+
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: #f3f4f6;
+}
+
+/* Text button (Sign in) */
+.text-btn {
+  background: transparent;
+  border: none;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+
+  cursor: pointer;
+}
+
+.text-btn:hover {
+  text-decoration: underline;
+}
+
+/* Primary button (Register) */
+.primary-btn {
+  padding: 8px 16px;
+
+  background-color: #2563eb;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+  background-color: #1e40af;
+}
+
+/* Stronger hover rules in case of specificity issues */
+.header-right .primary-btn:hover {
+  background-color: #1e40af;
+  transform: translateY(-1px);
+}
+.header-right .text-btn:hover {
+  color: #111827;
+}
+
+.register-menu .menu-roles .role:hover {
+  background: #e6eefc;
+  transform: translateY(-2px);
+}
+
+/* Ensure buttons accept pointer events */
+button, .role, .icon-btn {
+  pointer-events: auto;
+}
+
+/* Accessible focus state */
+button:focus, .role:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* ================= HERO ================= */
+.hero {
+  min-height: calc(100vh - 72px); /* full screen minus header */
+  background-color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+}
+
+.hero-content {
+  max-width: 700px;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 42px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.hero-content p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+.hero-content .cta-btn {
+  margin-top: 24px;
+  padding: 12px 24px;
+
+  background-color: #2563eb;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* Register menu popup */
+.register-wrap { position: relative }
+.register-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 240px;
+  background: #ffffff;
+  border: 1px solid #e6eef6;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+  z-index: 30;
+}
+.register-menu .menu-title { font-weight:700; margin-bottom:8px; color:#111827 }
+.register-menu .menu-roles { display:flex; gap:8px; margin-bottom:8px }
+.register-menu .menu-roles .role { padding:8px 10px; border-radius:8px; background:#f1f5f9; border:1px solid #e6eef6; cursor:pointer; color:#111827 }
+.register-menu .menu-roles .role.active { background:#2563eb; color:#fff; border-color:transparent }
+.register-menu .menu-actions { display:flex; gap:8px; justify-content:flex-end }
+.register-menu .menu-notice { margin-top:8px; color:#92400e; font-size:13px }
+
+.inscription-area { max-width: 960px; margin: 20px auto; padding: 0 20px }

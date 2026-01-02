@@ -5,10 +5,11 @@
     <div class="user-menu" *ngIf="userMenuOpen">
       <div class="user-item" (click)="selectUser('Doctor')">Doctor</div>
       <div class="user-item" (click)="selectUser('Patient')">Patient</div>
-      <div class="user-item" (click)="selectUser('Admin')">Admin</div>
       <div class="user-item" (click)="selectUser('Secretaire')">Secretaire</div>
     </div>
   </div>
+  
+  <a class="back-to-home" [routerLink]="['/']">← Back to home</a>
   <div class="inscription-container">
     <!-- Cercle de changement de langue -->
 <!-- Language Switcher -->
