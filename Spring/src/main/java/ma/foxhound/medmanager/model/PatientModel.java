@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -32,6 +33,7 @@ public class PatientModel extends UserModel {
         return java.util.Collections.singletonList(authority);
     }
     
+    @JsonIgnore
     @ManyToMany(mappedBy = "patients")
     private List<DoctorModel> doctors;
 
