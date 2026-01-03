@@ -1,7 +1,5 @@
-import { Component, signal, WritableSignal } from '@angular/core';
-import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { Component, signal, WritableSignal, HostListener } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet , RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -105,7 +103,7 @@ export class App {
   );
 }
 
-  isDoctorRoute(): boolean {
+  isSecretaryRoute(): boolean {
     try {
       return this.router.url.startsWith('/doctor-inscription') || 
              this.router.url.startsWith('/secretary-inscription') ||

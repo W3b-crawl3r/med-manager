@@ -36,7 +36,7 @@ export const routes: Routes = [
           .then(m => m.DoctorVisitsComponent)
     }
   ]
-}
+},
 
 
   { path: 'login', component: LoginComponent },
@@ -54,6 +54,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Secretary/secretary-inscription/secretary-inscription.component')
       .then(m => m.SecretaryInscriptionComponent)
+  },
+    {
+    path: 'doctor-login',
+    loadComponent: () =>
+      import('./doctor/doctor-login/doctor-login.component')
+      .then(m => m.DoctorLoginComponent)
   },
 
   {
