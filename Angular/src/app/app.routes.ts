@@ -1,6 +1,12 @@
 import { Routes } from '@angular/router';
 import { secretaryGuard } from './Secretary/secretary.guard';
+import { LoginComponent } from './components/login-component/login-component';
+import { Dummy } from './components/dummy/dummy';
+import { authenticatedGuard } from './guards/authenticated-guard';
+
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: Dummy, canActivate: [authenticatedGuard] },
 
   {
     path: 'doctor-inscription',
@@ -28,7 +34,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Secretary/dashboard-doctor.component')
       .then(m => m.DashboardDoctorComponent),
-    canActivate: [secretaryGuard] // 🔐 PROTECTION
+    canActivate: [secretaryGuard]
   },
 
   {

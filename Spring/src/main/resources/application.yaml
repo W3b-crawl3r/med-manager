@@ -4,4 +4,4 @@ spring:
   profiles:
     active:
     - jwt
-    - h2
+    - postgres
