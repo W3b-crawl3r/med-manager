@@ -196,4 +196,23 @@ button:focus, .role:focus {
 .register-menu .menu-actions { display:flex; gap:8px; justify-content:flex-end }
 .register-menu .menu-notice { margin-top:8px; color:#92400e; font-size:13px }
 
+/* Sign In menu popup */
+.signin-menu {
+  position: absolute;
+  left: -50px;
+  top: calc(100% + 8px);
+  min-width: 240px;
+  background: #ffffff;
+  border: 1px solid #e6eef6;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+  z-index: 30;
+}
+.signin-menu .menu-title { font-weight:700; margin-bottom:8px; color:#111827 }
+.signin-menu .menu-roles { display:flex; gap:8px; margin-bottom:8px }
+.signin-menu .menu-roles .role { padding:8px 10px; border-radius:8px; background:#f1f5f9; border:1px solid #e6eef6; cursor:pointer; color:#111827 }
+.signin-menu .menu-roles .role:hover { background: #e6eefc; transform: translateY(-2px); }
+.signin-menu .menu-actions { display:flex; gap:8px; justify-content:flex-end }
+
 .inscription-area { max-width: 960px; margin: 20px auto; padding: 0 20px }

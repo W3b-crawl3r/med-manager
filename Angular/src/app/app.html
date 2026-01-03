@@ -33,13 +33,19 @@
   Sign In
 </button>
 
+    <button
+      class="text-btn"
+      (click)="toggleRegisterMenu()"
+    >
+      Sign In
+    </button>
 
     <div class="register-wrap">
-      <button
-        class="primary-btn"
+       <button 
+         class="primary-btn"
         (click)="toggleRegisterMenu()"
         aria-haspopup="true"
-        aria-expanded="registerMenuOpen()"
+        [attr.aria-expanded]="registerMenuOpen()"
       >
         Register
       </button>
