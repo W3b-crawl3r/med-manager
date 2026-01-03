@@ -1,3 +1,5 @@
+import { Component, signal, WritableSignal } from '@angular/core';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { Component, signal, WritableSignal, HostListener } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -5,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, RouterLink],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -93,6 +95,15 @@ export class App {
   backToStart() {
     this.setAccountAction(null);
   }
+
+ isDoctorRoute(): boolean {
+  const url = this.router.url;
+  return (
+    url.startsWith('/doctor-inscription') ||
+    url.startsWith('/doctor-login') ||
+    url.startsWith('/doctor-dashboard')
+  );
+}
 
   isDoctorRoute(): boolean {
     try {
