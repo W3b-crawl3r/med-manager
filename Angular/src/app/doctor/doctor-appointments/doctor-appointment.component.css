@@ -1,0 +1,117 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.primary-btn.full {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* LIST */
+.appointments-list {
+  display: grid;
+  gap: 12px;
+}
+
+.appointment-card {
+  background: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+}
+
+.appointment-card h4 {
+  margin: 0;
+}
+
+.type {
+  font-size: 12px;
+  color: #2563eb;
+}
+
+.empty {
+  color: #6b7280;
+}
+
+/* MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: grid;
+  place-items: center;
+}
+
+.dialog {
+  background: white;
+  width: 360px;
+  padding: 20px;
+  border-radius: 14px;
+  position: relative;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input, select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions button {
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.actions .edit {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.actions .delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.actions button:hover {
+  opacity: 0.85;
+}
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: white;
+}
