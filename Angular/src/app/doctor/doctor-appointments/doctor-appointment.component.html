@@ -1,0 +1,56 @@
+<div class="header">
+  <h1>Appointments</h1>
+  <button class="primary-btn" (click)="openDialog()">+ New Appointment</button>
+</div>
+
+<div class="appointments-list" *ngIf="appointments.length; else empty">
+  <div class="appointment-card" *ngFor="let a of appointments; let i = index">
+
+    <div class="card-top">
+      <h4>{{ a.patientName }}</h4>
+      <div class="actions">
+        <button class="edit" (click)="editAppointment(i)">Edit</button>
+        <button class="delete" (click)="deleteAppointment(i)">Delete</button>
+      </div>
+    </div>
+
+    <p>{{ a.date }} at {{ a.time }}</p>
+    <span class="type">{{ a.type }}</span>
+  </div>
+</div>
+
+<ng-template #empty>
+  <p class="empty">No appointments scheduled.</p>
+</ng-template>
+
+<!-- MODAL -->
+<div class="overlay" *ngIf="showDialog" (click)="closeDialog()">
+  <div class="dialog" (click)="$event.stopPropagation()">
+
+    <h2>{{ editIndex !== null ? 'Edit Appointment' : 'New Appointment' }}</h2>
+
+    <form (ngSubmit)="submit()">
+
+      <label>Patient *</label>
+      <select [(ngModel)]="form.patientId" name="patient" required>
+        <option value="" disabled>Select patient</option>
+        <option *ngFor="let p of patients" [value]="p.id">{{ p.name }}</option>
+      </select>
+
+      <label>Date *</label>
+      <input type="date" [(ngModel)]="form.date" name="date" [min]="today" required />
+
+      <label>Time *</label>
+      <input type="time" [(ngModel)]="form.time" name="time" required />
+
+      <label>Type</label>
+      <input type="text" [(ngModel)]="form.type" name="type" placeholder="General Checkup" />
+
+      <button type="submit" class="primary-btn full">
+        {{ editIndex !== null ? 'Update' : 'Schedule' }}
+      </button>
+    </form>
+
+    <button class="close" (click)="closeDialog()">×</button>
+  </div>
+</div>

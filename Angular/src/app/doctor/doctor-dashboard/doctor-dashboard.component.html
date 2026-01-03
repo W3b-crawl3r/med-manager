@@ -1,0 +1,63 @@
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../../../assets/medMan-white.png" class="logo-img" />
+    </div>
+
+    <div class="profile">
+      <div class="avatar">D</div>
+      <div>
+        <p class="name">Dr. Johnson</p>
+        <span class="role">DOCTOR</span>
+      </div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="patients" routerLinkActive="active">Patients</a>
+      <a routerLink="appointments" routerLinkActive="active">Appointments</a>
+      <a routerLink="visits" routerLinkActive="active">Visits</a>
+    </nav>
+
+    <button class="logout" (click)="logout()">Logout</button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+<header class="topbar">
+  <h2>Welcome back!</h2>
+
+  <div class="notifications" (click)="toggleNotifications()">
+    <span class="material-icons">notifications</span>
+
+    <span class="badge-count" *ngIf="unreadCount > 0">
+      {{ unreadCount }}
+    </span>
+
+    <!-- DROPDOWN -->
+    <div class="notif-dropdown" *ngIf="notificationsOpen">
+      <p class="notif-title">Notifications</p>
+
+      <div
+        class="notif-item"
+        *ngFor="let n of notifications"
+        [class.unread]="!n.read"
+        (click)="markAsRead(n)"
+      >
+        {{ n.message }}
+      </div>
+
+      <p class="notif-empty" *ngIf="notifications.length === 0">
+        No notifications
+      </p>
+    </div>
+  </div>
+</header>
+
+    <main class="dashboard">
+      <!-- router will render the child views here -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
