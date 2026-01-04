@@ -69,6 +69,13 @@ export class App {
       this.router.navigate(['/secretary-inscription']);
       return;
     }
+    if (role === 'patient') {
+      // navigate to the patient inscription route
+      this.registerMenuOpen.set(false);
+      this.signInMenuOpen.set(false);
+      this.router.navigate(['/patient-inscription']);
+      return;
+    }
     // for other roles, select and show notice
     this.registerSelected.set(role);
     this.registerNotice.set('Registration for ' + role + ' is not available yet.');
