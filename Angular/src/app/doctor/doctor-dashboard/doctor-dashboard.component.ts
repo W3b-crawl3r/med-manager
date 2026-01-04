@@ -1,52 +1,35 @@
-import { Component, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // for *ngIf, *ngFor
+import { NgClass } from '@angular/common';      // for [ngClass]
+import { RouterModule } from '@angular/router'; // if you use routerLink
 
-interface Notification {
-  id: number;
-  message: string;
-  read: boolean;
+interface Appointment {
+  name: string;
+  initial: string;
+  reason: string;
+  time: string;
+  status: 'Scheduled' | 'Confirmed' | 'Cancelled';
 }
 
 @Component({
   selector: 'app-doctor-dashboard',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  standalone: true, // this is key
+  imports: [CommonModule, RouterModule, NgClass], // <-- add NgClass here
   templateUrl: './doctor-dashboard.component.html',
   styleUrls: ['./doctor-dashboard.component.css']
 })
 export class DoctorDashboardComponent {
+  totalPatients = 5;
+  activePatients = 5;
+  todaysAppointments = 3;
+  pendingVisits = 2;
 
-  notificationsOpen = false;
-
-  notifications: Notification[] = [
-    { id: 1, message: 'New appointment scheduled', read: false },
-    { id: 2, message: 'Patient updated profile', read: false },
-    { id: 3, message: 'Visit completed', read: false }
+  appointments: Appointment[] = [
+    { name: 'Michael Chen', initial: 'M', reason: 'General Checkup', time: '09:00', status: 'Confirmed' },
+    { name: 'Emma Rodriguez', initial: 'E', reason: 'Follow-up', time: '10:30', status: 'Scheduled' }
   ];
 
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.read).length;
-  }
-
-  toggleNotifications() {
-    this.notificationsOpen = !this.notificationsOpen;
-  }
-
-  markAsRead(notification: Notification) {
-    notification.read = true;
-  }
-
-  @HostListener('document:click', ['$event'])
-  closeOnOutsideClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.notifications')) {
-      this.notificationsOpen = false;
-    }
-  }
-
-  logout() {
-    localStorage.clear();
-    location.href = '/';
+  confirmAppointment(appt: Appointment) {
+    appt.status = 'Confirmed';
   }
 }
