@@ -17,6 +17,11 @@ export class AuthService {
       this.role = savedRole as 'SECRETARY' | 'DOCTOR';
     }
   }
+  // In auth.service.ts
+registerPatient(data: FormData) {
+  // Replace the URL with your backend endpoint for patient registration
+  return this.http.post('/api/patients/register', data);
+}
 
   registerDoctor(payload: any): Observable<any> {
     // Payload may be FormData (multipart) or plain JSON depending on caller

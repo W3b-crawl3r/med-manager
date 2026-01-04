@@ -1,0 +1,237 @@
+/* patient-inscription.component.css */
+
+.inscription-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f6f8;
+  font-family: 'Arial', sans-serif;
+}
+
+.bg-decor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  z-index: -1;
+}
+
+.back-to-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.inscription-container {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  width: 450px;
+}
+
+.language-switcher {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.language-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.language-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.language-item img {
+  width: 24px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.language-item:hover {
+  background: #f0f0f0;
+}
+
+.inscription-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #26c6da;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.icon-circle svg {
+  width: 32px;
+  height: 32px;
+  stroke: white;
+}
+
+.inscription-header h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field input,
+.form-field select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-field input:focus {
+  border-color: #26c6da;
+  outline: none;
+}
+
+.required-star {
+  color: red;
+  margin-left: 2px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.form-footer {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.btn-submit {
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  background: #26c6da;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:disabled {
+  background: #a0dce3;
+  cursor: not-allowed;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #00acc1;
+}
+
+.success-message {
+  color: green;
+  font-size: 14px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
+.login-link {
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.gender-field .gender-options {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.gender-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gender-option.selected {
+  background: #26c6da;
+  color: white;
+  border-color: #26c6da;
+}
+
+.gender-option .material-icons {
+  font-size: 18px;
+}

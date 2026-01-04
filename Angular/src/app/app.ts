@@ -69,6 +69,13 @@ export class App {
       this.router.navigate(['/secretary-inscription']);
       return;
     }
+    if (role === 'patient') {
+      // navigate to the patient inscription route
+      this.registerMenuOpen.set(false);
+      this.signInMenuOpen.set(false);
+      this.router.navigate(['/patient-inscription']);
+      return;
+    }
     // for other roles, select and show notice
     this.registerSelected.set(role);
     this.registerNotice.set('Registration for ' + role + ' is not available yet.');
@@ -84,7 +91,7 @@ export class App {
     if (role === 'doctor') {
       this.signInMenuOpen.set(false);
       this.registerMenuOpen.set(false);
-      this.router.navigate(['/doctor-login']);
+      this.router.navigate(['./doctor-login']);
       return;
     }
     // other roles not yet implemented
@@ -99,7 +106,7 @@ export class App {
   return (
     url.startsWith('/doctor-inscription') ||
     url.startsWith('/doctor-login') ||
-    url.startsWith('/doctor-dashboard')
+    url.startsWith('/doctor-page')
   );
 }
 
