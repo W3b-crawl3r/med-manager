@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: Dummy, canActivate: [authenticatedGuard] },
 
-  // DOCTOR & SECRETARY INSCRIPTIONS
+  // DOCTOR & SECRETARY AND PATIENT INSCRIPTIONS
   {
     path: 'doctor-inscription',
     loadComponent: () =>
@@ -29,6 +29,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Secretary/secretary-inscription/secretary-inscription.component')
         .then(m => m.SecretaryInscriptionComponent)
+  },
+  {
+    path: 'patient-inscription',
+    loadComponent: () =>
+      import('./patient/patient-inscription/patient-inscription.component')
+        .then(m => m.PatientInscriptionComponent)
   },
 
   // DOCTOR LOGIN
