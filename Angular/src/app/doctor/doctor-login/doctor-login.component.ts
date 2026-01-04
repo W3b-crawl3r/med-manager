@@ -44,7 +44,8 @@ export class DoctorLoginComponent {
 
     setTimeout(() => {
       if (email === this.DEMO_EMAIL && password === this.DEMO_PASSWORD) {
-        this.router.navigate(['/doctor-dashboard']);
+        this.router.navigate(['/doctor-page']);// goes to doctor layout -> dashboard
+
       } else {
         this.errorMessage = 'Invalid email or password';
       }

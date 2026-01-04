@@ -1,36 +1,40 @@
 <div class="inscription-shell">
   <div class="bg-decor"></div>
+
+  <!-- User Switcher -->
   <div class="user-switcher">
-    <button class="user-toggle" (click)="userMenuOpen = !userMenuOpen">{{ 'Change User:' }} {{ currentUser }}</button>
+    <button class="user-toggle" (click)="userMenuOpen = !userMenuOpen">
+      {{ 'Change User:' }} {{ currentUser }}
+    </button>
     <div class="user-menu" *ngIf="userMenuOpen">
       <div class="user-item" (click)="selectUser('Doctor')">Doctor</div>
       <div class="user-item" (click)="selectUser('Patient')">Patient</div>
       <div class="user-item" (click)="selectUser('Secretaire')">Secretaire</div>
     </div>
   </div>
-  
-  <a class="back-to-home" [routerLink]="['/']">← Back to home</a>
+
+  <!-- Back to home -->
+  <a class="back-to-home" [routerLink]="['/']">← {{ t('backToHome') }}</a>
+
+  <!-- Inscription container -->
   <div class="inscription-container">
-    <!-- Cercle de changement de langue -->
-<!-- Language Switcher -->
-<!-- Language Switcher -->
-  <div class="language-switcher">
-  <div class="language-circle" (click)="toggleLanguageMenu()">
-    <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
-  </div>
 
-  <div class="language-menu" *ngIf="showLanguageMenu">
-    <div class="language-item" (click)="changeLanguage('en')">
-      <img src="https://flagcdn.com/gb.svg" alt="English" /> English
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+      <div class="language-circle" (click)="showLanguageMenu = !showLanguageMenu">
+        <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
+      </div>
+      <div class="language-menu" *ngIf="showLanguageMenu">
+        <div class="language-item" (click)="changeLanguage('en')">
+          <img src="https://flagcdn.com/gb.svg" alt="English" /> English
+        </div>
+        <div class="language-item" (click)="changeLanguage('fr')">
+          <img src="https://flagcdn.com/fr.svg" alt="Français" /> Français
+        </div>
+      </div>
     </div>
-    <div class="language-item" (click)="changeLanguage('fr')">
-      <img src="https://flagcdn.com/fr.svg" alt="Français" /> Français
-    </div>
-  </div>
-</div>
 
-
-
+    <!-- Header -->
     <header class="inscription-header">
       <div class="icon-circle">
         <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,18 +47,23 @@
       </div>
     </header>
 
+    <!-- Form -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-grid">
-        <!-- Informations de base -->
+
+        <!-- Basic Info -->
         <label class="form-field">
           <span>{{ t('fullName') }}<span class="required-star">*</span></span>
           <input formControlName="name" placeholder="{{ t('fullNamePlaceholder') }}" />
         </label>
 
-        <label class="form-field">
-          <span>{{ t('email') }}<span class="required-star">*</span></span>
-          <input formControlName="email" type="email" placeholder="{{ t('emailPlaceholder') }}" />
-        </label>
+<label class="form-field">
+  <span>{{ t('email') }}<span class="required-star">*</span></span>
+  <input formControlName="email" type="email" placeholder="{{ t('emailPlaceholder') }}" />
+  <div class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+    Please enter a valid email.
+  </div>
+</label>
 
         <label class="form-field">
           <span>{{ t('password') }}<span class="required-star">*</span></span>
@@ -66,18 +75,24 @@
           <input formControlName="confirmPassword" type="password" placeholder="{{ t('confirmPasswordPlaceholder') }}" />
         </label>
 
-        <div class="error" *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched">{{ t('passwordMismatch') }}</div>
+        <div class="error" *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched">
+          {{ t('passwordMismatch') }}
+        </div>
 
-        <!-- Informations professionnelles -->
+        <!-- Professional Info -->
         <label class="form-field">
           <span>{{ t('specialty') }}<span class="required-star">*</span></span>
           <input formControlName="specialty" placeholder="{{ t('specialty') }}" />
         </label>
 
-        <label class="form-field">
-          <span>{{ t('phone') }}<span class="required-star">*</span></span>
-          <input formControlName="phone" placeholder="{{ t('phone') }}" />
-        </label>
+<label class="form-field">
+  <span>{{ t('phone') }}<span class="required-star">*</span></span>
+  <input formControlName="phone" placeholder="{{ t('phone') }}" />
+  <div class="error" *ngIf="form.get('phone')?.touched && form.get('phone')?.invalid">
+    Phone number must be 10 digits .
+  </div>
+</label>
+
 
         <label class="form-field">
           <span>{{ t('licenseNumber') }}<span class="required-star">*</span></span>
@@ -94,47 +109,54 @@
           <input formControlName="experience" type="number" placeholder="{{ t('experience') }}" />
         </label>
 
-        <!-- Téléchargement de fichiers -->
+        <!-- File Uploads -->
         <label class="file-field">
-          <span>{{ t('identityCard') }}</span>
-          <input type="file" accept="image/*" (change)="onIdentityChange($event)" />
-          <div class="file-info">
-            <div *ngIf="identityFile" class="file-name">{{ identityFile.name }}</div>
-            <img *ngIf="identityPreview" [src]="identityPreview" class="preview" alt="identity preview" />
-          </div>
+          <span>{{ t('identityCard') }}<span class="required-star">*</span></span>
+         <input type="file" accept="image/*" (change)="onIdentityChange($event)" />
+<div class="file-info">
+  <div *ngIf="identityFile" class="file-name">{{ identityFile.name }}</div>
+  <img *ngIf="identityPreview && identityFile?.type?.startsWith('image/')" 
+       [src]="identityPreview" 
+       class="preview" 
+       alt="identity preview" />
+</div>
+
         </label>
 
         <label class="file-field">
-          <span>{{ t('certificate') }}</span>
-          <input type="file" accept="image/*,application/pdf" (change)="onCertificateChange($event)" />
-          <div class="file-info">
-            <div *ngIf="certificateFile" class="file-name">{{ certificateFile.name }}</div>
-            <img *ngIf="certificatePreview" [src]="certificatePreview" class="preview" alt="certificate preview" />
-          </div>
+          <span>{{ t('certificate') }}<span class="required-star">*</span></span>
+        <input type="file" accept="image/*,application/pdf" (change)="onCertificateChange($event)" />
+<div class="file-info">
+  <div *ngIf="certificateFile" class="file-name">{{ certificateFile.name }}</div>
+  <img *ngIf="certificatePreview && certificateFile?.type?.startsWith('image/')" 
+       [src]="certificatePreview" 
+       class="preview" 
+       alt="certificate preview" />
+</div>
+
         </label>
 
-        <!-- Consentement et conditions -->
-        <label class="checkbox-field">
+      </div>
+
+      <!-- Form footer -->
+      <div class="form-footer">
+        <label class="terms-checkbox">
           <input type="checkbox" formControlName="terms" />
-          <span>{{ t('terms') }}<span class="required-star">*</span></span>
+          {{ t('terms') }}
         </label>
-      </div>
 
-      <div class="actions">
-        <button class="btn btn-primary" type="submit" [disabled]="submitting || form.invalid">{{ t('register') }}</button>
-      </div>
+        <button type="submit" class="btn-submit" [disabled]="submitting || form.invalid">
+          {{ submitting ? 'Registering...' : t('register') }}
+        </button>
 
+        <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <p class="login-link">
+          {{ t('alreadyAccountPrefix') }} <a [routerLink]="['/doctor-login']">{{ t('loginLink') }}</a>
+        </p>
+      </div>
 
     </form>
-
-    <div class="messages">
-      <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
-      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-    </div>
-
-    <!-- Section pour les utilisateurs déjà inscrits -->
-    <div class="existing-account">
-      <p>{{ t('alreadyAccountPrefix') }} <a [routerLink]="['/login']">{{ t('loginLink') }}</a></p>
-    </div>
   </div>
 </div>
