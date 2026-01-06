@@ -1,16 +1,49 @@
 <div class="inscription-shell">
   <div class="bg-decor"></div>
 
-  <!-- Back to home -->
-  <a class="back-to-home" [routerLink]="['/']">← Home</a>
 
+  <!-- ===== Back to home ===== -->
+  <a class="back-to-home" [routerLink]="['/']">← back to home</a>
+  <!-- ===== User Switcher ===== -->
+<div class="user-switcher">
+  <button class="user-toggle" (click)="toggleUserMenu()">
+    Change User
+  </button>
+
+  <div class="user-menu" *ngIf="showUserMenu">
+    <div class="user-item" [routerLink]="['/doctor-inscription']">
+      Doctor
+    </div>
+    <div class="user-item" [routerLink]="['/patient-inscription']">
+      Patient
+    </div>
+    <div class="user-item" [routerLink]="['/secretary-inscription']">
+      Secretary
+    </div>
+  </div>
+</div>
   <div class="inscription-container">
 
-    <!-- Header -->
+    <!-- ===== Language Switcher ===== -->
+  <div class="language-switcher">
+  <div class="language-circle" (click)="toggleLanguage()">
+    <img
+      [src]="currentLang === 'fr'
+        ? 'https://flagcdn.com/fr.svg'
+        : 'https://flagcdn.com/gb.svg'"
+      alt="language"
+    />
+  </div>
+
+
+
+</div>
+
+    <!-- ===== Header ===== -->
     <header class="inscription-header">
       <div class="icon-circle">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2v20M2 12h20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2v20M2 12h20" stroke="white" stroke-width="2"/>
         </svg>
       </div>
       <div>
@@ -19,89 +52,79 @@
       </div>
     </header>
 
-    <!-- Form -->
+    <!-- ===== Form ===== -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
       <div class="form-grid">
 
         <!-- Full Name -->
         <label class="form-field">
           <span>{{ t('fullName') }}<span class="required-star">*</span></span>
-          <input formControlName="fullName" placeholder="{{ t('fullName') }}" />
-          <div class="error" *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid">
-            {{ t('fullName') }} is required.
-          </div>
+          <input formControlName="fullName" />
         </label>
 
         <!-- Birth Date -->
         <label class="form-field">
           <span>{{ t('birthDate') }}<span class="required-star">*</span></span>
-          <input formControlName="birthDate" type="date" />
-          <div class="error" *ngIf="form.get('birthDate')?.touched && form.get('birthDate')?.invalid">
-            {{ t('birthDate') }} is required.
-          </div>
+          <input type="date" formControlName="birthDate" />
         </label>
 
         <!-- Email -->
         <label class="form-field">
           <span>{{ t('email') }}<span class="required-star">*</span></span>
-          <input formControlName="email" type="email" placeholder="{{ t('email') }}" />
-          <div class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-            Please enter a valid email.
-          </div>
+          <input type="email" formControlName="email" />
         </label>
 
         <!-- Password -->
         <label class="form-field">
           <span>{{ t('password') }}<span class="required-star">*</span></span>
-          <input formControlName="password" type="password" placeholder="{{ t('password') }}" />
-          <div class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-            Password must be at least 6 characters.
-          </div>
+          <input type="password" formControlName="password" />
         </label>
 
         <!-- Gender -->
         <div class="form-field gender-field">
           <span>{{ t('gender') }}<span class="required-star">*</span></span>
           <div class="gender-options">
-            <div class="gender-option" 
-                 [class.selected]="selectedGender==='male'" 
-                 (click)="selectGender('male')">
+            <div
+              class="gender-option"
+              [class.selected]="selectedGender === 'male'"
+              (click)="selectGender('male')">
               <span class="material-icons">male</span> Male
             </div>
-            <div class="gender-option" 
-                 [class.selected]="selectedGender==='female'" 
-                 (click)="selectGender('female')">
+
+            <div
+              class="gender-option"
+              [class.selected]="selectedGender === 'female'"
+              (click)="selectGender('female')">
               <span class="material-icons">female</span> Female
             </div>
-          </div>
-          <div class="error" *ngIf="form.get('gender')?.touched && form.get('gender')?.invalid">
-            Gender is required.
           </div>
         </div>
 
         <!-- Allergies -->
         <label class="form-field">
           <span>{{ t('allergies') }}</span>
-          <input formControlName="allergies" placeholder="{{ t('allergies') }}" />
+          <input formControlName="allergies" />
         </label>
 
       </div>
 
-      <!-- Footer -->
+      <!-- ===== Footer ===== -->
       <div class="form-footer">
-        <button type="submit" class="btn-submit" [disabled]="submitting || form.invalid || !selectedGender">
-          {{ submitting ? 'Registering...' : t('register') }}
+        <button
+          class="btn-submit"
+          type="submit"
+          [disabled]="form.invalid || !selectedGender || submitting">
+          {{ t('register') }}
         </button>
 
-        <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
         <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
 
         <p class="login-link">
-          {{ t('alreadyAccountPrefix') }} <a [routerLink]="['/patient-login']">{{ t('loginLink') }}</a>
+          {{ t('alreadyAccountPrefix') }}
+          <a [routerLink]="['/patient-login']">{{ t('loginLink') }}</a>
         </p>
       </div>
-
     </form>
   </div>
 </div>

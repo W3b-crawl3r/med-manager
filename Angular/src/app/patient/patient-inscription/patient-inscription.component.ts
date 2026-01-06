@@ -13,6 +13,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class PatientInscriptionComponent {
   form: FormGroup;
+  showLanguageMenu = false;
+  showUserMenu = false;
   submitting = false;
   successMessage = '';
   errorMessage = '';
@@ -67,7 +69,12 @@ export class PatientInscriptionComponent {
     this.selectedGender = g;
     this.form.get('gender')?.setValue(g);
   }
-
+  toggleLanguage() {
+  this.showLanguageMenu = !this.showLanguageMenu;
+}
+   toggleUserMenu() {
+  this.showUserMenu = !this.showUserMenu;
+}
   onSubmit() {
     if (this.form.invalid || !this.selectedGender) {
       this.form.markAllAsTouched();
