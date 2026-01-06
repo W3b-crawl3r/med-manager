@@ -1,53 +1,69 @@
 <div class="dashboard-page">
 
-  <!-- STATS CARDS -->
-  <div class="stats">
-    <div class="card">
+  <!-- HEADER -->
+  <div class="dashboard-header">
+    <h1>Doctor Dashboard</h1>
+    <p class="subtitle">Overview of your practice</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
       <p>Total Patients</p>
-      <h3>{{ totalPatients }}</h3>
+      <h2>{{ totalPatients }}</h2>
     </div>
-    <div class="card">
+
+    <div class="stat-card">
       <p>Today's Appointments</p>
-      <h3>{{ todaysAppointments }}</h3>
+      <h2>{{ todaysAppointments }}</h2>
     </div>
-    <div class="card">
+
+    <div class="stat-card">
       <p>Pending Visits</p>
-      <h3>{{ pendingVisits }}</h3>
+      <h2>{{ pendingVisits }}</h2>
     </div>
-    <div class="card">
+
+    <div class="stat-card">
       <p>Active Patients</p>
-      <h3>{{ activePatients }}</h3>
+      <h2>{{ activePatients }}</h2>
     </div>
   </div>
 
-  <!-- TODAY'S APPOINTMENTS PANEL -->
+  <!-- TODAY APPOINTMENTS -->
   <section class="panel">
     <h3>Today's Appointments</h3>
 
-    <div class="visit" *ngFor="let appt of appointments">
-      <div class="patient">
-        <div class="circle">{{ appt.initial }}</div>
-        <div>
-          <p>{{ appt.name }}</p>
+    <div class="appointment"
+         *ngFor="let appt of appointments">
+
+      <div class="left">
+        <div class="avatar">{{ appt.initial }}</div>
+
+        <div class="info">
+          <p class="name">{{ appt.name }}</p>
           <small>{{ appt.reason }}</small>
         </div>
       </div>
 
       <div class="right">
-        <span>{{ appt.time }}</span>
+        <span class="time">{{ appt.time }}</span>
 
-        <!-- STATUS BUTTONS -->
-        <button 
-          *ngIf="appt.status === 'Scheduled'" 
-          class="btn-confirm" 
+        <button
+          *ngIf="appt.status === 'Scheduled'"
+          class="btn-confirm"
           (click)="confirmAppointment(appt)">
           Confirm
         </button>
 
-        <span *ngIf="appt.status !== 'Scheduled'" class="badge" [ngClass]="appt.status.toLowerCase()">
+        <span
+          *ngIf="appt.status !== 'Scheduled'"
+          class="badge"
+          [ngClass]="appt.status.toLowerCase()">
           {{ appt.status }}
         </span>
       </div>
+
     </div>
   </section>
+
 </div>
