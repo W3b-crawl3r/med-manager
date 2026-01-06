@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private base = '/api/auth';
-  private role: 'SECRETARY' | 'DOCTOR' | null = null;
+  private role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | null = null;
   private token: string | null = null;
 
   constructor(private http: HttpClient) {
@@ -14,7 +14,7 @@ export class AuthService {
     const savedRole = localStorage.getItem('userRole');
     if (savedToken && savedRole) {
       this.token = savedToken;
-      this.role = savedRole as 'SECRETARY' | 'DOCTOR';
+      this.role = savedRole as 'SECRETARY' | 'DOCTOR' | 'PATIENT';
     }
   }
   // In auth.service.ts
@@ -40,6 +40,10 @@ registerPatient(data: FormData) {
     return this.http.post(`${this.base}/login-doctor`, payload);
   }
 
+  loginPatient(payload: any): Observable<any> {
+    return this.http.post(`${this.base}/login-patient`, payload);
+  }
+
   setToken(token: string) {
     this.token = token;
     localStorage.setItem('authToken', token);
@@ -49,7 +53,7 @@ registerPatient(data: FormData) {
     return this.token;
   }
 
-  setRole(role: 'SECRETARY' | 'DOCTOR') {
+  setRole(role: 'SECRETARY' | 'DOCTOR' | 'PATIENT') {
     this.role = role;
     localStorage.setItem('userRole', role);
   }
@@ -64,6 +68,10 @@ registerPatient(data: FormData) {
 
   isDoctor(): boolean {
     return this.role === 'DOCTOR';
+  }
+
+  isPatient(): boolean {
+    return this.role === 'PATIENT';
   }
 
   logout() {

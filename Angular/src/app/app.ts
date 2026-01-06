@@ -37,7 +37,7 @@ export class App implements OnInit {
       title: 'Doctor Portal',
       icon: 'medical_services',
       description: 'Full medical access with comprehensive tools',
-      route: '/login/doctor',
+      route: '/doctor-login',
       features: [
         { icon: 'check', text: 'Patient medical history', restricted: false },
         { icon: 'check', text: 'Visit records & prescriptions', restricted: false },
@@ -48,7 +48,7 @@ export class App implements OnInit {
       title: 'Secretary Portal',
       icon: 'assignment',
       description: 'Administrative access for office management',
-      route: '/login/secretary',
+      route: '/secretary-login',
       features: [
         { icon: 'check', text: 'Appointment scheduling', restricted: false },
         { icon: 'check', text: 'Patient basic information', restricted: false },
@@ -59,7 +59,7 @@ export class App implements OnInit {
       title: 'Patient Portal',
       icon: 'person',
       description: 'Personal health management dashboard',
-      route: '/login/patient',
+      route: '/patient-login',
       features: [
         { icon: 'check', text: 'Personal profile & records', restricted: false },
         { icon: 'check', text: 'Book appointments online', restricted: false },

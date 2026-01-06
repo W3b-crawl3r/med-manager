@@ -45,6 +45,19 @@ export const routes: Routes = [
         .then(m => m.DoctorLoginComponent)
   },
 
+  // PATIENT LOGIN
+  {
+    path: 'patient-login',
+    loadComponent: () =>
+      import('./patient/patient-login/patient-login.component')
+        .then(m => m.PatientLoginComponent)
+  },
+
+  // LEGACY LOGIN PATHS USED BY THE LANDING PAGE
+  { path: 'login/patient', redirectTo: 'patient-login', pathMatch: 'full' },
+  { path: 'login/doctor', redirectTo: 'doctor-login', pathMatch: 'full' },
+  { path: 'login/secretary', redirectTo: 'secretary-login', pathMatch: 'full' },
+
   // SECRETARY LOGIN & DASHBOARD
   {
     path: 'secretary-login',
