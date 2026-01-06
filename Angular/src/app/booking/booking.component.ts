@@ -37,6 +37,11 @@ export class BookingComponent implements OnInit {
   selectedDay = '';
   selectedPeriod: 'all' | 'morning' | 'afternoon' | 'evening' | 'night' = 'all';
   filteredTimes: string[] = [];
+  // quick-pick weekday helper
+  weekdayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  weekdayOrder = [1,2,3,4,5,6,0];
+  selectedWeekday: number | null = null;
+  availableTimesByWeekday: Record<number, string[]> = {};
 
   // small mock of doctors and slots — replace with API calls as needed
   private doctors: Doctor[] = [
@@ -90,6 +95,18 @@ export class BookingComponent implements OnInit {
     });
 
     this.loadAvailableTimes();
+
+    // load last search/book state
+    try {
+      const last = localStorage.getItem('lastBookingSearch');
+      if (last) {
+        const s = JSON.parse(last);
+        this.selectedDate = s.selectedDate || this.selectedDate;
+        this.selectedTime = s.selectedTime || this.selectedTime;
+        this.selectedSpecialty = s.selectedSpecialty || this.selectedSpecialty;
+      }
+    } catch (e) {}
+    this.initAvailableTimes();
   }
 
   get specialties(): string[] {
@@ -135,6 +152,7 @@ export class BookingComponent implements OnInit {
       this.selectedDay = this.getDayShortFromDate(this.selectedDate);
     }
     this.filterTimesBySelection();
+    this.saveLastSearch();
   }
 
   private hourFromTime(t: string) {
@@ -192,6 +210,7 @@ export class BookingComponent implements OnInit {
     // simulate successful booking
     alert(`Appointment booked with ${this.doctor?.name} on ${this.selectedDate} at ${this.selectedTime}`);
     // Optionally navigate to patient dashboard or confirmation page
+    this.saveLastSearch();
     this.router.navigate(['/']);
   }
 
@@ -219,5 +238,62 @@ export class BookingComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/']);
+  }
+
+  // booking helpers
+  pickWeekday(jsWeekday: number) {
+    this.selectedWeekday = jsWeekday;
+    const slots = this.doctorSlots[this.doctorId] || [];
+    const today = new Date();
+    const todayIndex = today.getDay();
+    if (jsWeekday === todayIndex) {
+      const nowMinutes = today.getHours() * 60 + today.getMinutes();
+      const future = slots.find(s => {
+        const [h,m] = s.split(':').map(Number); return (h*60+m) > nowMinutes;
+      });
+      if (future) this.selectedDate = today.toISOString().split('T')[0];
+      else this.selectedDate = this.nextDateForWeekday(jsWeekday);
+    } else {
+      this.selectedDate = this.nextDateForWeekday(jsWeekday);
+    }
+    // refresh available times
+    this.loadAvailableTimes();
+    // set filteredTimes to intersection of slots and period
+    this.filteredTimes = this.availableTimes.filter(t => {
+      if (this.selectedPeriod === 'all') return true;
+      const h = this.hourFromTime(t);
+      switch (this.selectedPeriod) {
+        case 'morning': return h >= 7 && h < 12;
+        case 'afternoon': return h >= 12 && h < 17;
+        case 'evening': return h >= 17 && h < 20;
+        case 'night': return h >= 20;
+      }
+      return true;
+    });
+    if (this.filteredTimes.length) this.selectedTime = this.filteredTimes[0];
+    this.saveLastSearch();
+  }
+
+  selectTime(t: string) {
+    this.selectedTime = t;
+    this.saveLastSearch();
+  }
+
+  nextDateForWeekday(targetWeekday: number): string {
+    const today = new Date();
+    const todayIndex = today.getDay();
+    let daysAhead = (targetWeekday - todayIndex + 7) % 7;
+    if (daysAhead === 0) daysAhead = 7;
+    const next = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysAhead);
+    return next.toISOString().split('T')[0];
+  }
+
+  initAvailableTimes() {
+    // simple reuse of doctorSlots; could extend per-weekday if API provided
+    // No-op here; kept for parity with appointment component
+  }
+
+  saveLastSearch() {
+    try { localStorage.setItem('lastBookingSearch', JSON.stringify({ selectedDate: this.selectedDate, selectedTime: this.selectedTime, selectedSpecialty: this.selectedSpecialty })); } catch (e) {}
   }
 }

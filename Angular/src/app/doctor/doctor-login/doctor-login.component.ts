@@ -91,16 +91,17 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
     this.submitting = true;
     this.errorMessage = '';
     // ✅ DEMO LOGIN (early return, clean)
-if (
-  payload?.email === this.DEMO_EMAIL &&
-  payload?.password === this.DEMO_PASSWORD
-) {
-  this.auth.setToken('demo-doctor-token');
-  this.auth.setRole('DOCTOR');
-  this.submitting = false;
-  this.router.navigate(['/doctor-page']);
-  return;
-}
+    if (
+      payload?.email === this.DEMO_EMAIL &&
+      payload?.password === this.DEMO_PASSWORD
+    ) {
+      this.auth.setToken('demo-doctor-token');
+      this.auth.setRole('DOCTOR');
+      this.submitting = false;
+      // navigate directly to doctor dashboard
+      this.router.navigate(['/doctor-page/dash']);
+      return;
+    }
 
 // ✅ REAL LOGIN
 this.auth.loginDoctor(payload).subscribe({

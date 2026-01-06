@@ -3,7 +3,7 @@
   <button class="primary-btn" (click)="openDialog()">+ New Appointment</button>
 </div>
 
-<div class="appointments-list" *ngIf="appointments.length; else empty">
+  <div class="appointments-list" *ngIf="appointments.length; else empty">
   <div class="appointment-card" *ngFor="let a of appointments; let i = index">
 
     <div class="card-top">
@@ -14,8 +14,12 @@
       </div>
     </div>
 
-    <p>{{ a.date }} at {{ a.time }}</p>
-    <span class="type">{{ a.type }}</span>
+    <p>{{ a.date }} at {{ a.time }} • <span class="type">{{ a.type }}</span></p>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+      <span class="status" [ngClass]="a.status?.toLowerCase()">{{ a.status }}</span>
+      <button *ngIf="a.status==='Scheduled'" class="primary-btn" (click)="confirmAppointment(i)">Confirm</button>
+      <button *ngIf="a.status==='Scheduled'" class="delete" (click)="cancelAppointment(i)">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -38,7 +42,24 @@
       </select>
 
       <label>Date *</label>
+      <div class="weekday-picks">
+        <label class="small">Quick pick</label>
+        <div class="days">
+          <button type="button" class="day-btn" *ngFor="let d of weekdayLabels; let idx = index"
+                  (click)="pickWeekday(weekdayOrder[idx])"
+                  [class.selected]="selectedWeekday === weekdayOrder[idx]">{{ d }}</button>
+        </div>
+      </div>
+
       <input type="date" [(ngModel)]="form.date" name="date" [min]="today" required />
+
+      <div class="times" *ngIf="filteredTimes.length">
+        <label class="small">Available times</label>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">
+          <button type="button" class="time-btn" *ngFor="let t of filteredTimes" (click)="selectTime(t)"
+                  [class.selected]="form.time === t">{{ t }}</button>
+        </div>
+      </div>
 
       <label>Time *</label>
       <input type="time" [(ngModel)]="form.time" name="time" required />

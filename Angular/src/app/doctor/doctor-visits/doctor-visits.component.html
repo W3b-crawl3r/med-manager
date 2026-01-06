@@ -10,8 +10,21 @@
   </div>
 
   <!-- VISITS -->
+  <div class="panel params">
+    <label>Status</label>
+    <select [(ngModel)]="filterStatus">
+      <option value="all">All</option>
+      <option value="Completed">Completed</option>
+      <option value="Pending">Pending</option>
+    </select>
+    <label>From</label>
+    <input type="date" [(ngModel)]="filterFrom" />
+    <label>To</label>
+    <input type="date" [(ngModel)]="filterTo" />
+  </div>
+
   <div class="visits-grid">
-    <div class="visit-card" *ngFor="let visit of visits; let i = index">
+    <div class="visit-card" *ngFor="let visit of filteredVisits; let i = index">
 
       <div class="card-header">
         <div>
@@ -32,8 +45,9 @@
         </ul>
       </div>
 
-      <div class="actions">
+        <div class="actions">
         <button class="danger" (click)="deleteVisit(i)">Delete</button>
+        <button class="primary" style="margin-left:8px" (click)="viewVisitDetails(visit)">View</button>
       </div>
 
     </div>
@@ -41,14 +55,52 @@
 </div>
 
 <!-- MODAL -->
-<div class="overlay" *ngIf="showModal">
-  <div class="modal">
-    <h2>Add New Visit</h2>
-    <p>This will create a new visit record.</p>
+  <div class="overlay" *ngIf="showModal">
+    <div class="modal">
+      <h2>Add New Visit</h2>
 
-    <div class="modal-actions">
-      <button class="secondary" (click)="closeModal()">Cancel</button>
-      <button class="primary" (click)="confirmAddVisit()">Add Visit</button>
+      <label>Patient</label>
+      <select [(ngModel)]="newVisit.patientName">
+        <option *ngFor="let p of patientsList" [value]="p">{{ p }}</option>
+      </select>
+
+      <label>Date & Time</label>
+      <input type="datetime-local" [(ngModel)]="newVisit.date" />
+
+      <label>Status</label>
+      <select [(ngModel)]="newVisit.status">
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
+      </select>
+
+      <label>Diagnosis</label>
+      <input [(ngModel)]="newVisit.diagnosis" />
+
+      <label>Notes</label>
+      <textarea [(ngModel)]="newVisit.notes"></textarea>
+
+      <label>Prescriptions (comma separated)</label>
+      <input [(ngModel)]="newVisit.prescriptionsString" />
+
+      <div class="modal-actions">
+        <button class="secondary" (click)="closeModal()">Cancel</button>
+        <button class="primary" (click)="confirmAddVisit()">Add Visit</button>
+      </div>
     </div>
-  </div>
+
+    <!-- DETAILS MODAL -->
+    <div class="overlay" *ngIf="showDetails" (click)="closeDetails()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>{{ selectedVisit?.patientName }}</h3>
+        <p><strong>Date:</strong> {{ selectedVisit?.date }}</p>
+        <p><strong>Status:</strong> {{ selectedVisit?.status }}</p>
+        <p><strong>Diagnosis:</strong> {{ selectedVisit?.diagnosis }}</p>
+        <p><strong>Notes:</strong> {{ selectedVisit?.notes }}</p>
+        <p><strong>Prescriptions:</strong></p>
+        <ul><li *ngFor="let p of selectedVisit?.prescriptions">{{ p }}</li></ul>
+        <div class="modal-actions">
+          <button class="secondary" (click)="closeDetails()">Close</button>
+        </div>
+      </div>
+    </div>
 </div>

@@ -101,6 +101,38 @@
   align-items: center;
 }
 
+.topbar-controls{display:flex;align-items:center;gap:12px}
+.theme-toggle{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
+.theme-toggle .material-icons{font-size:20px;color:#374151}
+.chat-toggle{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
+
+/* CHAT PANEL */
+.chat-panel{position:fixed;right:16px;bottom:16px;width:320px;max-height:60vh;border-radius:12px;overflow:hidden;box-shadow:0 20px 40px rgba(2,6,23,0.12);transform:translateY(30px);opacity:0;transition:all .22s ease;z-index:1200}
+.chat-panel.open{transform:translateY(0);opacity:1}
+.chat-panel .chat-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:linear-gradient(90deg,#2563eb,#7c3aed);color:white}
+.chat-body{background:var(--surface);padding:12px;max-height:40vh;overflow:auto}
+.chat-message{margin-bottom:8px}
+.chat-message .bubble{display:inline-block;padding:8px 10px;border-radius:10px;background:#eef2ff;max-width:80%}
+.chat-message.me .bubble{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;margin-left:auto}
+.chat-message .time{font-size:10px;color:var(--text-tertiary);margin-top:4px}
+.chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border-color)}
+.chat-input input{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border-color)}
+.chat-input button{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;border:none;padding:8px 12px;border-radius:8px}
+
+/* Logo styling */
+.logo-img{width:140px;object-fit:contain}
+
+/* floating chat FAB */
+.chat-fab{position:fixed;right:20px;bottom:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(90deg,#2563eb,#7c3aed);display:grid;place-items:center;color:white;box-shadow:0 10px 30px rgba(2,6,23,0.18);cursor:pointer;z-index:1300}
+.chat-fab .material-icons{font-size:28px}
+
+/* position notifications to right (already in topbar align) ensure ordering */
+.topbar .topbar-controls{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+/* logout icon spacing */
+.sidebar .logout{display:flex;align-items:center;gap:8px;color:white}
+.sidebar .logout .material-icons{font-size:18px}
+
 .notifications .material-icons {
   font-size: 28px;
   color: #2563eb;
