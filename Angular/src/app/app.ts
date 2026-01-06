@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal, HostListener, OnInit, Inject, Renderer2, HostBinding } from '@angular/core';
+import { Component, signal, WritableSignal, HostListener, OnInit, Inject, Renderer2 } from '@angular/core';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,9 +14,11 @@ import { DOCUMENT } from '@angular/common';
 export class App implements OnInit {
   protected readonly title = signal('Med Manager');
 
-  // ===== Theme with HostBinding =====
-  @HostBinding('attr.data-theme') theme = 'light';
+  // ===== Theme =====
   isDark = false;
+  
+  // Live theme state
+  currentTheme = signal('light');
 
   // ===== Live Data =====
   private messages: any[] = [];
@@ -97,35 +99,85 @@ export class App implements OnInit {
     // Check for saved theme preference on init
     const savedTheme = localStorage.getItem('theme') || 'light';
     this.isDark = savedTheme === 'dark';
-    this.theme = savedTheme;
+    this.currentTheme.set(savedTheme);
     this.updateTheme(savedTheme);
     
     // Simulate live chat messages
     this.simulateLiveChat();
+    
+    // Debug log
+    console.log('App initialized with theme:', savedTheme);
   }
 
-  toggleTheme() {
-    this.isDark = !this.isDark;
-    const newTheme = this.isDark ? 'dark' : 'light';
-    
-    // Update HostBinding
-    this.theme = newTheme;
-    
-    // Update theme in DOM
-    this.updateTheme(newTheme);
-    
-    // Save preference
-    localStorage.setItem('theme', newTheme);
-  }
+toggleTheme() {
+  // Toggle local flag
+  this.isDark = !this.isDark;
+
+  // Determine new theme string
+  const newTheme = this.isDark ? 'dark' : 'light';
+
+  // Persist and update reactive state
+  localStorage.setItem('theme', newTheme);
+  this.currentTheme.set(newTheme);
+
+  // Apply theme safely via updateTheme
+  this.updateTheme(newTheme);
+}
 
   private updateTheme(theme: string) {
-    // Direct DOM manipulation for reliable theme switching
-    this.document.body.setAttribute('data-theme', theme);
-    this.document.documentElement.setAttribute('data-theme', theme);
+    console.log('Updating theme to:', theme);
+
+    // Normalize: remove previous attributes/classes
+    try {
+      this.renderer.removeAttribute(this.document.body, 'data-theme');
+      this.renderer.removeAttribute(this.document.documentElement, 'data-theme');
+      this.renderer.removeClass(this.document.body, 'light-theme');
+      this.renderer.removeClass(this.document.body, 'dark-theme');
+    } catch (e) {
+      // Fallback to direct DOM if Renderer2 can't operate
+      this.document.body.removeAttribute('data-theme');
+      this.document.documentElement.removeAttribute('data-theme');
+      this.document.body.classList.remove('light-theme', 'dark-theme');
+    }
+
+    // Apply new theme attribute to both html and body so CSS variables resolve
+    try {
+      this.renderer.setAttribute(this.document.documentElement, 'data-theme', theme);
+      this.renderer.setAttribute(this.document.body, 'data-theme', theme);
+      this.renderer.addClass(this.document.body, `${theme}-theme`);
+    } catch (e) {
+      this.document.documentElement.setAttribute('data-theme', theme);
+      this.document.body.setAttribute('data-theme', theme);
+      this.document.body.classList.add(`${theme}-theme`);
+    }
   }
 
   getThemeIcon(): string {
     return this.isDark ? 'light_mode' : 'dark_mode';
+  }
+
+  // DEBUG METHOD - Add this to test theme manually
+  debugTheme() {
+    console.log('=== DEBUG THEME ===');
+    console.log('isDark:', this.isDark);
+    console.log('currentTheme signal:', this.currentTheme());
+    console.log('Body attributes:');
+    console.log('  - data-theme:', this.document.body.getAttribute('data-theme'));
+    console.log('  - class:', this.document.body.className);
+    console.log('HTML data-theme:', this.document.documentElement.getAttribute('data-theme'));
+    console.log('LocalStorage theme:', localStorage.getItem('theme'));
+    
+    // Check CSS variables
+    const bodyStyle = getComputedStyle(this.document.body);
+    console.log('CSS Variables on body:');
+    console.log('  --background:', bodyStyle.getPropertyValue('--background'));
+    console.log('  --text-primary:', bodyStyle.getPropertyValue('--text-primary'));
+    
+    // Try to force theme
+    console.log('Trying to force dark theme...');
+    this.document.body.setAttribute('data-theme', 'dark');
+    this.document.body.classList.add('dark-theme');
+    this.document.body.classList.remove('light-theme');
   }
 
   // ===== Account Actions & Menus =====
@@ -371,7 +423,7 @@ export class App implements OnInit {
 
   // For testing theme
   testTheme() {
-    console.log('Current theme:', this.theme);
+    console.log('Current theme:', this.currentTheme());
     console.log('Body attribute:', this.document.body.getAttribute('data-theme'));
     console.log('HTML attribute:', this.document.documentElement.getAttribute('data-theme'));
     console.log('Is dark:', this.isDark);
