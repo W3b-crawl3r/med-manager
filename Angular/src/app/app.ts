@@ -217,6 +217,8 @@ toggleTheme() {
            url === '/secretary-dashboard';
   }
 
+  
+
   isPatientRoute(): boolean {
     const url = this.router.url;
     return url.startsWith('/patient-inscription') || 
@@ -225,7 +227,8 @@ toggleTheme() {
   }
 
   isAuthRoute(): boolean {
-    return this.isDoctorRoute() || this.isSecretaryRoute() || this.isPatientRoute();
+    const url = this.router.url;
+    return this.isDoctorRoute() || this.isSecretaryRoute() || this.isPatientRoute() || url.startsWith('/book');
   }
 
   // ===== Click Outside =====

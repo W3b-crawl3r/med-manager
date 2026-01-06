@@ -45,18 +45,15 @@ export const routes: Routes = [
         .then(m => m.DoctorLoginComponent)
   },
 
-  // PATIENT LOGIN
+  // Booking route for patients to choose available time for a specific doctor
   {
-    path: 'patient-login',
-    loadComponent: () =>
-      import('./patient/patient-login/patient-login.component')
-        .then(m => m.PatientLoginComponent)
+    path: 'book/:id',
+    loadComponent: () => import('./booking/booking.component').then(m => m.BookingComponent)
   },
-
-  // LEGACY LOGIN PATHS USED BY THE LANDING PAGE
-  { path: 'login/patient', redirectTo: 'patient-login', pathMatch: 'full' },
-  { path: 'login/doctor', redirectTo: 'doctor-login', pathMatch: 'full' },
-  { path: 'login/secretary', redirectTo: 'secretary-login', pathMatch: 'full' },
+  {
+    path: 'book',
+    loadComponent: () => import('./booking/booking.component').then(m => m.BookingComponent)
+  },
 
   // SECRETARY LOGIN & DASHBOARD
   {
