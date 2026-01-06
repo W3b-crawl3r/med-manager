@@ -45,6 +45,16 @@ export const routes: Routes = [
         .then(m => m.DoctorLoginComponent)
   },
 
+  // Booking route for patients to choose available time for a specific doctor
+  {
+    path: 'book/:id',
+    loadComponent: () => import('./booking/booking.component').then(m => m.BookingComponent)
+  },
+  {
+    path: 'book',
+    loadComponent: () => import('./booking/booking.component').then(m => m.BookingComponent)
+  },
+
   // SECRETARY LOGIN & DASHBOARD
   {
     path: 'secretary-login',

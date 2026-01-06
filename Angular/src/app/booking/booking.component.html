@@ -1,0 +1,112 @@
+<div class="booking-page">
+  <div class="card">
+    <button class="back" (click)="goBack()">← Back</button>
+
+    <div *ngIf="doctor; else searchView">
+      <div class="doctor-head">
+        <div class="avatar">{{ getInitials(doctor.name) }}</div>
+        <div class="meta">
+          <h2>{{ doctor.name }}</h2>
+          <p class="muted">{{ doctor.specialty }} • {{ doctor.clinic || '' }}</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <label>Select Date</label>
+        <input type="date" [(ngModel)]="selectedDate" (ngModelChange)="loadAvailableTimes()" />
+      </div>
+
+      <div class="section">
+        <label>Pick Day</label>
+        <div class="weekday-row">
+          <button type="button" class="chip" [class.active]="selectedDay==='Mon'" (click)="selectedDay='Mon'; filterTimesBySelection()">Mon</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Tue'" (click)="selectedDay='Tue'; filterTimesBySelection()">Tue</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Wed'" (click)="selectedDay='Wed'; filterTimesBySelection()">Wed</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Thu'" (click)="selectedDay='Thu'; filterTimesBySelection()">Thu</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Fri'" (click)="selectedDay='Fri'; filterTimesBySelection()">Fri</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Sat'" (click)="selectedDay='Sat'; filterTimesBySelection()">Sat</button>
+          <button type="button" class="chip" [class.active]="selectedDay==='Sun'" (click)="selectedDay='Sun'; filterTimesBySelection()">Sun</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <label>Period</label>
+        <div class="period-row">
+          <button type="button" class="chip" [class.active]="selectedPeriod==='all'" (click)="selectedPeriod='all'; filterTimesBySelection()">All</button>
+          <button type="button" class="chip" [class.active]="selectedPeriod==='morning'" (click)="selectedPeriod='morning'; filterTimesBySelection()">Morning</button>
+          <button type="button" class="chip" [class.active]="selectedPeriod==='afternoon'" (click)="selectedPeriod='afternoon'; filterTimesBySelection()">Afternoon</button>
+          <button type="button" class="chip" [class.active]="selectedPeriod==='evening'" (click)="selectedPeriod='evening'; filterTimesBySelection()">Evening</button>
+          <button type="button" class="chip" [class.active]="selectedPeriod==='night'" (click)="selectedPeriod='night'; filterTimesBySelection()">Night</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <label>Available Times</label>
+        <div class="times">
+          <label *ngFor="let t of (filteredTimes.length ? filteredTimes : availableTimes)" class="time-pill">
+            <input type="radio" name="time" [value]="t" [(ngModel)]="selectedTime" />
+            <span>{{ t }}</span>
+          </label>
+        </div>
+        <p *ngIf="(filteredTimes.length ? filteredTimes : availableTimes).length === 0" class="muted">No available times for this doctor.</p>
+      </div>
+
+      <div class="actions">
+        <button class="primary-btn" (click)="onConfirm()">Confirm Appointment</button>
+        <button class="text-btn" (click)="goBack()">Cancel</button>
+      </div>
+    </div>
+
+    <ng-template #searchView>
+      <div class="search">
+        <h2>Find a Doctor</h2>
+
+        <div class="filters two-row">
+          <div class="row">
+            <input type="text" placeholder="Search by name, clinic or specialty" [(ngModel)]="searchTerm" />
+            <select [(ngModel)]="selectedSpecialty">
+              <option value="all">All Specialties</option>
+              <option *ngFor="let s of specialties" [value]="s">{{ s }}</option>
+            </select>
+            <select [(ngModel)]="selectedCity">
+              <option value="all">All Cities</option>
+              <option *ngFor="let c of cities" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label class="small">Date</label>
+            <input type="date" [(ngModel)]="selectedDate" />
+
+            <label class="small">Time</label>
+            <select [(ngModel)]="selectedTime">
+              <option value="">Any time</option>
+              <option *ngFor="let t of timeOptions" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="results">
+          <div *ngFor="let d of paginatedDoctors()" class="result-card">
+            <div class="left"><div class="avatar-sm">{{ getInitials(d.name) }}</div></div>
+            <div class="mid">
+              <h3>{{ d.name }}</h3>
+              <p class="muted">{{ d.specialty }} • {{ d.location || '—' }}</p>
+            </div>
+            <div class="right">
+              <button class="primary-btn" (click)="selectDoctor(d.id)">Book</button>
+            </div>
+          </div>
+
+          <div class="pagination" *ngIf="filteredDoctors().length > pageSize">
+            <button (click)="prevPage()" [disabled]="pageIndex===0">Previous</button>
+            <span class="muted">Page {{ pageIndex + 1 }} / {{ totalPages }}</span>
+            <button (click)="nextPage()" [disabled]="pageIndex >= totalPages - 1">Next</button>
+          </div>
+
+          <p *ngIf="filteredDoctors().length === 0" class="muted">No doctors found for selected criteria.</p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
