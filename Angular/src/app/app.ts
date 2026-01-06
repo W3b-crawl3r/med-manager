@@ -217,6 +217,17 @@ toggleTheme() {
            url === '/secretary-dashboard';
   }
 
+  isPatientRoute(): boolean {
+    const url = this.router.url;
+    return url.startsWith('/patient-inscription') || 
+           url.startsWith('/patient-login') ||
+           url === '/patient-dashboard';
+  }
+
+  isAuthRoute(): boolean {
+    return this.isDoctorRoute() || this.isSecretaryRoute() || this.isPatientRoute();
+  }
+
   // ===== Click Outside =====
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
