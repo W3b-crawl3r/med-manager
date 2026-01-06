@@ -52,7 +52,8 @@ export class DoctorInscriptionComponent {
       terms: 'I agree to the terms and conditions.',
       register: 'Register',
       alreadyAccountPrefix: 'Already have an account?',
-      loginLink: 'Login here'
+      loginLink: 'Login here',
+      backToHome: 'Back to home'
     },
     fr: {
       title: 'Inscription Médecin',
@@ -76,7 +77,8 @@ export class DoctorInscriptionComponent {
       terms: "J'accepte les termes et conditions.",
       register: "S'inscrire",
       alreadyAccountPrefix: "Vous avez déjà un compte ?",
-      loginLink: "Connectez-vous"
+      loginLink: "Connectez-vous",
+      backToHome: "Retour à l'accueil"
     }
   };
 
