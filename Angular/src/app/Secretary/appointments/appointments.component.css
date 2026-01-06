@@ -191,7 +191,8 @@
 
 .appointment-card {
   display: grid;
-  grid-template-columns: 80px 1fr auto auto;
+ /* grid-template-columns: 80px 1fr auto auto;*/
+   grid-template-columns: 160px 1fr 200px 90px;
   gap: 1rem;
   align-items: center;
   padding: 1rem;

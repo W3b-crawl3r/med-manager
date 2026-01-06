@@ -16,6 +16,10 @@ export class SecretaryLoginComponent {
   submitting = false;
   errorMessage = '';
 
+  // DEMO CREDENTIALS (frontend-only testing)
+  private DEMO_EMAIL = 'secretary@medmanager.com';
+  private DEMO_PASSWORD = 'secretary123';
+
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -81,6 +85,16 @@ export class SecretaryLoginComponent {
     const payload = this.form.value;
     this.submitting = true;
 
+    // Quick frontend-only demo login (no backend)
+    if (payload.email === this.DEMO_EMAIL && payload.password === this.DEMO_PASSWORD) {
+      // simulate successful login
+      this.auth.setToken('demo-secretary-token');
+      this.auth.setRole('SECRETARY');
+      this.submitting = false;
+      this.router.navigate(['/secretary/dashboard']);
+      return;
+    }
+
     this.auth.loginSecretary(payload).subscribe({
       next: (response: any) => {
         // Assuming the response contains a token
@@ -102,4 +116,7 @@ export class SecretaryLoginComponent {
       }
     });
   }
+
+
+
 }
