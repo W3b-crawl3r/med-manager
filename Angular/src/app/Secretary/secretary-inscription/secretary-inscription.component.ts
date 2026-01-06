@@ -105,6 +105,15 @@ export class SecretaryInscriptionComponent {
   selectUser(user: string) {
     this.currentUser = user;
     this.userMenuOpen = false;
+
+    // Redirect depending on user type
+    if (user === 'Doctor') {
+      this.router.navigate(['/doctor-inscription']);
+    } else if (user === 'Patient') {
+      this.router.navigate(['/patient-inscription']);
+    } else if (user === 'Secretaire') {
+      this.router.navigate(['/secretary-inscription']); // current page
+    }
   }
 
   goBack() {

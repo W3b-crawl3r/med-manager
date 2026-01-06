@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import ma.foxhound.medmanager.DTO.LoginRequestDto;
 import ma.foxhound.medmanager.DTO.TokenDto;
 import ma.foxhound.medmanager.service.AuthService;
+import ma.foxhound.medmanager.service.PatientService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ public class AuthController {
 
     
     AuthService authService;
+    PatientService patientService;
     
     @PostMapping("/login") // this is to define the endpoint for POST requests so it is accessible at api/v1/auth/login
     public ResponseEntity<TokenDto> postMethodName(@RequestBody LoginRequestDto loginRequest) {
@@ -28,13 +30,8 @@ public class AuthController {
          TokenDto dto = TokenDto.builder().token(token).build();
         return ResponseEntity.ok().body(dto);
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return new String("Hello World");
-    }
     
-    @GetMapping("/testauth")
+    @GetMapping("/appointments")
     public String authtest() {
         return new String("Hello World");
     }

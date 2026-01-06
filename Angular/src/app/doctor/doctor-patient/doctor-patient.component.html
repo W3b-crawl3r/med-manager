@@ -1,0 +1,37 @@
+<div class="patient-container">
+  <h2>Doctor Patients</h2>
+
+  <div class="actions">
+    <input
+      type="text"
+      placeholder="Search by name or ID"
+      [(ngModel)]="searchText"
+    />
+    <button (click)="addPatient()">Add Patient</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Blood Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let patient of filteredPatients">
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.gender }}</td>
+        <td>{{ patient.bloodType }}</td>
+        <td>
+          <button (click)="viewPatient(patient)">View</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

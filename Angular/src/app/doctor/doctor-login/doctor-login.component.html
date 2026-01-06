@@ -1,29 +1,71 @@
 <div class="login-shell">
-  <div class="login-card">
-    <h2>Doctor Sign In</h2>
-    <p class="muted">Enter your email and password to access your account.</p>
+  <div class="bg-decor"></div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <label class="field">
-        <span>Email</span>
-        <input formControlName="email" type="email" placeholder="you@hospital.com" />
-      </label>
+  <a class="back-to-home" [routerLink]="['/']">← {{ t('backToHome') }}</a>
 
-      <label class="field">
-        <span>Password</span>
-        <input formControlName="password" type="password" placeholder="Your password" />
-      </label>
+  <div class="login-container">
+    <div class="login-switcher">
+      <button class="switch-btn" [routerLink]="['/doctor-login']">Doctor</button>
+      <button class="switch-btn" [routerLink]="['/patient-login']">Patient</button>
+      <button class="switch-btn" [routerLink]="['/secretary-login']">Secretary</button>
+    </div>
 
-      <div class="actions">
-        <button class="btn primary" type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Sign In' }}</button>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+      <div class="language-circle" (click)="toggleLanguageMenu()">
+        <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
       </div>
 
-      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-    </form>
-
-    <div class="footer">
-      <a [routerLink]="['/']">Back to home</a>
-      <a [routerLink]="['/doctor-inscription']">Create an account</a>
+      <div class="language-menu" *ngIf="showLanguageMenu">
+        <div class="language-item" (click)="changeLanguage('en')">
+          <img src="https://flagcdn.com/gb.svg" alt="English" /> English
+        </div>
+        <div class="language-item" (click)="changeLanguage('fr')">
+          <img src="https://flagcdn.com/fr.svg" alt="Français" /> Français
+        </div>
+      </div>
     </div>
+
+    <header class="login-header">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2v20M2 12h20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h2>{{ t('title') }}</h2>
+        <p class="subtitle">{{ t('subtitle') }}</p>
+      </div>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-field">
+          <span>{{ t('email') }}<span class="required-star">*</span></span>
+          <input formControlName="email" type="email" placeholder="{{ t('emailPlaceholder') }}" />
+        </label>
+
+        <label class="form-field">
+          <span>{{ t('password') }}<span class="required-star">*</span></span>
+          <input formControlName="password" type="password" placeholder="{{ t('passwordPlaceholder') }}" />
+        </label>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+        <p *ngIf="errorMessage.includes('not found')" class="mt-2">
+          <a [routerLink]="['/doctor-inscription']" class="register-link">{{ t('registerHere') }}</a>
+        </p>
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="submitting">
+        {{ submitting ? t('loggingIn') : t('login') }}
+      </button>
+
+      <p class="register-link">
+        {{ t('noAccount') }}
+        <a [routerLink]="['/doctor-inscription']">{{ t('registerLink') }}</a>
+      </p>
+    </form>
   </div>
 </div>
