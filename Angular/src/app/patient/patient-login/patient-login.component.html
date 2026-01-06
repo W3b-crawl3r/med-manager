@@ -54,7 +54,7 @@
       <div class="error-message" *ngIf="errorMessage">
         <p>{{ errorMessage }}</p>
         <p *ngIf="errorMessage.includes('not found')" class="mt-2">
-          <a [routerLink]="['/doctor-inscription']" class="register-link">{{ t('registerHere') }}</a>
+          <a [routerLink]="['/patient-inscription']" class="register-link">{{ t('registerHere') }}</a>
         </p>
       </div>
 
@@ -64,7 +64,7 @@
 
       <p class="register-link">
         {{ t('noAccount') }}
-        <a [routerLink]="['/doctor-inscription']">{{ t('registerLink') }}</a>
+        <a [routerLink]="['/patient-inscription']">{{ t('registerLink') }}</a>
       </p>
     </form>
   </div>
