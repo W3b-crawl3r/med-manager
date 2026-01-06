@@ -6,16 +6,16 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
-  selector: 'app-doctor-login',
+  selector: 'app-patient-login',
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule   // ✅ THIS FIXES routerLink ERROR
   ],
-  templateUrl: './doctor-login.component.html',
-  styleUrls: ['./doctor-login.component.css']
+  templateUrl: './patient-login.component.html',
+  styleUrls: ['./patient-login.component.css']
 })
-export class DoctorLoginComponent {
+export class PatientLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
@@ -26,8 +26,8 @@ export class DoctorLoginComponent {
 
   translations: Record<string, Record<string, string>> = {
     en: {
-      title: 'Doctor Login',
-      subtitle: 'Access your MedManager account',
+      title: 'Patient Login',
+      subtitle: 'Access your MedManager portal',
       email: 'Email',
       emailPlaceholder: 'Enter your email',
       password: 'Password',
@@ -40,8 +40,8 @@ export class DoctorLoginComponent {
       backToHome: 'Back to home'
     },
     fr: {
-      title: 'Connexion Médecin',
-      subtitle: 'Accédez à votre compte MedManager',
+      title: 'Connexion Patient',
+      subtitle: 'Accédez à votre portail MedManager',
       email: 'E-mail',
       emailPlaceholder: 'Entrez votre e-mail',
       password: 'Mot de passe',
@@ -90,13 +90,13 @@ export class DoctorLoginComponent {
     this.submitting = true;
     this.errorMessage = '';
 
-    this.auth.loginDoctor(payload).subscribe({
+    this.auth.loginPatient(payload).subscribe({
       next: (response: any) => {
-        const token = response.token || 'doctor-token-placeholder';
+        const token = response.token || 'patient-token-placeholder';
         this.auth.setToken(token);
-        this.auth.setRole('DOCTOR');
+        this.auth.setRole('PATIENT');
         this.submitting = false;
-        this.router.navigate(['/doctor-page']);
+        this.router.navigate(['/']);
       },
       error: (err: any) => {
         if (err.status === 404) {

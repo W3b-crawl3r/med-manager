@@ -46,7 +46,7 @@
     <button class="btn-outline" (click)="navigate('/book')">
       <span class="material-icons">event</span> Book an Appointment
     </button>
-    <button class="btn-outline" (click)="navigate('/login/doctor')">
+      <button class="btn-outline" (click)="navigate('/doctor-login')">
       <span class="material-icons">medical_services</span> Doctor Login
     </button>
   </div>
@@ -234,7 +234,7 @@
       <button class="btn-primary" (click)="navigate('/book')">
         <span class="material-icons">event</span> Book First Appointment
       </button>
-      <button class="btn-outline" (click)="navigate('/login/doctor')">
+        <button class="btn-outline" (click)="navigate('/doctor-login')">
         <span class="material-icons">medical_services</span> Access Your Portal
       </button>
     </div>
@@ -277,7 +277,7 @@
         <a href="#doctors" (click)="smoothScroll('doctors')">
           <span class="material-icons">search</span> Find Doctors
         </a>
-        <a (click)="navigate('/login/patient')">
+        <a (click)="navigate('/patient-login')">
           <span class="material-icons">login</span> Patient Login
         </a>
         <a href="#how-it-works" (click)="smoothScroll('how-it-works')">
@@ -289,10 +289,10 @@
     <div class="footer-links-group">
       <h4>For Professionals</h4>
       <div class="footer-links">
-        <a (click)="navigate('/login/doctor')">
+        <a (click)="navigate('/doctor-login')">
           <span class="material-icons">medical_services</span> Doctor Portal
         </a>
-        <a (click)="navigate('/login/secretary')">
+        <a (click)="navigate('/secretary-login')">
           <span class="material-icons">assignment</span> Secretary Portal
         </a>
         <a (click)="navigate('/login/admin')">

@@ -15,7 +15,8 @@ export class SecretaryLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
-
+  private DEMO_EMAIL = 'secretary@medmanager.com';
+  private DEMO_PASSWORD = 'secretary123';
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -50,7 +51,7 @@ export class SecretaryLoginComponent {
   t(key: string) {
     return this.translations[this.currentLang]?.[key] ?? key;
   }
-
+  
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -80,7 +81,14 @@ export class SecretaryLoginComponent {
 
     const payload = this.form.value;
     this.submitting = true;
-
+    if (payload.email === this.DEMO_EMAIL && payload.password === this.DEMO_PASSWORD) {
+      // simulate successful login
+      this.auth.setToken('demo-secretary-token');
+      this.auth.setRole('SECRETARY');
+      this.submitting = false;
+      this.router.navigate(['/secretary/dashboard']);
+      return;
+    }
     this.auth.loginSecretary(payload).subscribe({
       next: (response: any) => {
         // Assuming the response contains a token
