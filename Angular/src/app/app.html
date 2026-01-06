@@ -1,5 +1,5 @@
 <!-- ================= HEADER ================= -->
-<header class="app-header" *ngIf="!isDoctorRoute()">
+<header class="app-header" *ngIf="!isAuthRoute()">
   <div class="header-left">
     <img src="assets/medMan-white.png" alt="MedManager Logo" class="logo" />
     <div class="tagline">Your Health, Our Priority</div>
@@ -34,15 +34,15 @@
 </header>
 
 <!-- ================= HERO ================= -->
-<main class="hero" *ngIf="!isDoctorRoute()">
+<main class="hero" *ngIf="!isAuthRoute()">
   <h1 class="hero-title">
-    <span class="gradient-text">Manage healthcare</span>
+    <span class="gradient-text">Manage healthcare , </span>
     <span class="highlight-text">simply.</span>
   </h1>
   <p class="hero-subtitle">Find trusted doctors, book appointments, and manage your healthcare in one place.</p>
 
   <div class="hero-buttons">
-    <button class="btn-primary" (click)="navigate('/login/patient')">
+    <button class="btn-outline" (click)="navigate('/login/patient')">
       <span class="material-icons">event</span> Book an Appointment
     </button>
     <button class="btn-outline" (click)="navigate('/login/doctor')">
@@ -68,7 +68,7 @@
 </main>
 
 <!-- ================= FIND DOCTOR ================= -->
-<section class="doctors-section" id="doctors" *ngIf="!isDoctorRoute()">
+<section class="doctors-section" id="doctors" *ngIf="!isAuthRoute()">
   <div class="section-header">
     <h2>Find Your Doctor</h2>
     <p class="subtitle">Search and book appointments with verified professionals</p>
@@ -160,7 +160,7 @@
 </section>
 
 <!-- ================= HOW IT WORKS ================= -->
-<section class="how-it-works" id="how-it-works" *ngIf="!isDoctorRoute()">
+<section class="how-it-works" id="how-it-works" *ngIf="!isAuthRoute()">
   <div class="section-header">
     <h2>How It Works</h2>
     <p>Simple steps to better healthcare</p>
@@ -180,7 +180,7 @@
 </section>
 
 <!-- ================= USER ACCESS ================= -->
-<section class="user-access" id="access" *ngIf="!isDoctorRoute()">
+<section class="user-access" id="access" *ngIf="!isAuthRoute()">
   <div class="section-header">
     <h2>Access Your Space</h2>
     <p>Role-based portals for everyone</p>
@@ -207,7 +207,7 @@
 </section>
 
 <!-- ================= SECURITY ================= -->
-<section class="security" *ngIf="!isDoctorRoute()">
+<section class="security" *ngIf="!isAuthRoute()">
   <div class="section-header">
     <h2>Security & Trust</h2>
     <p>Your health data is protected with enterprise-grade security</p>
@@ -224,7 +224,7 @@
 </section>
 
 <!-- ================= CTA ================= -->
-<section class="cta" *ngIf="!isDoctorRoute()">
+<section class="cta" *ngIf="!isAuthRoute()">
   <div class="cta-content">
     <h2>Ready to Get Started?</h2>
     <p>Join thousands of patients and professionals</p>
@@ -256,7 +256,7 @@
 </section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="footer" *ngIf="!isDoctorRoute()">
+<footer class="footer" *ngIf="!isAuthRoute()">
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="footer-logo">
@@ -333,7 +333,7 @@
 </footer>
 
 <!-- Live Chat Widget -->
-<div class="live-chat" *ngIf="!isDoctorRoute()">
+<div class="live-chat" *ngIf="!isAuthRoute()">
   <button class="chat-toggle" (click)="toggleChat()">
     <span class="material-icons">chat</span>
     <span class="chat-notification" *ngIf="hasUnreadMessages()">●</span>
