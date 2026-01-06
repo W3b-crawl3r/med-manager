@@ -62,3 +62,17 @@ button:hover {
 button.delete {
   background-color: #dc3545;
 }
+
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:var(--surface-elevated,#fff);border:1px solid var(--border-color,#e6eef8)}
+.card-left{display:flex;gap:12px;align-items:center}
+.avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#2563eb);color:white;display:grid;place-items:center;font-weight:700}
+.name{font-weight:700}
+.meta{color:var(--text-tertiary,#6b7280);font-size:13px}
+.card-right{display:flex;align-items:center;gap:10px}
+.blood{padding:6px 8px;border-radius:8px;background:#f3f4f6}
+.btn{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:500}
+.modal{background:var(--surface-elevated,#fff);padding:18px;border-radius:10px;width:420px;box-shadow:0 20px 40px rgba(2,6,23,0.12)}
+.modal-actions{display:flex;justify-content:flex-end;margin-top:12px}

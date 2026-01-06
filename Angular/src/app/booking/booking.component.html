@@ -19,13 +19,9 @@
       <div class="section">
         <label>Pick Day</label>
         <div class="weekday-row">
-          <button type="button" class="chip" [class.active]="selectedDay==='Mon'" (click)="selectedDay='Mon'; filterTimesBySelection()">Mon</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Tue'" (click)="selectedDay='Tue'; filterTimesBySelection()">Tue</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Wed'" (click)="selectedDay='Wed'; filterTimesBySelection()">Wed</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Thu'" (click)="selectedDay='Thu'; filterTimesBySelection()">Thu</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Fri'" (click)="selectedDay='Fri'; filterTimesBySelection()">Fri</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Sat'" (click)="selectedDay='Sat'; filterTimesBySelection()">Sat</button>
-          <button type="button" class="chip" [class.active]="selectedDay==='Sun'" (click)="selectedDay='Sun'; filterTimesBySelection()">Sun</button>
+          <button type="button" class="chip" *ngFor="let d of weekdayLabels; let i = index"
+                  [class.active]="selectedWeekday === weekdayOrder[i]"
+                  (click)="pickWeekday(weekdayOrder[i])">{{ d }}</button>
         </div>
       </div>
 
@@ -43,10 +39,8 @@
       <div class="section">
         <label>Available Times</label>
         <div class="times">
-          <label *ngFor="let t of (filteredTimes.length ? filteredTimes : availableTimes)" class="time-pill">
-            <input type="radio" name="time" [value]="t" [(ngModel)]="selectedTime" />
-            <span>{{ t }}</span>
-          </label>
+          <button type="button" class="time-pill" *ngFor="let t of (filteredTimes.length ? filteredTimes : availableTimes)"
+                  (click)="selectTime(t)" [class.active]="selectedTime===t">{{ t }}</button>
         </div>
         <p *ngIf="(filteredTimes.length ? filteredTimes : availableTimes).length === 0" class="muted">No available times for this doctor.</p>
       </div>
