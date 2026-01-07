@@ -1,69 +1,107 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface Visit {
   patientName: string;
-  date: string;
-  status: 'Completed' | 'Pending';
+  date: string; // ISO string
+  status: 'Pending' | 'Completed';
   diagnosis: string;
   notes: string;
   prescriptions: string[];
 }
 
 @Component({
-  selector: 'app-doctor-visits',
+  selector: 'app-visits',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './doctor-visits.component.html',
   styleUrls: ['./doctor-visits.component.css']
 })
-export class DoctorVisitsComponent {
+export class DoctorVisitsComponent implements OnInit {
 
-  showModal = false;
-  visits: Visit[] = [];
+  visits: Visit[] = [
+    {
+      patientName: 'John Doe',
+      date: '2026-01-05T09:00',
+      status: 'Completed',
+      diagnosis: 'Flu',
+      notes: 'Rest and hydration',
+      prescriptions: ['Paracetamol']
+    }
+  ];
 
-  // form model for creating a new visit
-  newVisit: any = {
-    patientName: '',
-    date: new Date().toISOString().slice(0,16),
-    status: 'Pending',
-    diagnosis: '',
-    notes: '',
-    prescriptions: [],
-    prescriptionsString: ''
-  };
+  filteredVisits: Visit[] = [];
 
-  selectedVisit: Visit | null = null;
-  showDetails = false;
-
-  // load patients list from stored patients (fallback to seeded names)
-  patientsList: string[] = [];
-
-  // parameters/filters
-  filterStatus: 'all' | 'Completed' | 'Pending' = 'all';
+  // FILTERS
+  filterStatus: 'all' | 'Pending' | 'Completed' = 'all';
   filterFrom = '';
   filterTo = '';
 
-  get filteredVisits() {
-    return this.visits.filter(v => {
-      if (this.filterStatus !== 'all' && v.status !== this.filterStatus) return false;
-      if (this.filterFrom) {
-        const from = new Date(this.filterFrom);
-        const vd = new Date(v.date);
-        if (vd < from) return false;
+  // MODALS
+  showModal = false;
+  showDetails = false;
+  selectedVisit: Visit | null = null;
+
+  // NEW VISIT
+newVisit: {
+  patientName: string;
+  date: string;
+  status: 'Pending' | 'Completed';
+  diagnosis: string;
+  notes: string;
+  prescriptionsString: string;
+} = {
+  patientName: '',
+  date: '',
+  status: 'Pending',
+  diagnosis: '',
+  notes: '',
+  prescriptionsString: ''
+};
+
+
+  patientsList = ['John Doe', 'Sarah Smith', 'Ahmed Ali'];
+
+  // TIME PICKER
+  weekdayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat'];
+  weekdayOrder = [1,2,3,4,5,6]; // ISO weekday
+  selectedWeekday: number | null = null;
+  selectedPeriod: 'all' | 'morning' | 'evening' = 'all';
+  availableTimes: string[] = [];
+  selectedTime = '';
+
+  ngOnInit() {
+    this.applyFilters();
+  }
+
+  // ================= FILTERS =================
+  applyFilters() {
+    this.filteredVisits = this.visits.filter(v => {
+
+      if (this.filterStatus !== 'all' && v.status !== this.filterStatus) {
+        return false;
       }
-      if (this.filterTo) {
-        const to = new Date(this.filterTo);
-        const vd = new Date(v.date);
-        if (vd > to) return false;
+
+      const visitDate = new Date(v.date);
+
+      if (this.filterFrom && visitDate < new Date(this.filterFrom)) {
+        return false;
       }
+
+      if (this.filterTo && visitDate > new Date(this.filterTo)) {
+        return false;
+      }
+
       return true;
     });
   }
 
+  // ================= MODALS =================
   openNewVisit() {
     this.resetNewVisit();
+    this.showDetails = false;
+    this.generateTimes();
     this.showModal = true;
   }
 
@@ -71,95 +109,104 @@ export class DoctorVisitsComponent {
     this.showModal = false;
   }
 
-  confirmAddVisit() {
-    // basic validation
-    if (!this.newVisit.patientName || !this.newVisit.date) {
-      alert('Please provide patient name and date');
-      return;
-    }
-
-    // parse prescriptions string into array
-    const presRaw = (this.newVisit.prescriptionsString || '').trim();
-    const presArr = presRaw ? presRaw.split(',').map((s: string) => s.trim()).filter((s: string) => !!s) : [];
-    const toSave: Visit = {
-      patientName: this.newVisit.patientName,
-      date: this.newVisit.date,
-      status: this.newVisit.status,
-      diagnosis: this.newVisit.diagnosis || '—',
-      notes: this.newVisit.notes || '—',
-      prescriptions: presArr.length ? presArr : ['—']
-    };
-
-    this.visits.unshift(toSave);
-    this.saveVisits();
-    this.closeModal();
-  }
-
-  viewVisitDetails(v: Visit) {
-    this.selectedVisit = v;
+  viewVisitDetails(visit: Visit) {
+    this.selectedVisit = visit;
     this.showDetails = true;
   }
 
   closeDetails() {
-    this.selectedVisit = null;
     this.showDetails = false;
+    this.selectedVisit = null;
   }
 
-  deleteVisit(index: number) {
-    this.visits.splice(index, 1);
-    this.saveVisits();
+  // ================= VISITS =================
+  confirmAddVisit() {
+    if (!this.newVisit.patientName || !this.newVisit.date) return;
+
+    const visit: Visit = {
+      patientName: this.newVisit.patientName,
+      date: this.newVisit.date,
+      status: this.newVisit.status,
+      diagnosis: this.newVisit.diagnosis,
+      notes: this.newVisit.notes,
+      prescriptions: this.newVisit.prescriptionsString
+        ? this.newVisit.prescriptionsString.split(',').map(p => p.trim())
+        : []
+    };
+
+    this.visits.unshift(visit);
+    this.applyFilters();
+    this.closeModal();
   }
 
-  // persistence
-  constructor() {
-    try {
-      const raw = localStorage.getItem('doctorVisits');
-      if (raw) this.visits = JSON.parse(raw);
-      else {
-        // seed with example if nothing stored
-        this.visits = [
-          {
-            patientName: 'Michael Chen',
-            date: '2024-12-10 10:00',
-            status: 'Completed',
-            diagnosis: 'Hypertension',
-            notes: 'Blood pressure elevated.',
-            prescriptions: ['Lisinopril 10mg']
-          }
-        ];
-      }
-    } catch (e) {
-      this.visits = [];
+  deleteVisit(visit: Visit) {
+    this.visits = this.visits.filter(v => v !== visit);
+    this.applyFilters();
+  }
+
+  // ================= TIME =================
+  pickWeekday(day: number) {
+    this.selectedWeekday = day;
+    this.generateTimes();
+  }
+
+  selectPeriod(period: any) {
+    this.selectedPeriod = period;
+    this.generateTimes();
+  }
+
+  generateTimes() {
+    if (this.selectedPeriod === 'morning') {
+      this.availableTimes = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00'];
+    } else if (this.selectedPeriod === 'evening') {
+      this.availableTimes = ['17:00','17:30','18:00','18:30','19:00'];
+    } else {
+      this.availableTimes = ['08:00','09:00','10:00','11:00','14:00','15:00','16:00','17:00'];
     }
+  }
 
-    // load patients from localStorage doctorPatients if present
-    try {
-      const rawP = localStorage.getItem('doctorPatients');
-      if (rawP) {
-        const arr = JSON.parse(rawP) as Array<any>;
-        this.patientsList = arr.map(p => p.name).filter(Boolean);
-      }
-    } catch (e) {
-      // fallback to defaults if not available
-    }
-    if (!this.patientsList.length) {
-      this.patientsList = ['Michael Chen','Emma Rodriguez','David Thompson','Sarah Williams','Aisha Ben','Omar Haddad'];
+  selectTime(time: string) {
+    this.selectedTime = time;
+    if (this.selectedWeekday !== null) {
+      const iso = this.nextDateForWeekday(this.selectedWeekday);
+      this.newVisit.date = `${iso}T${time}`;
+    } else {
+      const today = new Date();
+      const iso = today.toISOString().split('T')[0];
+      this.newVisit.date = `${iso}T${time}`;
     }
   }
 
-  saveVisits() {
-    try { localStorage.setItem('doctorVisits', JSON.stringify(this.visits)); } catch (e) {}
+  formatSelectedDisplay(): string {
+    if (!this.selectedTime || this.selectedWeekday === null) return 'No date selected';
+    const iso = this.nextDateForWeekday(this.selectedWeekday);
+    const idx = this.weekdayOrder.indexOf(this.selectedWeekday);
+    const dayLabel = idx >= 0 ? this.weekdayLabels[idx] : '';
+    return `${dayLabel} ${iso} at ${this.selectedTime}`;
   }
 
+  private nextDateForWeekday(targetWeekday: number): string {
+    const today = new Date();
+    const todayIndex = today.getDay();
+    let daysAhead = (targetWeekday - todayIndex + 7) % 7;
+    if (daysAhead === 0) daysAhead = 7;
+    const next = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysAhead);
+    return next.toISOString().split('T')[0];
+  }
+
+  // ================= UTILS =================
   resetNewVisit() {
     this.newVisit = {
-      patientName: this.patientsList[0] || '',
-      date: new Date().toISOString().slice(0,16),
+      patientName: '',
+      date: '',
       status: 'Pending',
       diagnosis: '',
       notes: '',
-      prescriptions: [],
       prescriptionsString: ''
     };
+    this.selectedWeekday = null;
+    this.selectedPeriod = 'all';
+    this.availableTimes = [];
+    this.selectedTime = '';
   }
 }

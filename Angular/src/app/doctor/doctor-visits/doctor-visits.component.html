@@ -9,7 +9,7 @@
     <button class="primary" (click)="openNewVisit()">+ New Visit</button>
   </div>
 
-  <!-- VISITS -->
+  <!-- filters -->
   <div class="panel params">
     <label>Status</label>
     <select [(ngModel)]="filterStatus">
@@ -21,6 +21,15 @@
     <input type="date" [(ngModel)]="filterFrom" />
     <label>To</label>
     <input type="date" [(ngModel)]="filterTo" />
+  </div>
+
+  <!-- debug counts -->
+  <div style="margin:8px 0;">
+    <small class="muted">Total visits: {{ visits.length }} — Visible: {{ filteredVisits.length }}</small>
+  </div>
+
+  <div style="margin:8px 0;">
+    <small class="muted">Raw visits JSON: {{ visits | json }}</small>
   </div>
 
   <div class="visits-grid">
@@ -45,8 +54,8 @@
         </ul>
       </div>
 
-        <div class="actions">
-        <button class="danger" (click)="deleteVisit(i)">Delete</button>
+      <div class="actions">
+        <button class="danger" (click)="deleteVisit(visit)">Delete</button>
         <button class="primary" style="margin-left:8px" (click)="viewVisitDetails(visit)">View</button>
       </div>
 
@@ -54,53 +63,72 @@
   </div>
 </div>
 
-<!-- MODAL -->
-  <div class="overlay" *ngIf="showModal">
-    <div class="modal">
-      <h2>Add New Visit</h2>
+<!-- NEW VISIT MODAL -->
+<div class="overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>Add New Visit</h2>
 
-      <label>Patient</label>
-      <select [(ngModel)]="newVisit.patientName">
-        <option *ngFor="let p of patientsList" [value]="p">{{ p }}</option>
-      </select>
+    <label>Patient</label>
+    <select [(ngModel)]="newVisit.patientName">
+      <option *ngFor="let p of patientsList" [value]="p">{{ p }}</option>
+    </select>
 
-      <label>Date & Time</label>
-      <input type="datetime-local" [(ngModel)]="newVisit.date" />
+    <label>Choose Day</label>
+    <div class="weekday-row">
+      <button type="button" class="chip" *ngFor="let d of weekdayLabels; let i = index" [class.active]="selectedWeekday===weekdayOrder[i]" (click)="pickWeekday(weekdayOrder[i])">{{ d }}</button>
+    </div>
 
-      <label>Status</label>
-      <select [(ngModel)]="newVisit.status">
-        <option value="Pending">Pending</option>
-        <option value="Completed">Completed</option>
-      </select>
+    <label>Period</label>
+    <div class="period-row">
+      <button type="button" class="chip" [class.active]="selectedPeriod==='all'" (click)="selectPeriod('all')">All</button>
+      <button type="button" class="chip" [class.active]="selectedPeriod==='morning'" (click)="selectPeriod('morning')">Morning</button>
+      <button type="button" class="chip" [class.active]="selectedPeriod==='evening'" (click)="selectPeriod('evening')">Evening</button>
+    </div>
 
-      <label>Diagnosis</label>
-      <input [(ngModel)]="newVisit.diagnosis" />
-
-      <label>Notes</label>
-      <textarea [(ngModel)]="newVisit.notes"></textarea>
-
-      <label>Prescriptions (comma separated)</label>
-      <input [(ngModel)]="newVisit.prescriptionsString" />
-
-      <div class="modal-actions">
-        <button class="secondary" (click)="closeModal()">Cancel</button>
-        <button class="primary" (click)="confirmAddVisit()">Add Visit</button>
+    <div *ngIf="availableTimes?.length">
+      <label>Hours</label>
+      <div class="times-row">
+        <button type="button" class="time-pill" *ngFor="let t of availableTimes" [class.active]="selectedTime===t" (click)="selectTime(t)">{{ t }}</button>
       </div>
     </div>
 
-    <!-- DETAILS MODAL -->
-    <div class="overlay" *ngIf="showDetails" (click)="closeDetails()">
-      <div class="modal" (click)="$event.stopPropagation()">
-        <h3>{{ selectedVisit?.patientName }}</h3>
-        <p><strong>Date:</strong> {{ selectedVisit?.date }}</p>
-        <p><strong>Status:</strong> {{ selectedVisit?.status }}</p>
-        <p><strong>Diagnosis:</strong> {{ selectedVisit?.diagnosis }}</p>
-        <p><strong>Notes:</strong> {{ selectedVisit?.notes }}</p>
-        <p><strong>Prescriptions:</strong></p>
-        <ul><li *ngFor="let p of selectedVisit?.prescriptions">{{ p }}</li></ul>
-        <div class="modal-actions">
-          <button class="secondary" (click)="closeDetails()">Close</button>
-        </div>
-      </div>
+    <label>Selected</label>
+    <div style="margin-bottom:8px;font-weight:600">{{ formatSelectedDisplay() }}</div>
+
+    <label>Status</label>
+    <select [(ngModel)]="newVisit.status">
+      <option value="Pending">Pending</option>
+      <option value="Completed">Completed</option>
+    </select>
+
+    <label>Diagnosis</label>
+    <input [(ngModel)]="newVisit.diagnosis" />
+
+    <label>Notes</label>
+    <textarea [(ngModel)]="newVisit.notes"></textarea>
+
+    <label>Prescriptions (comma separated)</label>
+    <input [(ngModel)]="newVisit.prescriptionsString" />
+
+    <div class="modal-actions">
+      <button class="secondary" (click)="closeModal()">Cancel</button>
+      <button class="primary" (click)="confirmAddVisit()">Add Visit</button>
     </div>
+  </div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div class="overlay" *ngIf="showDetails" (click)="closeDetails()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ selectedVisit?.patientName }}</h3>
+    <p><strong>Date:</strong> {{ selectedVisit?.date }}</p>
+    <p><strong>Status:</strong> {{ selectedVisit?.status }}</p>
+    <p><strong>Diagnosis:</strong> {{ selectedVisit?.diagnosis }}</p>
+    <p><strong>Notes:</strong> {{ selectedVisit?.notes }}</p>
+    <p><strong>Prescriptions:</strong></p>
+    <ul><li *ngFor="let p of selectedVisit?.prescriptions">{{ p }}</li></ul>
+    <div class="modal-actions">
+      <button class="secondary" (click)="closeDetails()">Close</button>
+    </div>
+  </div>
 </div>
