@@ -61,7 +61,7 @@ export class PatientInscriptionComponent {
     this.form = this.fb.group({
       fullName: ['', Validators.required],
       birthDate: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       gender: ['', Validators.required],
       allergies: ['']

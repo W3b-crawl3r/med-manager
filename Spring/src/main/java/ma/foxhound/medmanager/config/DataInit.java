@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.foxhound.medmanager.model.DoctorModel;
 import ma.foxhound.medmanager.model.PatientModel;
+import ma.foxhound.medmanager.model.SecretaryModel;
 import ma.foxhound.medmanager.model.VisitModel;
 import ma.foxhound.medmanager.repository.UserRepository;
 
@@ -61,11 +62,24 @@ public class DataInit implements CommandLineRunner {
         d5.setClinic("Neuro Care Center");
 
         DoctorModel d6 = new DoctorModel();
-        d6.setUsername("Dr. Mehdi Benjelloun");
+        d6.setUsername("test");
         d6.setHashedPassword(passwordEncoder.encode("pass6"));
         d6.setSpecialty("Dentist");
         d6.setLocation("Tangier");
         d6.setClinic("Smile Dental Clinic");
+
+        // Seed secretaries
+        SecretaryModel s1 = new SecretaryModel();
+        s1.setUsername("secretary1");
+        s1.setHashedPassword(passwordEncoder.encode("secretary123"));
+
+        SecretaryModel s2 = new SecretaryModel();
+        s2.setUsername("secretary2");
+        s2.setHashedPassword(passwordEncoder.encode("secretary123"));
+
+        SecretaryModel s3 = new SecretaryModel();
+        s3.setUsername("secretary3");
+        s3.setHashedPassword(passwordEncoder.encode("secretary123"));
         PatientModel patient = new PatientModel();
         patient.setUsername("patient1");
         patient.setHashedPassword(passwordEncoder.encode("patient123"));
@@ -79,7 +93,11 @@ public class DataInit implements CommandLineRunner {
         d1.getPatients().add(patient2);
         d2.getPatients().add(patient);
         d2.getPatients().add(patient2);
-        userRepository.saveAll(java.util.Arrays.asList(patient, patient2, d1, d2, d3, d4, d5, d6));
+        userRepository.saveAll(java.util.Arrays.asList(
+            patient, patient2,
+            d1, d2, d3, d4, d5, d6,
+            s1, s2, s3
+        ));
     }   
     
 }

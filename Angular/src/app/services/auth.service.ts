@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private base = '/api/auth';
+  private base = '/api/v1/auth';
   private role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | null = null;
   private token: string | null = null;
 
@@ -33,15 +33,22 @@ registerPatient(data: FormData) {
   }
 
   loginSecretary(payload: any): Observable<any> {
-    return this.http.post(`${this.base}/login-secretary`, payload);
+    return this.http.post(`${this.base}/login-secretary`, this.toLoginPayload(payload));
   }
 
   loginDoctor(payload: any): Observable<any> {
-    return this.http.post(`${this.base}/login-doctor`, payload);
+    return this.http.post(`${this.base}/login-doctor`, this.toLoginPayload(payload));
   }
 
   loginPatient(payload: any): Observable<any> {
-    return this.http.post(`${this.base}/login-patient`, payload);
+    return this.http.post(`${this.base}/login-patient`, this.toLoginPayload(payload));
+  }
+
+  private toLoginPayload(payload: any) {
+    return {
+      username: payload?.email ?? payload?.username ?? '',
+      password: payload?.password ?? ''
+    };
   }
 
   setToken(token: string) {

@@ -90,7 +90,7 @@ export class DoctorInscriptionComponent {
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
  this.form = this.fb.group({
   name: ['', Validators.required],
-  email: ['', [Validators.required, Validators.email, Validators.pattern(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+  email: ['', [Validators.required]],
   password: ['', [Validators.required, Validators.minLength(6)]],
   confirmPassword: ['', Validators.required],
   specialty: ['', Validators.required],

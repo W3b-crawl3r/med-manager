@@ -248,7 +248,17 @@ toggleTheme() {
 
   isAuthRoute(): boolean {
     const url = this.router.url;
-    return this.isDoctorRoute() || this.isSecretaryRoute() || this.isPatientRoute() || url.startsWith('/book');
+    return this.isDoctorRoute() || 
+           this.isSecretaryRoute() || 
+           this.isPatientRoute() || 
+           url.startsWith('/book') ||
+           url.startsWith('/doctor-login') ||
+           url.startsWith('/patient-login') ||
+           url.startsWith('/secretary-login') ||
+           url.startsWith('/doctor-inscription') ||
+           url.startsWith('/patient-inscription') ||
+           url.startsWith('/secretary-inscription') ||
+           url.startsWith('/login');
   }
 
   // ===== Click Outside =====

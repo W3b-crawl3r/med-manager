@@ -59,7 +59,7 @@
 
 <label class="form-field">
   <span>{{ t('email') }}<span class="required-star">*</span></span>
-  <input formControlName="email" type="email" placeholder="{{ t('emailPlaceholder') }}" />
+  <input formControlName="email" type="text" placeholder="{{ t('emailPlaceholder') }}" />
   <div class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
     Please enter a valid email.
   </div>

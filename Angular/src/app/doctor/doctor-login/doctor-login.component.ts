@@ -66,7 +66,7 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
     private router: Router
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -82,52 +82,69 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
   }
 
   onSubmit() {
+    console.log('Login form submitted');
+    
     if (this.form.invalid) {
+      console.log('Form is invalid');
       this.form.markAllAsTouched();
       return;
     }
 
     const payload = this.form.value;
+    console.log('Login payload:', { email: payload.email, hasPassword: !!payload.password });
+    
     this.submitting = true;
     this.errorMessage = '';
+    
     // ✅ DEMO LOGIN (early return, clean)
     if (
       payload?.email === this.DEMO_EMAIL &&
       payload?.password === this.DEMO_PASSWORD
     ) {
+      console.log('Demo login successful');
       this.auth.setToken('demo-doctor-token');
       this.auth.setRole('DOCTOR');
       this.submitting = false;
-      // navigate directly to doctor dashboard
       this.router.navigate(['/doctor-page/dash']);
       return;
     }
 
-// ✅ REAL LOGIN
-this.auth.loginDoctor(payload).subscribe({
-  next: (response: any) => {
-    if (!response?.token) {
-      throw new Error('Token missing');
-    }
+    // ✅ REAL LOGIN
+    console.log('Attempting real backend login...');
+    this.auth.loginDoctor(payload).subscribe({
+      next: (response: any) => {
+        console.log('Login response received:', response);
+        
+        if (!response?.token) {
+          console.error('No token in response');
+          this.errorMessage = 'Login failed: No token received.';
+          this.submitting = false;
+          return;
+        }
 
-    this.auth.setToken(response.token);
-    this.auth.setRole('DOCTOR');
-    this.router.navigate(['/doctor-page/dash']);
-  },
+        console.log('Login successful, setting token and navigating');
+        this.auth.setToken(response.token);
+        this.auth.setRole('DOCTOR');
+        this.submitting = false;
+        this.router.navigate(['/doctor-page/dash']);
+      },
 
-  error: (err: any) => {
-    if (err.status === 404) {
-      this.errorMessage = 'Account not found. Please register first.';
-    } else if (err.status === 401) {
-      this.errorMessage = 'Invalid email or password.';
-    } else {
-      this.errorMessage = 'Login failed. Please try again.';
-    }
-  },
-
-  complete: () => {
-    this.submitting = false;
-  }
-});
+      error: (err: any) => {
+        console.error('Login error:', err);
+        this.submitting = false;
+        
+        if (err.status === 404) {
+          this.errorMessage = 'Account not found. Please register first.';
+        } else if (err.status === 401) {
+          this.errorMessage = 'Invalid email or password.';
+        } else if (err.status === 403) {
+          this.errorMessage = 'Access denied. Please ensure you are logging in as a Doctor.';
+        } else if (err.status === 0) {
+          this.errorMessage = 'Cannot connect to server. Please check if the backend is running.';
+        } else {
+          this.errorMessage = 'Login failed. Please try again. (Error: ' + (err.status || 'Unknown') + ')';
+        }
+      }
+    });
   }
 }

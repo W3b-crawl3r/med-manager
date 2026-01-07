@@ -34,6 +34,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/v1/auth/login").permitAll()
+                    .requestMatchers("/api/v1/auth/login-doctor").permitAll()
+                    .requestMatchers("/api/v1/auth/login-patient").permitAll()
+                    .requestMatchers("/api/v1/auth/login-secretary").permitAll()
                     .requestMatchers("/api/v1/patients/signup").permitAll()
                     .requestMatchers("/api/v1/search/doctor/**").permitAll()
                     .requestMatchers("/api/v1/auth/testauth").hasAuthority("ROLE_DOCTOR")
