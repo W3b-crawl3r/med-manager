@@ -12,6 +12,7 @@ export class AuthService {
     // Load token and role from localStorage on service init
     const savedToken = localStorage.getItem('authToken');
     const savedRole = localStorage.getItem('userRole');
+    
     if (savedToken && savedRole) {
       this.token = savedToken;
       this.role = savedRole as 'SECRETARY' | 'DOCTOR' | 'PATIENT' | 'ADMIN';
