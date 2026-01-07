@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     @Query("SELECT p FROM PatientModel p WHERE ?1 MEMBER OF p.doctors AND LOWER(p.username) LIKE LOWER(CONCAT('%', ?2, '%'))")
     List<PatientModel> searchPatientsByKeyword(DoctorModel doctor, String keyword);
+
+    @Query("SELECT d FROM DoctorModel d WHERE LOWER(d.username) LIKE LOWER(CONCAT('%', ?1, '%'))")
+    List<DoctorModel> searchDoctorsByKeyword(String keyword);
 }

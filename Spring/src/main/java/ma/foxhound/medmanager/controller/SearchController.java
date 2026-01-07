@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import ma.foxhound.medmanager.DTO.DoctorSummaryDto;
 import ma.foxhound.medmanager.DTO.PatientSummaryDto;
 import ma.foxhound.medmanager.DTO.VisitSummaryDto;
 import ma.foxhound.medmanager.model.DoctorModel;
@@ -23,6 +24,22 @@ import ma.foxhound.medmanager.service.SearchService;
 public class SearchController {
 
     SearchService searchService;
+
+    @GetMapping("/doctor/{keyword}")
+    public ResponseEntity<List<DoctorSummaryDto>> searchDoctors(@PathVariable String keyword) {
+        List<DoctorModel> doctors = searchService.searchDoctors(keyword);
+        List<DoctorSummaryDto> summaries = doctors.stream()
+            .map(d -> DoctorSummaryDto.builder()
+                .id(d.getId())
+                .username(d.getUsername())
+                .specialty(d.getSpecialty())
+                .build())
+            .collect(Collectors.toList());
+        if (summaries.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(summaries);
+    }
 
     @GetMapping("/patient/{keyword}")
     public ResponseEntity<List<PatientSummaryDto>> searchPatients(@PathVariable String keyword, Authentication authentication) {

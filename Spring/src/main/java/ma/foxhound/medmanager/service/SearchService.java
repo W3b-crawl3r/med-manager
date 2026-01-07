@@ -17,4 +17,8 @@ public class SearchService {
         return userRepository.searchPatientsByKeyword(doctor,keyword);
     }
     
+    public java.util.List<DoctorModel> searchDoctors(String keyword) {
+        return userRepository.searchDoctorsByKeyword(keyword);
+    }
+    
 }
