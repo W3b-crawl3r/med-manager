@@ -28,7 +28,9 @@
   <!-- DETAILS MODAL -->
   <div class="overlay" *ngIf="showDetails && selectedPatient as sp" (click)="closeDetails()">
     <div class="modal" (click)="$event.stopPropagation()">
-      <h3>Patient Details</h3>
+      <h3 *ngIf="!isNewPatient">Patient Details</h3>
+      <h3 *ngIf="isNewPatient">Add Patient</h3>
+      <p style="color:var(--muted,#6b7280);margin-top:6px;margin-bottom:12px" *ngIf="isNewPatient">Fill the form below to add a new patient.</p>
 
       <label>Name</label>
       <input [(ngModel)]="sp.name" [readonly]="!editingPatient" />
