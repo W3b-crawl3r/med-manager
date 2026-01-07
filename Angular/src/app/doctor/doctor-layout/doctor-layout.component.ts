@@ -57,9 +57,8 @@ export class DoctorLayoutComponent {
   }
 
   get logoSrc() {
-    // choose logo variant by theme
-    const saved = localStorage.getItem('theme') || (this.isDark ? 'dark' : 'light');
-    return saved === 'dark' ? 'assets/medMan-white.png' : 'assets/medMan-color.png';
+    // sidebar uses a dark background — use white logo to ensure visibility
+    return 'assets/medMan-white.png';
   }
 
   get unreadCount(): number {
