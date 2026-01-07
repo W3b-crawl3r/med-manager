@@ -28,35 +28,37 @@
     <small class="muted">Total visits: {{ visits.length }} — Visible: {{ filteredVisits.length }}</small>
   </div>
 
-  <div style="margin:8px 0;">
-    <small class="muted">Raw visits JSON: {{ visits | json }}</small>
-  </div>
+  <!-- removed debug JSON output -->
 
   <div class="visits-grid">
     <div class="visit-card" *ngFor="let visit of filteredVisits; let i = index">
 
       <div class="card-header">
-        <div>
-          <h3>{{ visit.patientName }}</h3>
-          <span>{{ visit.date }}</span>
+        <div class="left">
+          <div class="avatar-lg">{{ getInitials(visit.patientName) }}</div>
+          <div class="meta">
+            <h3 class="patient-name">{{ visit.patientName }}</h3>
+            <div class="date muted">{{ visit.date }}</div>
+          </div>
         </div>
-        <span class="badge" [class.completed]="visit.status === 'Completed'">
-          {{ visit.status }}
-        </span>
+        <div class="right">
+          <span class="badge" [class.completed]="visit.status === 'Completed'">{{ visit.status }}</span>
+        </div>
       </div>
 
       <div class="content">
-        <p><strong>Diagnosis:</strong> {{ visit.diagnosis }}</p>
-        <p><strong>Notes:</strong> {{ visit.notes }}</p>
-
-        <ul>
-          <li *ngFor="let p of visit.prescriptions">{{ p }}</li>
-        </ul>
+        <div class="diagnosis"><strong>Diagnosis:</strong> {{ visit.diagnosis }}</div>
+        <div class="notes"><strong>Notes:</strong> {{ visit.notes }}</div>
+        <div class="prescriptions"><strong>Prescriptions:</strong>
+          <ul>
+            <li *ngFor="let p of visit.prescriptions">{{ p }}</li>
+          </ul>
+        </div>
       </div>
 
       <div class="actions">
-        <button class="danger" (click)="deleteVisit(visit)">Delete</button>
-        <button class="primary" style="margin-left:8px" (click)="viewVisitDetails(visit)">View</button>
+        <button class="btn danger" (click)="deleteVisit(visit)">Delete</button>
+        <button class="btn primary" (click)="viewVisitDetails(visit)">View</button>
       </div>
 
     </div>
@@ -67,13 +69,14 @@
 <div class="overlay" *ngIf="showModal" (click)="closeModal()">
   <div class="modal" (click)="$event.stopPropagation()">
     <h2>Add New Visit</h2>
+    <p style="color:var(--muted,#6b7280);margin-top:6px;margin-bottom:12px">Select a patient, then pick a day (Mon–Sat), choose Morning/Evening or All, and tap an hour.</p>
 
-    <label>Patient</label>
+    <label>Select Patient</label>
     <select [(ngModel)]="newVisit.patientName">
       <option *ngFor="let p of patientsList" [value]="p">{{ p }}</option>
     </select>
 
-    <label>Choose Day</label>
+    <label>Choose Day (Mon–Sat)</label>
     <div class="weekday-row">
       <button type="button" class="chip" *ngFor="let d of weekdayLabels; let i = index" [class.active]="selectedWeekday===weekdayOrder[i]" (click)="pickWeekday(weekdayOrder[i])">{{ d }}</button>
     </div>
@@ -86,14 +89,14 @@
     </div>
 
     <div *ngIf="availableTimes?.length">
-      <label>Hours</label>
+        <label>Available Hours</label>
       <div class="times-row">
         <button type="button" class="time-pill" *ngFor="let t of availableTimes" [class.active]="selectedTime===t" (click)="selectTime(t)">{{ t }}</button>
       </div>
     </div>
 
     <label>Selected</label>
-    <div style="margin-bottom:8px;font-weight:600">{{ formatSelectedDisplay() }}</div>
+    <div style="margin-bottom:8px;font-weight:600;color:var(--text-primary)">{{ formatSelectedDisplay() }}</div>
 
     <label>Status</label>
     <select [(ngModel)]="newVisit.status">

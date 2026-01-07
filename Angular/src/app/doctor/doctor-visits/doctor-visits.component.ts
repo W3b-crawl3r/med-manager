@@ -23,11 +23,43 @@ export class DoctorVisitsComponent implements OnInit {
   visits: Visit[] = [
     {
       patientName: 'John Doe',
-      date: '2026-01-05T09:00',
+      date: '2026-01-05 09:00',
       status: 'Completed',
       diagnosis: 'Flu',
       notes: 'Rest and hydration',
       prescriptions: ['Paracetamol']
+    },
+    {
+      patientName: 'Sarah Smith',
+      date: '2026-01-06 11:30',
+      status: 'Pending',
+      diagnosis: 'Back pain',
+      notes: 'Recommended physiotherapy',
+      prescriptions: ['Ibuprofen']
+    },
+    {
+      patientName: 'Ahmed Ali',
+      date: '2026-01-07 14:00',
+      status: 'Completed',
+      diagnosis: 'Allergy',
+      notes: 'Prescribed antihistamine',
+      prescriptions: ['Loratadine']
+    },
+    {
+      patientName: 'Fatima Noor',
+      date: '2026-01-08 16:00',
+      status: 'Pending',
+      diagnosis: 'Follow-up',
+      notes: 'Check blood results',
+      prescriptions: ['—']
+    },
+    {
+      patientName: 'Omar Haddad',
+      date: '2026-01-09 10:00',
+      status: 'Completed',
+      diagnosis: 'Dental check',
+      notes: 'Referred to dentist',
+      prescriptions: ['—']
     }
   ];
 
@@ -72,6 +104,20 @@ newVisit: {
   selectedTime = '';
 
   ngOnInit() {
+    // load persisted visits if any
+    try {
+      const raw = localStorage.getItem('doctorVisits');
+      if (raw) this.visits = JSON.parse(raw) as Visit[];
+    } catch (e) {}
+    // try to load patients from persisted store
+    try {
+      const rawP = localStorage.getItem('doctorPatients');
+      if (rawP) {
+        const arr = JSON.parse(rawP) as Array<any>;
+        if (arr.length) this.patientsList = arr.map(p => p.name).filter(Boolean);
+      }
+    } catch (e) {}
+
     this.applyFilters();
   }
 
@@ -102,6 +148,8 @@ newVisit: {
     this.resetNewVisit();
     this.showDetails = false;
     this.generateTimes();
+    // default selected patient
+    this.newVisit.patientName = this.patientsList[0] || '';
     this.showModal = true;
   }
 
@@ -123,9 +171,16 @@ newVisit: {
   confirmAddVisit() {
     if (!this.newVisit.patientName || !this.newVisit.date) return;
 
+    // normalize date display to YYYY-MM-DD HH:mm
+    let displayDate = this.newVisit.date;
+    try {
+      const dt = new Date(this.newVisit.date);
+      displayDate = dt.toISOString().split('.')[0].replace('T', ' ');
+    } catch (e) {}
+
     const visit: Visit = {
       patientName: this.newVisit.patientName,
-      date: this.newVisit.date,
+      date: displayDate,
       status: this.newVisit.status,
       diagnosis: this.newVisit.diagnosis,
       notes: this.newVisit.notes,
@@ -135,13 +190,19 @@ newVisit: {
     };
 
     this.visits.unshift(visit);
+    this.saveVisits();
     this.applyFilters();
     this.closeModal();
   }
 
   deleteVisit(visit: Visit) {
     this.visits = this.visits.filter(v => v !== visit);
+    this.saveVisits();
     this.applyFilters();
+  }
+
+  saveVisits() {
+    try { localStorage.setItem('doctorVisits', JSON.stringify(this.visits)); } catch (e) {}
   }
 
   // ================= TIME =================
@@ -183,6 +244,12 @@ newVisit: {
     const idx = this.weekdayOrder.indexOf(this.selectedWeekday);
     const dayLabel = idx >= 0 ? this.weekdayLabels[idx] : '';
     return `${dayLabel} ${iso} at ${this.selectedTime}`;
+  }
+
+  getInitials(name?: string): string {
+    if (!name) return '';
+    const parts = name.split(' ').filter(p => !!p);
+    return parts.map(p => p.charAt(0)).slice(0,2).join('').toUpperCase();
   }
 
   private nextDateForWeekday(targetWeekday: number): string {
