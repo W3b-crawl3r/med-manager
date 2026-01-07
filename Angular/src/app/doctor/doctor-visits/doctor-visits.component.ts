@@ -37,10 +37,8 @@ export class DoctorVisitsComponent {
   selectedVisit: Visit | null = null;
   showDetails = false;
 
-  // small mocked patient list to populate select in new visit
-  patientsList = [
-    'Michael Chen','Emma Rodriguez','David Thompson','Sarah Williams','Aisha Ben','Omar Haddad'
-  ];
+  // load patients list from stored patients (fallback to seeded names)
+  patientsList: string[] = [];
 
   // parameters/filters
   filterStatus: 'all' | 'Completed' | 'Pending' = 'all';
@@ -133,6 +131,20 @@ export class DoctorVisitsComponent {
     } catch (e) {
       this.visits = [];
     }
+
+    // load patients from localStorage doctorPatients if present
+    try {
+      const rawP = localStorage.getItem('doctorPatients');
+      if (rawP) {
+        const arr = JSON.parse(rawP) as Array<any>;
+        this.patientsList = arr.map(p => p.name).filter(Boolean);
+      }
+    } catch (e) {
+      // fallback to defaults if not available
+    }
+    if (!this.patientsList.length) {
+      this.patientsList = ['Michael Chen','Emma Rodriguez','David Thompson','Sarah Williams','Aisha Ben','Omar Haddad'];
+    }
   }
 
   saveVisits() {
@@ -142,11 +154,12 @@ export class DoctorVisitsComponent {
   resetNewVisit() {
     this.newVisit = {
       patientName: this.patientsList[0] || '',
-      date: new Date().toISOString().slice(0,16).replace('T',' '),
+      date: new Date().toISOString().slice(0,16),
       status: 'Pending',
       diagnosis: '',
       notes: '',
-      prescriptions: []
+      prescriptions: [],
+      prescriptionsString: ''
     };
   }
 }
