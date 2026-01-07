@@ -3,6 +3,21 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
+import { SearchService, DoctorSearchResult } from './services/search.service';
+
+type DoctorCard = {
+  id: number;
+  name: string;
+  specialty: string;
+  clinic: string;
+  location: string;
+  experience: number;
+  rating: number;
+  nextAvailable: string;
+  availability: string[];
+  online: boolean;
+  image: string;
+};
 
 @Component({
   selector: 'app-root',
@@ -92,7 +107,8 @@ export class App implements OnInit {
   constructor(
     private router: Router,
     @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
@@ -104,6 +120,9 @@ export class App implements OnInit {
     
     // Simulate live chat messages
     this.simulateLiveChat();
+
+    // Load doctors from backend search endpoint
+    this.fetchDoctors();
     
     // Debug log
     console.log('App initialized with theme:', savedTheme);
@@ -278,109 +297,133 @@ toggleTheme() {
   searchTerm = '';
   selectedSpecialty = 'all';
   selectedCity = 'all';
+  doctorLoading = false;
+  doctorError: string | null = null;
 
-  // Enhanced doctors data with live features
-  doctors = [
-    { 
-      id: 1, 
-      name: 'Dr. Sarah Bennani', 
-      specialty: 'Cardiologist', 
-      clinic: 'Heart Care Clinic', 
-      location: 'Casablanca', 
-      experience: 12, 
-      rating: 4.8, 
+  private doctorAvatars = [
+    'assets/doctors/doc1.jpg',
+    'assets/doctors/doc2.jpg',
+    'assets/doctors/doc3.jpg',
+    'assets/doctors/doc4.jpg',
+    'assets/doctors/doc5.jpg',
+    'assets/doctors/doc6.jpg'
+  ];
+
+  private mockDoctors: DoctorCard[] = [
+    {
+      id: 1,
+      name: 'Dr. Sarah Bennani',
+      specialty: 'Cardiologist',
+      clinic: 'Heart Care Clinic',
+      location: 'Casablanca',
+      experience: 12,
+      rating: 4.8,
       nextAvailable: 'Tomorrow 10 AM',
       availability: ['Mon', 'Wed', 'Fri', 'Sat'],
       online: true,
-      image: 'assets/doctors/doc1.jpg' 
+      image: 'assets/doctors/doc1.jpg'
     },
-    { 
-      id: 2, 
-      name: 'Dr. Youssef Amrani', 
-      specialty: 'Dermatologist', 
-      clinic: 'Skin Center', 
-      location: 'Rabat', 
-      experience: 9, 
-      rating: 4.6, 
+    {
+      id: 2,
+      name: 'Dr. Youssef Amrani',
+      specialty: 'Dermatologist',
+      clinic: 'Skin Center',
+      location: 'Rabat',
+      experience: 9,
+      rating: 4.6,
       nextAvailable: 'Today 3 PM',
       availability: ['Tue', 'Thu', 'Sat'],
       online: false,
-      image: 'assets/doctors/doc2.jpg' 
+      image: 'assets/doctors/doc2.jpg'
     },
-    { 
-      id: 3, 
-      name: 'Dr. Amina El Fassi', 
-      specialty: 'Pediatrician', 
-      clinic: 'Children\'s Health Center', 
-      location: 'Marrakech', 
-      experience: 15, 
-      rating: 4.9, 
+    {
+      id: 3,
+      name: "Dr. Amina El Fassi",
+      specialty: 'Pediatrician',
+      clinic: "Children's Health Center",
+      location: 'Marrakech',
+      experience: 15,
+      rating: 4.9,
       nextAvailable: 'Monday 9 AM',
       availability: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
       online: true,
-      image: 'assets/doctors/doc3.jpg' 
+      image: 'assets/doctors/doc3.jpg'
     },
-    { 
-      id: 4, 
-      name: 'Dr. Karim Bouzidi', 
-      specialty: 'Orthopedic Surgeon', 
-      clinic: 'Bone & Joint Clinic', 
-      location: 'Casablanca', 
-      experience: 18, 
-      rating: 4.7, 
+    {
+      id: 4,
+      name: 'Dr. Karim Bouzidi',
+      specialty: 'Orthopedic Surgeon',
+      clinic: 'Bone & Joint Clinic',
+      location: 'Casablanca',
+      experience: 18,
+      rating: 4.7,
       nextAvailable: 'Wednesday 2 PM',
       availability: ['Wed', 'Thu', 'Sat'],
       online: true,
-      image: 'assets/doctors/doc4.jpg' 
+      image: 'assets/doctors/doc4.jpg'
     },
-    { 
-      id: 5, 
-      name: 'Dr. Fatima Zahra Alaoui', 
-      specialty: 'Neurologist', 
-      clinic: 'Neuro Care Center', 
-      location: 'Rabat', 
-      experience: 11, 
-      rating: 4.8, 
+    {
+      id: 5,
+      name: 'Dr. Fatima Zahra Alaoui',
+      specialty: 'Neurologist',
+      clinic: 'Neuro Care Center',
+      location: 'Rabat',
+      experience: 11,
+      rating: 4.8,
       nextAvailable: 'Friday 11 AM',
       availability: ['Mon', 'Fri'],
       online: false,
-      image: 'assets/doctors/doc5.jpg' 
+      image: 'assets/doctors/doc5.jpg'
     },
-    { 
-      id: 6, 
-      name: 'Dr. Mehdi Benjelloun', 
-      specialty: 'Dentist', 
-      clinic: 'Smile Dental Clinic', 
-      location: 'Tangier', 
-      experience: 8, 
-      rating: 4.5, 
+    {
+      id: 6,
+      name: 'Dr. Mehdi Benjelloun',
+      specialty: 'Dentist',
+      clinic: 'Smile Dental Clinic',
+      location: 'Tangier',
+      experience: 8,
+      rating: 4.5,
       nextAvailable: 'Today 5 PM',
       availability: ['Tue', 'Wed', 'Thu', 'Fri'],
       online: true,
-      image: 'assets/doctors/doc6.jpg' 
+      image: 'assets/doctors/doc6.jpg'
     }
   ];
 
+  doctors: DoctorCard[] = [];
+
   get specialties(): string[] {
-    return ['all', ...new Set(this.doctors.map(d => d.specialty))];
+    return ['all', ...new Set(this.doctors.map(d => d.specialty || 'General Medicine'))];
   }
 
   get cities(): string[] {
-    return ['all', ...new Set(this.doctors.map(d => d.location))];
+    return ['all', ...new Set(this.doctors.map(d => d.location || 'Unknown'))];
   }
 
   get filteredDoctors() {
-    return this.doctors.filter(d =>
-      (this.selectedSpecialty === 'all' || d.specialty === this.selectedSpecialty) &&
-      (this.selectedCity === 'all' || d.location === this.selectedCity) &&
-      (d.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-       d.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-       d.clinic.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
+    const term = this.searchTerm.toLowerCase();
+    const selectedSpecialty = this.selectedSpecialty.toLowerCase();
+    const selectedCity = this.selectedCity.toLowerCase();
+
+    return this.doctors.filter(d => {
+      const specialty = (d.specialty || '').toLowerCase();
+      const city = (d.location || '').toLowerCase();
+      const name = (d.name || '').toLowerCase();
+      const clinic = (d.clinic || '').toLowerCase();
+
+      return (
+        (this.selectedSpecialty === 'all' || specialty === selectedSpecialty) &&
+        (this.selectedCity === 'all' || city === selectedCity) &&
+        (!term ||
+          name.includes(term) ||
+          specialty.includes(term) ||
+          clinic.includes(term))
+      );
+    });
   }
 
   onFilterChange() {
-    // Filter logic here
+    this.fetchDoctors();
   }
 
   hasActiveFilters(): boolean {
@@ -393,6 +436,49 @@ toggleTheme() {
     this.searchTerm = '';
     this.selectedSpecialty = 'all';
     this.selectedCity = 'all';
+    this.fetchDoctors();
+  }
+
+  private fetchDoctors() {
+    const keyword = (this.searchTerm || '').trim();
+    if (!keyword) {
+      this.doctors = this.mockDoctors;
+      this.doctorError = null;
+      this.doctorLoading = false;
+      return;
+    }
+
+    this.doctorLoading = true;
+    this.searchService.searchDoctors(keyword).subscribe({
+      next: (results: DoctorSearchResult[]) => {
+        this.doctors = results.map((doctor, index) => this.mapDoctorToCard(doctor, index));
+        this.doctorError = null;
+        this.doctorLoading = false;
+      },
+      error: (err) => {
+        console.error('Unable to fetch doctors', err);
+        this.doctorError = 'Unable to load doctors right now.';
+        this.doctors = this.mockDoctors;
+        this.doctorLoading = false;
+      }
+    });
+  }
+
+  private mapDoctorToCard(doctor: DoctorSearchResult, index: number): DoctorCard {
+    const specialty = doctor.specialty || 'General Medicine';
+    return {
+      id: doctor.id,
+      name: doctor.username,
+      specialty,
+      clinic: 'Clinic not specified',
+      location: 'Unknown',
+      experience: 5 + (doctor.id % 10),
+      rating: 4.5,
+      nextAvailable: 'Contact clinic for availability',
+      availability: ['Mon', 'Wed', 'Fri'],
+      online: index % 2 === 0,
+      image: this.doctorAvatars[index % this.doctorAvatars.length]
+    };
   }
 
   isToday(day: string): boolean {

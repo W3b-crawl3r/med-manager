@@ -101,6 +101,11 @@
     </button>
   </div>
 
+  <div class="status-row" *ngIf="doctorLoading || doctorError">
+    <span *ngIf="doctorLoading">Loading doctors...</span>
+    <span *ngIf="doctorError" class="error-text">{{ doctorError }}</span>
+  </div>
+
   <!-- Doctors Grid -->
   <div class="doctors-grid">
     <div class="doctor-card" *ngFor="let doctor of filteredDoctors; let i = index">
