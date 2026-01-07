@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router'; 
+import { Routes } from '@angular/router';
 import { secretaryGuard } from './Secretary/secretary.guard';
 import { LoginComponent } from './components/login-component/login-component';
 import { Dummy } from './components/dummy/dummy';
@@ -7,12 +7,12 @@ import { authenticatedGuard } from './guards/authenticated-guard';
 export const routes: Routes = [
   // DOCTOR ROUTES
   {
-  path: 'doctor-page',
-  loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorRoutingModule)
-}
+    path: 'doctor-page',
+    loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorRoutingModule)
+  }
 
 
-,
+  ,
   // LOGIN ROUTES
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: Dummy, canActivate: [authenticatedGuard] },
@@ -62,6 +62,14 @@ export const routes: Routes = [
       import('./Secretary/secretary-login/secretary-login.component')
         .then(m => m.SecretaryLoginComponent)
   },
+
+  // ADMIN LOGIN
+  {
+    path: 'admin-login',
+    loadComponent: () =>
+      import('./admin/admin-login/admin-login.component')
+        .then(m => m.AdminLoginComponent)
+  },
   {
     path: 'secretary/dashboard',
     loadComponent: () =>
@@ -90,4 +98,12 @@ export const routes: Routes = [
         .then(m => m.PatientsListComponent),
     canActivate: [secretaryGuard]
   }
+  ,
+  // ADMIN ROUTES
+  // ADMIN ROUTES
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  }
+
 ];

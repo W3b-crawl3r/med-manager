@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private base = '/api/auth';
-  private role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | null = null;
+  private role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | 'ADMIN' | null = null;
   private token: string | null = null;
 
   constructor(private http: HttpClient) {
@@ -14,14 +14,14 @@ export class AuthService {
     const savedRole = localStorage.getItem('userRole');
     if (savedToken && savedRole) {
       this.token = savedToken;
-      this.role = savedRole as 'SECRETARY' | 'DOCTOR' | 'PATIENT';
+      this.role = savedRole as 'SECRETARY' | 'DOCTOR' | 'PATIENT' | 'ADMIN';
     }
   }
   // In auth.service.ts
-registerPatient(data: FormData) {
-  // Replace the URL with your backend endpoint for patient registration
-  return this.http.post('/api/patients/register', data);
-}
+  registerPatient(data: FormData) {
+    // Replace the URL with your backend endpoint for patient registration
+    return this.http.post('/api/patients/register', data);
+  }
 
   registerDoctor(payload: any): Observable<any> {
     // Payload may be FormData (multipart) or plain JSON depending on caller
@@ -44,6 +44,10 @@ registerPatient(data: FormData) {
     return this.http.post(`${this.base}/login-patient`, payload);
   }
 
+  loginAdmin(payload: any): Observable<any> {
+    return this.http.post(`${this.base}/login-admin`, payload);
+  }
+
   setToken(token: string) {
     this.token = token;
     localStorage.setItem('authToken', token);
@@ -53,7 +57,7 @@ registerPatient(data: FormData) {
     return this.token;
   }
 
-  setRole(role: 'SECRETARY' | 'DOCTOR' | 'PATIENT') {
+  setRole(role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | 'ADMIN') {
     this.role = role;
     localStorage.setItem('userRole', role);
   }
@@ -72,6 +76,10 @@ registerPatient(data: FormData) {
 
   isPatient(): boolean {
     return this.role === 'PATIENT';
+  }
+
+  isAdmin(): boolean {
+    return this.role === 'ADMIN';
   }
 
   logout() {
