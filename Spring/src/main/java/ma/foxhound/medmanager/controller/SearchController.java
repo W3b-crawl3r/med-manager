@@ -34,6 +34,25 @@ public class SearchController {
                 .username(d.getUsername())
                 .specialty(d.getSpecialty())
                 .location(d.getLocation())
+                .clinic(d.getClinic())
+                .build())
+            .collect(Collectors.toList());
+        if (summaries.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(summaries);
+    }
+
+    @GetMapping("/doctor/all")
+    public ResponseEntity<List<DoctorSummaryDto>> getAllDoctors() {
+        List<DoctorModel> doctors = searchService.getAllDoctors();
+        List<DoctorSummaryDto> summaries = doctors.stream()
+            .map(d -> DoctorSummaryDto.builder()
+                .id(d.getId())
+                .username(d.getUsername())
+                .specialty(d.getSpecialty())
+                .location(d.getLocation())
+                .clinic(d.getClinic())
                 .build())
             .collect(Collectors.toList());
         if (summaries.isEmpty()) {

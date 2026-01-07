@@ -8,6 +8,7 @@ export interface DoctorSearchResult {
   username: string;
   specialty: string;
   location: string;
+  clinic: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,6 +25,17 @@ export class SearchService {
       .pipe(
         catchError(err => {
           console.error('Doctor search failed', err);
+          return of([]);
+        })
+      );
+  }
+
+  getAllDoctors(): Observable<DoctorSearchResult[]> {
+    return this.http
+      .get<DoctorSearchResult[]>(`${this.base}/doctor/all`)
+      .pipe(
+        catchError(err => {
+          console.error('Fetch all doctors failed', err);
           return of([]);
         })
       );

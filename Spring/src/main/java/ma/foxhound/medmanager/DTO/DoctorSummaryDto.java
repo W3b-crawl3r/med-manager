@@ -10,4 +10,5 @@ public class DoctorSummaryDto {
     private String username;
     private String specialty;
     private String location;
+    private String clinic;
 }

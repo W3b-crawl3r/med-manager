@@ -442,9 +442,20 @@ toggleTheme() {
   private fetchDoctors() {
     const keyword = (this.searchTerm || '').trim();
     if (!keyword) {
-      this.doctors = this.mockDoctors;
-      this.doctorError = null;
-      this.doctorLoading = false;
+      this.doctorLoading = true;
+      this.searchService.getAllDoctors().subscribe({
+        next: (results: DoctorSearchResult[]) => {
+          this.doctors = results.map((doctor, index) => this.mapDoctorToCard(doctor, index));
+          this.doctorError = null;
+          this.doctorLoading = false;
+        },
+        error: (err) => {
+          console.error('Unable to fetch all doctors', err);
+          this.doctorError = 'Unable to load doctors right now.';
+          this.doctors = this.mockDoctors;
+          this.doctorLoading = false;
+        }
+      });
       return;
     }
 
@@ -470,7 +481,7 @@ toggleTheme() {
       id: doctor.id,
       name: doctor.username,
       specialty,
-      clinic: 'Clinic not specified',
+      clinic: doctor.clinic || 'Clinic not specified',
       location: doctor.location || 'Unknown',
       experience: 5 + (doctor.id % 10),
       rating: 4.5,

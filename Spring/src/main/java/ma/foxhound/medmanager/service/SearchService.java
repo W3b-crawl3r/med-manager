@@ -20,5 +20,9 @@ public class SearchService {
     public java.util.List<DoctorModel> searchDoctors(String keyword) {
         return userRepository.searchDoctorsByKeyword(keyword);
     }
+
+    public java.util.List<DoctorModel> getAllDoctors() {
+        return userRepository.findAllDoctors();
+    }
     
 }

@@ -21,6 +21,7 @@ import ma.foxhound.medmanager.enums.Role;
 public class DoctorModel extends UserModel {
     String specialty;
     String location;
+    String clinic;
 
         @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
