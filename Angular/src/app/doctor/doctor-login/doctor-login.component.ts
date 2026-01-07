@@ -67,7 +67,13 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
+    });
+    
+    // Pre-fill demo credentials for testing
+    this.form.patchValue({
+      email: this.DEMO_EMAIL,
+      password: this.DEMO_PASSWORD
     });
   }
 
@@ -83,6 +89,18 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
 
   onSubmit() {
     console.log('Login form submitted');
+    console.log('Form status:', this.form.status);
+    console.log('Form value:', this.form.value);
+    console.log('Email control:', { 
+      value: this.form.get('email')?.value,
+      valid: this.form.get('email')?.valid,
+      errors: this.form.get('email')?.errors
+    });
+    console.log('Password control:', { 
+      value: this.form.get('password')?.value,
+      valid: this.form.get('password')?.valid,
+      errors: this.form.get('password')?.errors
+    });
     
     if (this.form.invalid) {
       console.log('Form is invalid');

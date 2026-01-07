@@ -43,11 +43,15 @@
         <label class="form-field">
           <span>{{ t('email') }}<span class="required-star">*</span></span>
           <input formControlName="email" type="text" placeholder="{{ t('emailPlaceholder') }}" />
+          <small *ngIf="form.get('email')?.invalid && form.get('email')?.touched" style="color: red;">Email is required</small>
         </label>
 
         <label class="form-field">
           <span>{{ t('password') }}<span class="required-star">*</span></span>
           <input formControlName="password" type="password" placeholder="{{ t('passwordPlaceholder') }}" />
+          <small *ngIf="form.get('password')?.invalid && form.get('password')?.touched" style="color: red;">
+            Password is required
+          </small>
         </label>
       </div>
 
