@@ -55,6 +55,14 @@ export const routes: Routes = [
     loadComponent: () => import('./booking/booking.component').then(m => m.BookingComponent)
   },
 
+  // PATIENT LOGIN
+  {
+    path: 'patient-login',
+    loadComponent: () =>
+      import('./patient/patient-login/patient-login.component')
+        .then(m => m.PatientLoginComponent)
+  },
+
   // SECRETARY LOGIN & DASHBOARD
   {
     path: 'secretary-login',

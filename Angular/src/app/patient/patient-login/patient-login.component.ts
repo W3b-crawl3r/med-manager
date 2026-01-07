@@ -19,7 +19,8 @@ export class PatientLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
-
+  private DEMO_EMAIL = 'patient@medmanager.com';
+  private DEMO_PASSWORD = 'patient123';
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -90,6 +91,19 @@ export class PatientLoginComponent {
     this.submitting = true;
     this.errorMessage = '';
 
+    // ✅ DEMO LOGIN (early return, clean)
+    if (
+      payload?.email === this.DEMO_EMAIL &&
+      payload?.password === this.DEMO_PASSWORD
+    ) {
+      this.auth.setToken('demo-patient-token');
+      this.auth.setRole('PATIENT');
+      this.submitting = false;
+      this.router.navigate(['/']);
+      return;
+    }
+
+    // ✅ REAL LOGIN
     this.auth.loginPatient(payload).subscribe({
       next: (response: any) => {
         const token = response.token || 'patient-token-placeholder';

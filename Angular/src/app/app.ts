@@ -214,7 +214,7 @@ toggleTheme() {
     const url = this.router.url;
     return url.startsWith('/secretary-inscription') || 
            url.startsWith('/secretary-login') ||
-           url === '/secretary-dashboard';
+           url.startsWith('/secretary/');
   }
 
   
@@ -223,7 +223,8 @@ toggleTheme() {
     const url = this.router.url;
     return url.startsWith('/patient-inscription') || 
            url.startsWith('/patient-login') ||
-           url === '/patient-dashboard';
+           url.startsWith('/patient/') ||
+           url === '/patients';
   }
 
   isAuthRoute(): boolean {

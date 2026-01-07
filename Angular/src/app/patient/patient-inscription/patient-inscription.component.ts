@@ -20,6 +20,7 @@ export class PatientInscriptionComponent {
   errorMessage = '';
   selectedGender: 'male' | 'female' | null = null;
   currentLang = 'en';
+  currentFlag = 'https://flagcdn.com/gb.svg';
 
   translations: Record<string, Record<string, string>> = {
     en: {
@@ -33,7 +34,8 @@ export class PatientInscriptionComponent {
       allergies: 'Allergies',
       register: 'Register',
       alreadyAccountPrefix: 'Already have an account?',
-      loginLink: 'Login here'
+      loginLink: 'Login here',
+      backToHome: 'Back to home'
     },
     fr: {
       title: "Inscription Patient",
@@ -46,7 +48,8 @@ export class PatientInscriptionComponent {
       allergies: "Allergies",
       register: "S'inscrire",
       alreadyAccountPrefix: "Vous avez déjà un compte ?",
-      loginLink: "Connectez-vous"
+      loginLink: "Connectez-vous",
+      backToHome: "Retour à l'accueil"
     }
   };
 
@@ -69,9 +72,15 @@ export class PatientInscriptionComponent {
     this.selectedGender = g;
     this.form.get('gender')?.setValue(g);
   }
-  toggleLanguage() {
-  this.showLanguageMenu = !this.showLanguageMenu;
-}
+  toggleLanguageMenu() {
+    this.showLanguageMenu = !this.showLanguageMenu;
+  }
+
+  changeLanguage(lang: 'en' | 'fr') {
+    this.currentLang = lang;
+    this.currentFlag = lang === 'fr' ? 'https://flagcdn.com/fr.svg' : 'https://flagcdn.com/gb.svg';
+    this.showLanguageMenu = false;
+  }
    toggleUserMenu() {
   this.showUserMenu = !this.showUserMenu;
 }
