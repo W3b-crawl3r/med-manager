@@ -33,6 +33,7 @@ public class SearchController {
                 .id(d.getId())
                 .username(d.getUsername())
                 .specialty(d.getSpecialty())
+                .location(d.getLocation())
                 .build())
             .collect(Collectors.toList());
         if (summaries.isEmpty()) {

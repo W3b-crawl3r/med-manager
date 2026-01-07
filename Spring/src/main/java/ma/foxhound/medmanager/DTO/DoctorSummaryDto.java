@@ -9,4 +9,5 @@ public class DoctorSummaryDto {
     private Long id;
     private String username;
     private String specialty;
+    private String location;
 }

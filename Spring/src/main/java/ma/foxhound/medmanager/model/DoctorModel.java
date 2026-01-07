@@ -20,6 +20,7 @@ import ma.foxhound.medmanager.enums.Role;
 @EqualsAndHashCode(callSuper = true)
 public class DoctorModel extends UserModel {
     String specialty;
+    String location;
 
         @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

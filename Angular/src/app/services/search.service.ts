@@ -7,6 +7,7 @@ export interface DoctorSearchResult {
   id: number;
   username: string;
   specialty: string;
+  location: string;
 }
 
 @Injectable({ providedIn: 'root' })

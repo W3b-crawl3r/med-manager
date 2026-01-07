@@ -28,10 +28,12 @@ public class DataInit implements CommandLineRunner {
         doctor.setUsername("admin");
         doctor.setHashedPassword(passwordEncoder.encode("admin123"));
         doctor.setSpecialty("General");
+        doctor.setLocation("Casablanca");
         DoctorModel doctor2 = new DoctorModel();
         doctor2.setUsername("doctor2");
         doctor2.setHashedPassword(passwordEncoder.encode("doctor123"));
         doctor2.setSpecialty("Pediatrics");
+        doctor2.setLocation("Rabat");
         PatientModel patient = new PatientModel();
         patient.setUsername("patient1");
         patient.setHashedPassword(passwordEncoder.encode("patient123"));

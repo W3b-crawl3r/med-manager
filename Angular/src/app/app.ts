@@ -471,7 +471,7 @@ toggleTheme() {
       name: doctor.username,
       specialty,
       clinic: 'Clinic not specified',
-      location: 'Unknown',
+      location: doctor.location || 'Unknown',
       experience: 5 + (doctor.id % 10),
       rating: 4.5,
       nextAvailable: 'Contact clinic for availability',
