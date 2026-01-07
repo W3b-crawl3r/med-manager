@@ -37,6 +37,8 @@ export class BookingComponent implements OnInit {
   selectedDay = '';
   selectedPeriod: 'all' | 'morning' | 'afternoon' | 'evening' | 'night' = 'all';
   filteredTimes: string[] = [];
+  // search-specific available times (based on selected weekday/period/specialty/city)
+  availableSearchTimes: string[] = [];
   // quick-pick weekday helper
   weekdayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   weekdayOrder = [1,2,3,4,5,6,0];
@@ -118,25 +120,40 @@ export class BookingComponent implements OnInit {
   }
 
   filteredDoctors() {
-    const term = this.searchTerm.trim().toLowerCase();
+    const term = (this.searchTerm || '').trim().toLowerCase();
     let list = this.doctors.filter(d =>
       (this.selectedSpecialty === 'all' || d.specialty === this.selectedSpecialty) &&
       (this.selectedCity === 'all' || (d.location || '') === this.selectedCity) &&
-      (term === '' || d.name.toLowerCase().includes(term) || d.specialty.toLowerCase().includes(term) || (d.clinic || '').toLowerCase().includes(term))
+      (term === '' || d.name.toLowerCase().includes(term) || d.specialty.toLowerCase().includes(term) || (d.clinic||'').toLowerCase().includes(term))
     );
 
-    // If user selected a date, require doctor availability that weekday
-    if (this.selectedDate) {
-      const day = this.getDayShortFromDate(this.selectedDate);
-      list = list.filter(d => (this.doctorAvailability[d.id] || []).includes(day));
+    // If a weekday quick-pick is selected, filter by doctor availability for that weekday
+    if (this.selectedWeekday !== null) {
+      const idx = this.weekdayOrder.indexOf(this.selectedWeekday as number);
+      const dayShort = idx >= 0 ? this.weekdayLabels[idx] : '';
+      if (dayShort) list = list.filter(d => (this.doctorAvailability[d.id] || []).includes(dayShort));
     }
 
-    // If user also selected a specific time, require slot availability
-    if (this.selectedTime) {
-      list = list.filter(d => (this.doctorSlots[d.id] || []).includes(this.selectedTime));
+    // If a period is selected (morning/afternoon/evening/night), require doctor to have at least one slot in that period
+    if (this.selectedPeriod && this.selectedPeriod !== 'all') {
+      list = list.filter(d => this.hasSlotInPeriod(d.id, this.selectedPeriod));
     }
 
     return list;
+  }
+
+  hasSlotInPeriod(doctorId: number, period: string): boolean {
+    const slots = this.doctorSlots[doctorId] || [];
+    return slots.some(t => {
+      const h = this.hourFromTime(t);
+      switch (period) {
+        case 'morning': return h >= 7 && h < 12;
+        case 'afternoon': return h >= 12 && h < 17;
+        case 'evening': return h >= 17 && h < 20;
+        case 'night': return h >= 20;
+        default: return true;
+      }
+    });
   }
 
   getInitials(name?: string): string {
@@ -256,8 +273,9 @@ export class BookingComponent implements OnInit {
     } else {
       this.selectedDate = this.nextDateForWeekday(jsWeekday);
     }
-    // refresh available times
+    // refresh available times for per-doctor view AND search view
     this.loadAvailableTimes();
+    this.computeAvailableTimesForSearch();
     // set filteredTimes to intersection of slots and period
     this.filteredTimes = this.availableTimes.filter(t => {
       if (this.selectedPeriod === 'all') return true;
@@ -277,6 +295,38 @@ export class BookingComponent implements OnInit {
   selectTime(t: string) {
     this.selectedTime = t;
     this.saveLastSearch();
+  }
+
+  // compute available times across doctors for the search view given the current filters
+  computeAvailableTimesForSearch() {
+    const timesSet = new Set<string>();
+    // map weekday number to short label
+    if (this.selectedWeekday === null) {
+      this.availableSearchTimes = [];
+      return;
+    }
+    const idx = this.weekdayOrder.indexOf(this.selectedWeekday as number);
+    const dayShort = idx >= 0 ? this.weekdayLabels[idx] : '';
+    if (!dayShort) { this.availableSearchTimes = []; return; }
+
+    // consider only doctors matching specialty/city filters
+    const candidates = this.doctors.filter(d => (this.selectedSpecialty === 'all' || d.specialty === this.selectedSpecialty) && (this.selectedCity === 'all' || (d.location||'') === this.selectedCity));
+    for (const d of candidates) {
+      if (!(this.doctorAvailability[d.id] || []).includes(dayShort)) continue;
+      const slots = this.doctorSlots[d.id] || [];
+      for (const s of slots) {
+        // period filter
+        if (this.selectedPeriod && this.selectedPeriod !== 'all') {
+          const h = this.hourFromTime(s);
+          if (this.selectedPeriod === 'morning' && !(h >= 7 && h < 12)) continue;
+          if (this.selectedPeriod === 'afternoon' && !(h >= 12 && h < 17)) continue;
+          if (this.selectedPeriod === 'evening' && !(h >= 17 && h < 20)) continue;
+        }
+        timesSet.add(s);
+      }
+    }
+    this.availableSearchTimes = Array.from(timesSet).sort((a,b) => a.localeCompare(b));
+    if (this.availableSearchTimes.length && !this.selectedTime) this.selectedTime = this.availableSearchTimes[0];
   }
 
   nextDateForWeekday(targetWeekday: number): string {

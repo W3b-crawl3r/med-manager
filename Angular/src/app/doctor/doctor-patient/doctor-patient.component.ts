@@ -31,6 +31,7 @@ export class DoctorPatientComponent {
   selectedPatient: Patient | null = null;
   showDetails = false;
   editingPatient = false;
+  isNewPatient = false;
 
   getInitials(name: string) {
     if (!name) return '';
@@ -46,14 +47,31 @@ export class DoctorPatientComponent {
     );
   }
 
-  viewPatient(patient: Patient) { this.selectedPatient = patient; this.showDetails = true; this.editingPatient = false; }
-  closeDetails() { this.selectedPatient = null; this.showDetails = false; this.editingPatient = false; }
-  addPatient() { alert('Add patient clicked!'); }
+  viewPatient(patient: Patient) { this.selectedPatient = patient; this.showDetails = true; this.editingPatient = false; this.isNewPatient = false; }
+  closeDetails() { this.selectedPatient = null; this.showDetails = false; this.editingPatient = false; this.isNewPatient = false; }
+  addPatient() {
+    // open modal with empty patient for creation
+    const newId = this.generatePatientId();
+    this.selectedPatient = { id: newId, name: '', age: 0, gender: 'Other', bloodType: '' };
+    this.isNewPatient = true;
+    this.editingPatient = true;
+    this.showDetails = true;
+  }
 
   savePatient() {
+    if (this.selectedPatient) {
+      if (this.isNewPatient) {
+        this.patients.push(this.selectedPatient);
+      } else {
+        // update existing patient already bound to selectedPatient
+        const idx = this.patients.findIndex(p => p.id === this.selectedPatient!.id);
+        if (idx >= 0) this.patients[idx] = this.selectedPatient;
+      }
+    }
     try { localStorage.setItem('doctorPatients', JSON.stringify(this.patients)); } catch (e) {}
     this.editingPatient = false;
     this.showDetails = false;
+    this.isNewPatient = false;
     alert('Patient saved.');
   }
 
@@ -66,6 +84,11 @@ export class DoctorPatientComponent {
       const raw = localStorage.getItem('doctorPatients');
       if (raw) this.patients = JSON.parse(raw);
     } catch (e) {}
+  }
+
+  generatePatientId(): string {
+    const next = this.patients.length + 1;
+    return `P${String(next).padStart(3,'0')}`;
   }
 }
 

@@ -32,10 +32,11 @@
 
 /* CARD */
 .visit-card {
-  background: #fff;
+  background: var(--surface-elevated,#fff);
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color,#e5e7eb);
   padding: 16px;
+  box-shadow: var(--shadow-sm);
 }
 
 /* CARD HEADER */
@@ -96,10 +97,13 @@
 }
 
 .modal {
-  background: #fff;
-  padding: 24px;
+  background: var(--surface-elevated,#fff);
+  padding: 20px;
   border-radius: 12px;
-  width: 320px;
+  width: 520px;
+  max-width:95%;
+  box-shadow: 0 20px 40px rgba(2,6,23,0.08);
+  color: var(--text-primary);
 }
 
 .modal-actions {
@@ -114,4 +118,9 @@
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
+}
+
+@media (max-width:700px){
+  .modal{width:100%;height:100vh;border-radius:0;padding:16px;overflow:auto;align-self:start}
+  .visits-grid{grid-template-columns:1fr}
 }
