@@ -29,8 +29,8 @@ input,select{padding:10px;border-radius:8px;border:1px solid var(--border-color)
 .close{position:absolute;top:10px;right:12px;font-size:22px;background:none;border:none;cursor:pointer;color:var(--text-tertiary)}
 .card-top{display:flex;justify-content:space-between;align-items:center}
 .actions button{border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px}
-.actions .edit{background:rgba(224,231,255,0.15);color:var(--primary-color)}
-.actions .delete{background:rgba(254,226,226,0.12);color:var(--danger-color,#b91c1c)}
+.actions .edit{background:rgba(129, 153, 230, 0.578);color:var(--primary-color)}
+.actions .delete{background:rgba(238, 72, 72, 0.571);color:var(--danger-color,#f70000)}
 .actions button:hover{opacity:0.9}
 .status{font-size:12px;padding:4px 8px;border-radius:6px;color:white}
 

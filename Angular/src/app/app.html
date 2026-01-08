@@ -36,6 +36,19 @@
 
 <!-- ================= HERO ================= -->
 <main class="hero" *ngIf="!isAuthRoute()">
+<div class="hero-bg-video dark-video">
+  <video autoplay loop muted playsinline preload="auto">
+    <source src="../assets/VideoHumain.mp4" type="video/mp4" />
+  </video>
+</div>
+
+<div class="hero-bg-video light-video">
+  <video autoplay loop muted playsinline preload="auto">
+    <source src="../assets/dna.mp4" type="video/mp4" />
+  </video>
+</div>
+
+  <!-- HERO CONTENT -->
   <h1 class="hero-title">
     <span class="gradient-text">Manage healthcare , </span>
     <span class="highlight-text">simply.</span>
@@ -50,7 +63,7 @@
       <span class="material-icons">medical_services</span> Doctor Login
     </button>
   </div>
-
+ 
   <!-- Live Stats -->
   <div class="live-stats">
     <div class="stat-item">
@@ -66,6 +79,9 @@
       <div class="stat-label">Satisfaction Rate</div>
     </div>
   </div>
+  <!-- ================= DARK MODE VIDEO ================= -->
+
+
 </main>
 
 <!-- ================= FIND DOCTOR ================= -->

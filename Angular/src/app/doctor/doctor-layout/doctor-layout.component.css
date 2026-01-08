@@ -9,7 +9,7 @@
 /* SIDEBAR */
 .sidebar {
   width: 260px;
-  background: #0f172a; /* keep accent dark sidebar */
+  background: #002a6e; /* keep accent dark sidebar */
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
@@ -24,7 +24,9 @@
 
 .profile {
   display: flex;
+  color: white;
   align-items: center;
+  text-decoration: none;
   gap: 12px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -33,7 +35,7 @@
 .avatar {
   width: 44px;
   height: 44px;
-  background: #2563eb;
+  background: #4069c1;
   color: white;
   border-radius: 50%;
   display: grid;
@@ -62,7 +64,7 @@
 
 .menu a.active,
 .menu a:hover {
-  background: #2563eb;
+  background: #2d83e4;
   color: white;
   box-shadow: 0 4px 12px rgba(37,99,235,0.3);
 }
@@ -113,11 +115,11 @@
 .chat-body{background:var(--surface);padding:12px;max-height:40vh;overflow:auto}
 .chat-message{margin-bottom:8px}
 .chat-message .bubble{display:inline-block;padding:8px 10px;border-radius:10px;background:#eef2ff;max-width:80%}
-.chat-message.me .bubble{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;margin-left:auto}
+.chat-message.me .bubble{background:linear-gradient(90deg,#2abec9,#7057ff);color:white;margin-left:auto}
 .chat-message .time{font-size:10px;color:var(--text-tertiary);margin-top:4px}
 .chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border-color)}
 .chat-input input{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border-color)}
-.chat-input button{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;border:none;padding:8px 12px;border-radius:8px}
+.chat-input button{background:linear-gradient(90deg#2abec9,#7057ff);color:white;border:none;padding:8px 12px;border-radius:8px}
 
 /* Logo styling */
 .logo-img{width:140px;object-fit:contain}
@@ -179,7 +181,7 @@
 }
 
 .notif-item.unread {
-  background: rgba(37,99,235,0.08);
+  background: rgba(74, 120, 220, 0.08);
   font-weight: 500;
 }
 
@@ -255,11 +257,11 @@
 }
 
 .scheduled {
-  background: #9333ea;
+  background: #8a41ce;
   color: white;
 }
 
 .cancelled {
-  background: #ef4444;
+  background: #b51414;
   color: white;
 }

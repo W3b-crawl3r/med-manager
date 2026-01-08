@@ -1,35 +1,36 @@
 /* ================= BASE & THEME VARIABLES ================= */
 :root {
   /* Modern Medical Color Palette - Professional & Trustworthy */
-  --primary-color: #0b4bab;       /* Deep professional blue */
+  --primary-color: #0b96ab;       /* Deep professional blue */
   --primary-light: #5472d3;
   --primary-dark: #002171;
-  --primary-accent: #2196f3;      /* Bright accent blue */
+  --primary-accent: #148def;      /* Bright accent blue */
   
-  --secondary-color: #00796b;     /* Teal - health/medical */
+  --secondary-color: #03a794;     /* Teal - health/medical */
   --secondary-light: #48a999;
   --secondary-dark: #004c40;
   
-  --accent-color: #d32f2f;        /* Emergency/attention red */
+  --accent-color: #d41010;        /* Emergency/attention red */
   --accent-light: #ff6659;
   --accent-dark: #9a0007;
   
-  --success-color: #2e7d32;       /* Green - success/healthy */
-  --warning-color: #f57c00;       /* Orange - warning */
-  --info-color: #0288d1;          /* Light blue - information */
+  --success-color: #5be061;       /* Green - success/healthy */
+  --warning-color: #f56200;       /* Orange - warning */
+  --info-color: #2075f5;          /* Light blue - information */
   
   --neutral-light: #f5f5f5;
   --neutral-medium: #e0e0e0;
   --neutral-dark: #616161;
   
   /* Light theme - Professional medical */
-  --background: #ffffff;
-  --surface: #f8f9fa;
-  --surface-elevated: #ffffff;
-  --text-primary: #212121;
-  --text-secondary: #424242;
-  --text-tertiary: #757575;
-  --border-color: #e0e0e0;
+  
+    --background: #509ac263;
+    --surface: rgba(79, 89, 102, .08);
+    --surface-elevated: #ffffff;
+    --text-primary: #0c0d19;
+    --text-secondary: #0c0d19;
+    --text-tertiary: #110a7a;
+    --border-color: rgba(0, 0, 0, .08);
   --border-hover: #bdbdbd;
   
   /* Shadows - subtle and professional */
@@ -51,13 +52,13 @@
   --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-accent));
   --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--secondary-light));
   --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--accent-light));
-  --gradient-hero: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  --gradient-hero: linear-gradient(135deg, #145bfc9c, #f3e5f5);
 }
 
 [data-theme="dark"] {
   /* Dark theme - Professional dark medical */
   --background: #121212;
-  --surface: #1e1e1e;
+  --surface: #222222;
   --surface-elevated: #2d2d2d;
   --text-primary: #ffffff;
   --text-secondary: #e0e0e0;
@@ -74,7 +75,8 @@
   --shadow-primary: 0 8px 20px rgba(33, 150, 243, 0.3);
   
   /* Dark gradients */
-  --gradient-hero: linear-gradient(135deg, #0d1b2a, #1b263b);
+ --gradient-hero: linear-gradient(135deg, #20262e, #000000);
+
 }
 
 /* ================= ANIMATIONS ================= */
@@ -437,6 +439,66 @@ body {
   transform-origin: left center;
   animation: shine 3.5s linear infinite;
 }
+/* ================= HERO BASE ================= */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ================= BASE VIDEO (hidden by default) ================= */
+.hero-bg-video {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ================= DARK MODE VIDEO ================= */
+:host-context(.dark) .hero-bg-video.dark-video,
+:host-context(.dark-mode) .hero-bg-video.dark-video,
+:host-context([data-theme="dark"]) .hero-bg-video.dark-video {
+  display: block;
+}
+
+.hero-bg-video.dark-video {
+  top: 14px;
+  right: 8px;
+  width: 26%;
+  height: 85%;
+}
+
+/* ================= LIGHT MODE VIDEO ================= */
+/* light mode = default */
+.hero-bg-video.light-video {
+  display: block;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* hide light video when dark is active */
+:host-context(.dark) .hero-bg-video.light-video,
+:host-context(.dark-mode) .hero-bg-video.light-video,
+:host-context([data-theme="dark"]) .hero-bg-video.light-video {
+  display: none;
+}
+
+/* ================= VIDEO ELEMENT ================= */
+.hero-bg-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;      /* subtle background */
+  filter: none;       /* NO blur */
+  transform: none;    /* avoid GPU softening */
+}
+
+/* ================= CONTENT ABOVE VIDEOS ================= */
+.hero > *:not(.hero-bg-video) {
+  position: relative;
+  z-index: 2;
+}
+
 
 .hero-subtitle {
   font-size: 1.05rem;
