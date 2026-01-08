@@ -73,7 +73,7 @@ export const routes: Routes = [
   {
     path: 'secretary/dashboard',
     loadComponent: () =>
-      import('./Secretary/dashboard-doctor.component')
+      import('./Secretary/dashboard/dashboard-doctor.component')
         .then(m => m.DashboardDoctorComponent),
     canActivate: [secretaryGuard]
   },

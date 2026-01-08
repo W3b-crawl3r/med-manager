@@ -15,8 +15,16 @@ export class SecretaryLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
+<<<<<<< HEAD
+
+  // DEMO CREDENTIALS (frontend-only testing)
   private DEMO_EMAIL = 'secretary@medmanager.com';
   private DEMO_PASSWORD = 'secretary123';
+
+=======
+  private DEMO_EMAIL = 'secretary@medmanager.com';
+  private DEMO_PASSWORD = 'secretary123';
+>>>>>>> 496039acdefb8500819be88086c3977f8808f9df
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -110,4 +118,7 @@ export class SecretaryLoginComponent {
       }
     });
   }
+
+
+
 }

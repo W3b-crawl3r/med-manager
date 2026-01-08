@@ -21,7 +21,11 @@
 
     <!-- Language Switcher -->
     <div class="language-switcher">
+<<<<<<< HEAD
+      <div class="language-circle" (click)="showLanguageMenu = !showLanguageMenu">
+=======
       <div class="language-circle" (click)="toggleLanguageMenu()">
+>>>>>>> 496039acdefb8500819be88086c3977f8808f9df
         <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
       </div>
       <div class="language-menu" *ngIf="showLanguageMenu">

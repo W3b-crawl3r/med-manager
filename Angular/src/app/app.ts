@@ -1,8 +1,9 @@
-import { Component, signal, WritableSignal, HostListener, OnInit, Inject, Renderer2 } from '@angular/core';
-import { Router, RouterOutlet, RouterLink } from '@angular/router';
+import { Component, signal, WritableSignal, HostListener, OnInit, OnDestroy, Inject, Renderer2 } from '@angular/core';
+import { Router, RouterOutlet, RouterLink, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class App implements OnInit {
+export class App implements OnInit, OnDestroy {
   protected readonly title = signal('Med Manager');
 
   // ===== Theme =====
@@ -19,6 +20,9 @@ export class App implements OnInit {
   
   // Live theme state
   currentTheme = signal('light');
+
+  // Router subscription for scroll to top
+  private routerSubscription?: Subscription;
 
   // ===== Live Data =====
   private messages: any[] = [];
@@ -105,8 +109,23 @@ export class App implements OnInit {
     // Simulate live chat messages
     this.simulateLiveChat();
     
+    // Subscribe to router events to scroll to top on navigation
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.isSecretaryRoute() || this.isDoctorRoute() || this.isPatientRoute()) {
+          window.scrollTo(0, 0);
+        }
+      });
+    
     // Debug log
     console.log('App initialized with theme:', savedTheme);
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
 toggleTheme() {
@@ -214,7 +233,9 @@ toggleTheme() {
     const url = this.router.url;
     return url.startsWith('/secretary-inscription') || 
            url.startsWith('/secretary-login') ||
-           url.startsWith('/secretary/');
+           url.startsWith('/secretary/') ||
+           url.startsWith('/patients') ||
+           url.startsWith('/patient-detail');
   }
 
   

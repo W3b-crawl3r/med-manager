@@ -1,97 +1,143 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* empêche le scroll global */
+}
+
 .layout {
   display: flex;
   height: 100vh;
-  font-family: Arial, sans-serif;
-  background: #f8f9fb;
+  background: #f9fafb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* SIDEBAR */
 .sidebar {
-  width: 240px;
-  background: #ffffff;
-  padding: 20px;
-  border-right: 1px solid #eee;
-  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  padding: 2rem 1rem;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* occupe toute la hauteur */
+  overflow: hidden; /* pas de scroll interne */
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;   /* empêche tout scroll */
+  padding: 2rem;
 }
 
 .logo {
-  color: #2563eb;
-  margin-bottom: 30px;
+  margin: 0 0 2rem 0;
+  color: #1f2937;
+  font-size: 1.5rem;
 }
 
 .user {
   display: flex;
+  gap: 1rem;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  padding: 10px;
+  padding: 1rem;
   background: #f3f4f6;
   border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.user strong {
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .avatar {
-  background: #2563eb;
-  color: white;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
+  background: #3b82f6;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
   font-weight: bold;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
 .role {
-  font-size: 12px;
-  color: white;
+  display: block;
   background: #10b981;
-  padding: 2px 6px;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 3px;
   font-weight: bold;
+  margin-top: 0.2rem;
+  width: fit-content;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 nav a {
-  display: block;
-  padding: 10px;
-  border-radius: 8px;
-  color: #333;
+  padding: 0.75rem 1rem;
+  color: #6b7280;
   text-decoration: none;
-  margin-bottom: 10px;
+  border-radius: 6px;
   transition: all 0.2s;
 }
 
 nav a:hover {
   background: #f3f4f6;
+  color: #1f2937;
 }
 
 nav a.active {
-  background: #2563eb;
+  background: #3b82f6;
   color: white;
 }
 
-/* CONTENT */
-.content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
+
+
+.content h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #111827;
 }
 
 .subtitle {
-  color: #777;
-  margin-bottom: 20px;
+  margin: 0 0 2rem 0;
+  color: #6b7280;
 }
 
 /* DATE SELECT */
 .date-select {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.date-select label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #374151;
+  font-weight: 500;
 }
 
 .date-select input {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-left: 10px;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 /* CARDS */
@@ -111,13 +157,14 @@ nav a.active {
 
 .card p {
   margin: 0;
-  color: #666;
-  font-size: 14px;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 .card h2 {
-  margin: 10px 0 0 0;
-  color: #333;
+  margin: 0.5rem 0 0 0;
+  color: #111827;
+  font-size: 1.8rem;
 }
 
 /* APPOINTMENTS */
@@ -129,14 +176,15 @@ nav a.active {
 }
 
 .appointments h3 {
-  margin: 0 0 10px 0;
-  color: #333;
+  margin: 0 0 1rem 0;
+  color: #111827;
+  font-size: 1.25rem;
 }
 
 .appointments .date {
-  margin: 0 0 20px 0;
-  color: #666;
-  font-size: 14px;
+  margin: 0 0 1.5rem 0;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 .empty-state {
@@ -187,19 +235,21 @@ nav a.active {
 
 .appointment-details strong {
   display: block;
-  color: #333;
+  color: #111827;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .appointment-type {
-  margin: 3px 0 0 0;
-  color: #666;
-  font-size: 14px;
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 .patient-age {
-  margin: 3px 0 0 0;
-  color: #999;
-  font-size: 13px;
+  margin: 0.5rem 0 0 0;
+  color: #9ca3af;
+  font-size: 0.85rem;
 }
 
 .right {
@@ -211,14 +261,15 @@ nav a.active {
 
 .time {
   font-weight: bold;
-  color: #333;
+  color: #1f2937;
+  font-size: 1.1rem;
   min-width: 60px;
 }
 
 .status {
-  padding: 5px 10px;
+  padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 0.875rem;
   font-weight: 500;
   min-width: 100px;
   text-align: center;
@@ -242,14 +293,15 @@ nav a.active {
 .btn-view {
   background: #f3f4f6;
   color: #374151;
-  padding: 6px 12px;
+  padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s;
   text-decoration: none;
+  display: inline-block;
 }
 
 .btn-view:hover {
