@@ -122,6 +122,7 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
       console.log('Demo login successful');
       this.auth.setToken('demo-doctor-token');
       this.auth.setRole('DOCTOR');
+      this.auth.setUsername(payload.email);
       this.submitting = false;
       this.router.navigate(['/doctor-page/dash']);
       return;
@@ -143,6 +144,7 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
         console.log('Login successful, setting token and navigating');
         this.auth.setToken(response.token);
         this.auth.setRole('DOCTOR');
+        this.auth.setUsername(payload.email);
         this.submitting = false;
         this.router.navigate(['/doctor-page/dash']);
       },

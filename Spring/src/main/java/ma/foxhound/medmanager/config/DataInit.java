@@ -113,18 +113,65 @@ public class DataInit implements CommandLineRunner {
         PatientModel patient = new PatientModel();
         patient.setUsername("patient1");
         patient.setHashedPassword(passwordEncoder.encode("patient123"));
+
         PatientModel patient2 = new PatientModel();
         patient2.setUsername("patient2");
         patient2.setHashedPassword(passwordEncoder.encode("patient123"));
+
+        PatientModel patient3 = new PatientModel();
+        patient3.setUsername("emma.rodriguez");
+        patient3.setHashedPassword(passwordEncoder.encode("patient123"));
+
+        PatientModel patient4 = new PatientModel();
+        patient4.setUsername("michael.chen");
+        patient4.setHashedPassword(passwordEncoder.encode("patient123"));
+
+        PatientModel patient5 = new PatientModel();
+        patient5.setUsername("david.thompson");
+        patient5.setHashedPassword(passwordEncoder.encode("patient123"));
+
+        // Visits for patients (include some today for dashboard)
         VisitModel visit1 = new VisitModel(null, "Regular check-up. All vitals normal.", java.time.LocalDate.now().minusDays(10));
-        VisitModel visit2 = new VisitModel(null, "Follow-up visit for blood test results.", java.time.LocalDate.now().minusDays(5));    
+        VisitModel visit2 = new VisitModel(null, "Follow-up visit for blood test results.", java.time.LocalDate.now().minusDays(5));
         patient.setVisits(java.util.Arrays.asList(visit1, visit2));
+
+        VisitModel p2v1 = new VisitModel(null, "Knee pain evaluation.", java.time.LocalDate.now().minusDays(2));
+        VisitModel p2v2 = new VisitModel(null, "Physiotherapy session.", java.time.LocalDate.now());
+        patient2.setVisits(java.util.Arrays.asList(p2v1, p2v2));
+
+        VisitModel p3v1 = new VisitModel(null, "Dermatology follow-up.", java.time.LocalDate.now());
+        VisitModel p3v2 = new VisitModel(null, "Allergy test results discussion.", java.time.LocalDate.now().plusDays(7));
+        patient3.setVisits(java.util.Arrays.asList(p3v1, p3v2));
+
+        VisitModel p4v1 = new VisitModel(null, "Cardiology consultation.", java.time.LocalDate.now());
+        patient4.setVisits(java.util.Arrays.asList(p4v1));
+
+        VisitModel p5v1 = new VisitModel(null, "General consultation.", java.time.LocalDate.now().minusDays(1));
+        VisitModel p5v2 = new VisitModel(null, "Blood pressure check.", java.time.LocalDate.now());
+        patient5.setVisits(java.util.Arrays.asList(p5v1, p5v2));
+
+        // Link patients to many doctors
         d1.getPatients().add(patient);
         d1.getPatients().add(patient2);
+        d1.getPatients().add(patient3);
+        d1.getPatients().add(patient4);
+
         d2.getPatients().add(patient);
         d2.getPatients().add(patient2);
+        d2.getPatients().add(patient3);
+
+        d3.getPatients().add(patient);
+        d3.getPatients().add(patient4);
+
+        d4.getPatients().add(patient2);
+        d4.getPatients().add(patient5);
+
+        d5.getPatients().add(patient3);
+        d5.getPatients().add(patient5);
+
+        d6.getPatients().add(patient4);
         userRepository.saveAll(java.util.Arrays.asList(
-            patient, patient2,
+            patient, patient2, patient3, patient4, patient5,
             d1, d2, d3, d4, d5, d6,
             s1, s2, s3
         ));

@@ -7,14 +7,21 @@ export class AuthService {
   private base = '/api/v1/auth';
   private role: 'SECRETARY' | 'DOCTOR' | 'PATIENT' | null = null;
   private token: string | null = null;
+  private username: string | null = null;
 
   constructor(private http: HttpClient) {
-    // Load token and role from localStorage on service init
+    // Load token, role and username from localStorage on service init
     const savedToken = localStorage.getItem('authToken');
     const savedRole = localStorage.getItem('userRole');
-    if (savedToken && savedRole) {
+    const savedUsername = localStorage.getItem('username');
+    if (savedToken) {
       this.token = savedToken;
+    }
+    if (savedRole) {
       this.role = savedRole as 'SECRETARY' | 'DOCTOR' | 'PATIENT';
+    }
+    if (savedUsername) {
+      this.username = savedUsername;
     }
   }
   // In auth.service.ts
@@ -65,6 +72,15 @@ registerPatient(data: FormData) {
     localStorage.setItem('userRole', role);
   }
 
+  setUsername(username: string) {
+    this.username = username;
+    localStorage.setItem('username', username);
+  }
+
+  getUsername(): string | null {
+    return this.username;
+  }
+
   getRole() {
     return this.role;
   }
@@ -84,7 +100,9 @@ registerPatient(data: FormData) {
   logout() {
     this.token = null;
     this.role = null;
+    this.username = null;
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('username');
   }
 }

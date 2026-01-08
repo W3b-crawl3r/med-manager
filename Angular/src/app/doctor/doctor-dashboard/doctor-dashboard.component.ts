@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DoctorService, DoctorDashboardDto } from '../../services/doctor.service';
+import { AuthService } from '../../services/auth.service';
 
 interface Appointment {
   name: string;
@@ -18,29 +20,47 @@ interface Appointment {
   templateUrl: './doctor-dashboard.component.html',
   styleUrls: ['./doctor-dashboard.component.css']
 })
-export class DoctorDashboardComponent {
-  totalPatients = 24;
-  activePatients = 18;
-  todaysAppointments = 6;
-  pendingVisits = 4;
+export class DoctorDashboardComponent implements OnInit {
+  totalPatients = 0;
+  activePatients = 0;
+  todaysAppointments = 0;
+  pendingVisits = 0;
 
   doctorInitials = 'SB';
   doctorName = 'Dr. Sarah Bennani';
   doctorSpecialty = 'Cardiology';
   showFilter: 'all' | 'scheduled' | 'confirmed' = 'all';
 
-  appointments: Appointment[] = [
-    { name: 'Michael Chen', initial: 'M', reason: 'General Checkup', time: '09:00', status: 'Confirmed' },
-    { name: 'Emma Rodriguez', initial: 'E', reason: 'Follow-up', time: '10:30', status: 'Scheduled' },
-    { name: 'David Thompson', initial: 'D', reason: 'Consultation', time: '11:15', status: 'Scheduled' }
-  ];
+  appointments: Appointment[] = [];
 
   recentVisits = [
     { patient: 'Michael Chen', date: '2025-12-20', summary: 'Routine checkup - BP stable' },
     { patient: 'Aisha Ben', date: '2025-12-18', summary: 'Skin allergy follow-up' }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private doctorService: DoctorService, private auth: AuthService) {}
+
+  ngOnInit(): void {
+    const username = this.auth.getUsername();
+    if (!username) {
+      // If username not known, redirect to login
+      this.router.navigate(['/doctor-login']);
+      return;
+    }
+
+    this.doctorService.getDashboard(username).subscribe({
+      next: (dto: DoctorDashboardDto) => {
+        this.totalPatients = dto.totalPatients;
+        this.activePatients = dto.activePatients;
+        this.todaysAppointments = dto.todaysAppointments;
+        this.pendingVisits = dto.pendingVisits;
+        this.appointments = dto.appointments as Appointment[];
+      },
+      error: (err) => {
+        console.error('Failed to load dashboard', err);
+      }
+    });
+  }
 
   refresh() { console.log('refresh dashboard'); }
 

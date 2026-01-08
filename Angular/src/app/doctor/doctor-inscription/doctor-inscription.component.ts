@@ -201,6 +201,7 @@ selectUser(user: string) {
         
         // Set user role and navigate to doctor dashboard
         this.auth.setRole('DOCTOR');
+        this.auth.setUsername(val.email);
         this.router.navigate(['/doctor-page/dash']);
       },
       error: (error) => {
