@@ -102,14 +102,17 @@ public class DataInit implements CommandLineRunner {
         SecretaryModel s1 = new SecretaryModel();
         s1.setUsername("secretary1");
         s1.setHashedPassword(passwordEncoder.encode("secretary123"));
+        s1.setDoctor(d1);
 
         SecretaryModel s2 = new SecretaryModel();
         s2.setUsername("secretary2");
         s2.setHashedPassword(passwordEncoder.encode("secretary123"));
+        s2.setDoctor(d1);
 
         SecretaryModel s3 = new SecretaryModel();
         s3.setUsername("secretary3");
         s3.setHashedPassword(passwordEncoder.encode("secretary123"));
+        s3.setDoctor(d2);
         PatientModel patient = new PatientModel();
         patient.setUsername("patient1");
         patient.setHashedPassword(passwordEncoder.encode("patient123"));

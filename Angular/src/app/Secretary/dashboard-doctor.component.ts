@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AppointmentService, Appointment } from '../services/appointment.service';
-import { PatientService, Patient } from '../services/patient.service';
+import { Router, RouterModule } from '@angular/router';
+import { SecretaryService, SecretaryAppointment } from '../services/secretary.service';
+import { AuthService } from '../services/auth.service';
+
+interface Patient {
+  id: number;
+  username: string;
+  fullName?: string;
+  age?: number;
+}
 
 @Component({
   selector: 'app-dashboard-doctor',
@@ -19,50 +26,72 @@ export class DashboardDoctorComponent implements OnInit {
   todayAppointments = 0;
   pendingVisits = 0;
   activePatients = 0;
-  appointments: Appointment[] = [];
+  appointments: SecretaryAppointment[] = [];
   patients: Patient[] = [];
 
   constructor(
-    private apptService: AppointmentService,
-    private patientService: PatientService
-  ) {
-    this.apptService.appointments$.subscribe(list => {
-      this.recomputeStats(list, this.selectedDate);
-    });
-  }
+    private secretaryService: SecretaryService,
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.patients = this.patientService.getAllPatients();
-    const all = this.apptService.getAppointments();
-    this.recomputeStats(all, this.selectedDate);
+    const username = this.auth.getUsername();
+    if (!username) {
+      return;
+    }
+
+    // Load patients
+    this.secretaryService.getPatients(username).subscribe({
+      next: (ps) => {
+        this.patients = ps.map(p => ({ 
+          id: p.id, 
+          username: p.username,
+          fullName: p.username,
+          age: 35 // placeholder
+        }));
+      },
+      error: (err) => console.error('Failed to load patients', err)
+    });
+
+    // Load dashboard data for today
+    this.loadDashboard();
   }
 
   onDateChange(newDate: string) {
     this.selectedDate = newDate;
-    const all = this.apptService.getAppointments();
-    this.recomputeStats(all, newDate);
     this.todayStr = new Date(newDate).toLocaleDateString();
+    this.loadDashboard();
+  }
+
+  private loadDashboard() {
+    const username = this.auth.getUsername();
+    if (!username) return;
+
+    this.secretaryService.getDashboard(username, this.selectedDate).subscribe({
+      next: (dto) => {
+        this.totalPatients = dto.totalPatients;
+        this.todayAppointments = dto.appointmentsOnDate;
+        this.pendingVisits = dto.pendingVisits;
+        this.activePatients = dto.activePatients;
+        this.appointments = dto.appointments;
+      },
+      error: (err) => console.error('Failed to load dashboard', err)
+    });
   }
 
   getPatientId(patientName: string): string {
     const patient = this.patients.find(p => p.fullName === patientName);
-    return patient ? patient.id : '';
+    return patient ? String(patient.id) : '';
   }
 
   getPatientAge(patientName: string): number {
     const patient = this.patients.find(p => p.fullName === patientName);
-    return patient ? patient.age : 0;
+    return patient ? (patient.age || 0) : 0;
   }
 
-  private recomputeStats(allAppointments: Appointment[], date: string) {
-    const dayAppts = allAppointments.filter(a => a.date === date);
-    this.appointments = dayAppts;
-
-    const uniquePatients = new Set(dayAppts.map(a => a.patientName));
-    this.totalPatients = uniquePatients.size;
-
-    this.todayAppointments = dayAppts.length;
-    this.pendingVisits = dayAppts.filter(a => a.status === 'Pending').length;
-    this.activePatients = this.patients.length;
+  onLogout() {
+    this.auth.logout();
+    this.router.navigate(['/']);
   }
 }

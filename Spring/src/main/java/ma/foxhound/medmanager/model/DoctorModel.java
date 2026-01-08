@@ -28,7 +28,7 @@ public class DoctorModel extends UserModel {
     String hospital;
     Integer experience;
 
-        @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + Role.DOCTOR.name());
         return java.util.Collections.singletonList(authority);
@@ -36,4 +36,7 @@ public class DoctorModel extends UserModel {
     
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<PatientModel> patients = new ArrayList<>();
+
+    @jakarta.persistence.OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SecretaryModel> secretaries = new ArrayList<>();
 }

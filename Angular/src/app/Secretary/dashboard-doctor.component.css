@@ -12,6 +12,8 @@
   padding: 20px;
   border-right: 1px solid #eee;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -255,4 +257,27 @@ nav a.active {
 .btn-view:hover {
   background: #e5e7eb;
   border-color: #9ca3af;
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+  margin-top: auto;
+  width: 100%;
+  background: #ef4444; /* red-500 */
+  color: #ffffff;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.05s;
+}
+
+.logout-btn:hover {
+  background: #dc2626; /* red-600 */
+}
+
+.logout-btn:active {
+  transform: translateY(1px);
 }
