@@ -75,7 +75,7 @@
   --shadow-primary: 0 8px 20px rgba(33, 150, 243, 0.3);
   
   /* Dark gradients */
- --gradient-hero: linear-gradient(135deg, #20262e, #000000);
+ --gradient-hero: linear-gradient(135deg, #000000, #000000);
 
 }
 
@@ -460,10 +460,10 @@ body {
 }
 
 .hero-bg-video.dark-video {
-  top: 14px;
-  right: 8px;
-  width: 26%;
-  height: 85%;
+    top: 44px;
+    right: 8px;
+    width: 100%;
+    height: 93%;
 }
 
 /* ================= LIGHT MODE VIDEO ================= */
