@@ -87,4 +87,8 @@ export class AppointmentsComponent implements OnInit {
     this.newStatus = 'Scheduled';
     this.showForm = false;
   }
+  logout() {
+    localStorage.clear();
+    location.href = '/';
+  }
 }

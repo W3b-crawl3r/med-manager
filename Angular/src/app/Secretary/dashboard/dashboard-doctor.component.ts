@@ -65,4 +65,8 @@ export class DashboardDoctorComponent implements OnInit {
     this.pendingVisits = dayAppts.filter(a => a.status === 'Pending').length;
     this.activePatients = this.patients.length;
   }
+  logout() {
+    localStorage.clear();
+    location.href = '/';
+  }
 }
