@@ -2,15 +2,15 @@
 .layout {
   display: flex;
   height: 100vh;
-  background: #f8fafc;
+  background: var(--surface);
 }
 
 /* SIDEBAR */
 /* SIDEBAR */
 .sidebar {
   width: 260px;
-  background: #0f172a; /* dark modern navy */
-  color: #f8fafc;
+  background: #002a6e; /* keep accent dark sidebar */
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
@@ -24,7 +24,9 @@
 
 .profile {
   display: flex;
+  color: white;
   align-items: center;
+  text-decoration: none;
   gap: 12px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -33,7 +35,7 @@
 .avatar {
   width: 44px;
   height: 44px;
-  background: #2563eb;
+  background: #4069c1;
   color: white;
   border-radius: 50%;
   display: grid;
@@ -62,7 +64,7 @@
 
 .menu a.active,
 .menu a:hover {
-  background: #2563eb;
+  background: #2d83e4;
   color: white;
   box-shadow: 0 4px 12px rgba(37,99,235,0.3);
 }
@@ -85,13 +87,13 @@
 /* TOPBAR */
 .topbar {
   height: 64px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--surface-elevated);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .notifications {
@@ -103,7 +105,7 @@
 
 .topbar-controls{display:flex;align-items:center;gap:12px}
 .theme-toggle{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
-.theme-toggle .material-icons{font-size:20px;color:#374151}
+.theme-toggle .material-icons{font-size:20px;color:var(--text-secondary)}
 .chat-toggle{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 
 /* CHAT PANEL */
@@ -113,11 +115,11 @@
 .chat-body{background:var(--surface);padding:12px;max-height:40vh;overflow:auto}
 .chat-message{margin-bottom:8px}
 .chat-message .bubble{display:inline-block;padding:8px 10px;border-radius:10px;background:#eef2ff;max-width:80%}
-.chat-message.me .bubble{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;margin-left:auto}
+.chat-message.me .bubble{background:linear-gradient(90deg,#2abec9,#7057ff);color:white;margin-left:auto}
 .chat-message .time{font-size:10px;color:var(--text-tertiary);margin-top:4px}
 .chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border-color)}
 .chat-input input{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border-color)}
-.chat-input button{background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;border:none;padding:8px 12px;border-radius:8px}
+.chat-input button{background:linear-gradient(90deg#2abec9,#7057ff);color:white;border:none;padding:8px 12px;border-radius:8px}
 
 /* Logo styling */
 .logo-img{width:140px;object-fit:contain}
@@ -135,7 +137,7 @@
 
 .notifications .material-icons {
   font-size: 28px;
-  color: #2563eb;
+  color: var(--primary-color);
 }
 
 .badge-count {
@@ -157,9 +159,9 @@
   top: 40px;
   right: 0;
   width: 280px;
-  background: #ffffff;
+  background: var(--surface-elevated);
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-xl);
   padding: 12px;
   z-index: 200;
 }
@@ -179,7 +181,7 @@
 }
 
 .notif-item.unread {
-  background: #eef2ff;
+  background: rgba(74, 120, 220, 0.08);
   font-weight: 500;
 }
 
@@ -201,11 +203,11 @@
 }
 
 .card {
-  background: #ffffff;
+  background: var(--surface-elevated);
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
   transition: transform 0.2s;
 }
 
@@ -220,10 +222,10 @@
 
 /* VISITS */
 .panel {
-  background: white;
+  background: var(--surface-elevated);
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 .visit {
   display: flex;
@@ -232,8 +234,8 @@
   border-radius: 12px;
   padding: 16px;
   margin-top: 16px;
-  background: #ffffff;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow);
   transition: transform 0.2s;
 }
 
@@ -255,11 +257,11 @@
 }
 
 .scheduled {
-  background: #9333ea;
+  background: #8a41ce;
   color: white;
 }
 
 .cancelled {
-  background: #ef4444;
+  background: #b51414;
   color: white;
 }

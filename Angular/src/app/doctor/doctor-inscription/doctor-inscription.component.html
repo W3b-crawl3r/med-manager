@@ -21,7 +21,11 @@
 
     <!-- Language Switcher -->
     <div class="language-switcher">
+<<<<<<< HEAD
+      <div class="language-circle" (click)="showLanguageMenu = !showLanguageMenu">
+=======
       <div class="language-circle" (click)="toggleLanguageMenu()">
+>>>>>>> 496039acdefb8500819be88086c3977f8808f9df
         <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
       </div>
       <div class="language-menu" *ngIf="showLanguageMenu">
@@ -59,7 +63,7 @@
 
 <label class="form-field">
   <span>{{ t('email') }}<span class="required-star">*</span></span>
-  <input formControlName="email" type="text" placeholder="{{ t('emailPlaceholder') }}" />
+  <input formControlName="email" type="email" placeholder="{{ t('emailPlaceholder') }}" />
   <div class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
     Please enter a valid email.
   </div>
