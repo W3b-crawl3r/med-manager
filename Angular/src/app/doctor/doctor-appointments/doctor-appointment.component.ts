@@ -1,20 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DoctorService, AppointmentDto } from '../../services/doctor.service';
+import { AuthService } from '../../services/auth.service';
 
-interface Patient {
+interface PatientOption {
   id: number;
   name: string;
 }
 
-interface Appointment {
-  patientId: number;
-  patientName: string;
-  date: string;
-  time: string;
-  type: string;
-  status?: 'Scheduled' | 'Confirmed' | 'Cancelled';
-}
+type Appointment = AppointmentDto;
 
 @Component({
   selector: 'app-doctor-appointment',
@@ -28,16 +23,9 @@ export class DoctorAppointmentComponent {
   showDialog = false;
   editIndex: number | null = null;
 
-  patients: Patient[] = [
-    { id: 1, name: 'Michael Chen' },
-    { id: 2, name: 'Emma Rodriguez' },
-    { id: 3, name: 'David Thompson' }
-  ];
+  patients: PatientOption[] = [];
 
-  appointments: Appointment[] = [
-    { patientId: 1, patientName: 'Michael Chen', date: '2025-12-20', time: '09:00', type: 'Checkup', status: 'Scheduled' },
-    { patientId: 2, patientName: 'Emma Rodriguez', date: '2025-12-20', time: '10:30', type: 'Follow-up', status: 'Confirmed' }
-  ];
+  appointments: Appointment[] = [];
 
   form = {
     patientId: '',
@@ -57,9 +45,7 @@ export class DoctorAppointmentComponent {
 
   // ===== DIALOG =====
   openDialog() {
-    this.resetForm();
-    this.editIndex = null;
-    this.showDialog = true;
+    alert('Creating appointments from the UI is not implemented yet.');
   }
 
   closeDialog() {
@@ -68,68 +54,25 @@ export class DoctorAppointmentComponent {
 
   // ===== ADD / EDIT =====
   submit() {
-    if (!this.form.patientId || !this.form.date || !this.form.time) {
-      alert('All required fields must be filled');
-      return;
-    }
-
-    if (!this.isFutureDate(this.form.date, this.form.time)) {
-      alert('Appointment must be in the future');
-      return;
-    }
-
-    const patient = this.patients.find(p => p.id === Number(this.form.patientId));
-    if (!patient) return;
-
-    const appointment: Appointment = {
-      patientId: patient.id,
-      patientName: patient.name,
-      date: this.form.date,
-      time: this.form.time,
-      type: this.form.type || 'General'
-    };
-
-    if (this.editIndex !== null) {
-      this.appointments[this.editIndex] = appointment;
-    } else {
-      this.appointments.push({ ...appointment, status: 'Scheduled' });
-    }
-
-    this.saveAppointments();
-    this.closeDialog();
+    alert('Save is not implemented yet.');
   }
 
   confirmAppointment(index: number) {
-    this.appointments[index].status = 'Confirmed';
-    this.saveAppointments();
+    alert('Confirm is not implemented yet.');
   }
 
   cancelAppointment(index: number) {
-    if (confirm('Cancel this appointment?')) {
-      this.appointments[index].status = 'Cancelled';
-      this.saveAppointments();
-    }
+    alert('Cancel is not implemented yet.');
   }
 
   // ===== EDIT =====
   editAppointment(index: number) {
-    const a = this.appointments[index];
-    this.form = {
-      patientId: String(a.patientId),
-      date: a.date,
-      time: a.time,
-      type: a.type
-    };
-    this.editIndex = index;
-    this.showDialog = true;
+    alert('Edit is not implemented yet.');
   }
 
   // ===== DELETE =====
   deleteAppointment(index: number) {
-    if (confirm('Delete this appointment?')) {
-      this.appointments.splice(index, 1);
-      this.saveAppointments();
-    }
+    alert('Delete is not implemented yet.');
   }
 
   // ===== HELPERS =====
@@ -138,24 +81,31 @@ export class DoctorAppointmentComponent {
     this.selectedWeekday = null;
   }
 
-  // persist appointments to localStorage
-  constructor() {
-    try {
-      const raw = localStorage.getItem('doctorAppointments');
-      if (raw) this.appointments = JSON.parse(raw);
-    } catch (e) {
-      // ignore parse errors
-    }
-    // initialize availability
+  constructor(private doctorService: DoctorService, private auth: AuthService) {
     this.initAvailableTimes();
   }
 
-  saveAppointments() {
-    try {
-      localStorage.setItem('doctorAppointments', JSON.stringify(this.appointments));
-    } catch (e) {
-      // ignore storage errors
-    }
+  ngOnInit(): void {
+    const username = this.auth.getUsername();
+    if (!username) return;
+
+    this.doctorService.getPatients(username).subscribe({
+      next: (ps) => {
+        this.patients = ps.map(p => ({ id: p.id, name: p.username }));
+      },
+      error: (err) => console.error('Failed to load patients', err)
+    });
+
+    this.doctorService.getAppointments(username).subscribe({
+      next: (apps) => {
+        this.appointments = apps.map(a => ({
+          ...a,
+          date: a.date,
+          status: (a.status as any) || 'Scheduled'
+        }));
+      },
+      error: (err) => console.error('Failed to load appointments', err)
+    });
   }
 
   isFutureDate(date: string, time: string): boolean {

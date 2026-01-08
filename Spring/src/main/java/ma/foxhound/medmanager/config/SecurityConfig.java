@@ -41,6 +41,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/v1/doctors/signup").permitAll()
                     .requestMatchers("/api/v1/doctors/*/dashboard").permitAll()
                     .requestMatchers("/api/v1/doctors/*/patients").permitAll()
+                    .requestMatchers("/api/v1/doctors/*/appointments").permitAll()
                     .requestMatchers("/api/v1/search/doctor/**").permitAll()
                     .requestMatchers("/api/v1/auth/testauth").hasAuthority("ROLE_DOCTOR")
                     .requestMatchers("/api/v1/search/patient/**").hasAuthority("ROLE_DOCTOR")

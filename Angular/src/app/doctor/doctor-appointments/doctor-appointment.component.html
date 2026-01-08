@@ -1,6 +1,6 @@
 <div class="header">
   <h1>Appointments</h1>
-  <button class="primary-btn" (click)="openDialog()">+ New Appointment</button>
+  <button class="primary-btn" (click)="openDialog()" title="Not implemented">+ New Appointment</button>
 </div>
 
   <div class="appointments-list" *ngIf="appointments.length; else empty">
@@ -8,17 +8,12 @@
 
     <div class="card-top">
       <h4>{{ a.patientName }}</h4>
-      <div class="actions">
-        <button class="edit" (click)="editAppointment(i)">Edit</button>
-        <button class="delete" (click)="deleteAppointment(i)">Delete</button>
-      </div>
+      <div class="actions"></div>
     </div>
 
     <p>{{ a.date }} at {{ a.time }} • <span class="type">{{ a.type }}</span></p>
     <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
       <span class="status" [ngClass]="a.status?.toLowerCase()">{{ a.status }}</span>
-      <button *ngIf="a.status==='Scheduled'" class="primary-btn" (click)="confirmAppointment(i)">Confirm</button>
-      <button *ngIf="a.status==='Scheduled'" class="delete" (click)="cancelAppointment(i)">Cancel</button>
     </div>
   </div>
 </div>
