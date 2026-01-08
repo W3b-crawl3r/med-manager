@@ -9,7 +9,8 @@ export const serverLogOutInterceptorInterceptor: HttpInterceptorFn = (req, next)
   
   return next(req).pipe(
     catchError((error) => {
-      if (error.status === 403) {
+      // Redirect to login only when user was authenticated; avoid hijacking public pages
+      if (error.status === 403 && authService.isLoggedIn()) {
         authService.logout();
       }
       return throwError(() => error);
