@@ -126,20 +126,23 @@ export class SecretaryInscriptionComponent {
       return;
     }
 
-    const payload = this.form.value;
+    const payload = {
+      username: this.form.value.email,
+      password: this.form.value.password
+    };
 
     this.submitting = true;
     this.auth.registerSecretary(payload).subscribe({
       next: (response: any) => {
-        // Set token and role upon successful registration
-        const token = response.token || 'secretary-token-placeholder';
-        this.auth.setToken(token);
+        // Backend returns message/username only; set role/username and navigate
         this.auth.setRole('SECRETARY');
+        this.auth.setUsername(payload.username);
         this.successMessage = 'Registration successful';
         this.submitting = false;
-        this.router.navigate(['/secretary/dashboard']);
+        this.router.navigate(['/secretary/dashboard'], { replaceUrl: true });
       },
-      error: () => {
+      error: (err) => {
+        console.error('Secretary registration failed', err);
         this.errorMessage = 'Registration failed. Please try again.';
         this.submitting = false;
       }

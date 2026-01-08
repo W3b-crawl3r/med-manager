@@ -34,8 +34,8 @@ export class AuthService {
     return this.http.post('/api/v1/doctors/signup', payload);
   }
 
-  registerSecretary(payload: any): Observable<any> {
-    return this.http.post(`${this.base}/register-secretary`, payload);
+  registerSecretary(payload: { username: string; password: string }): Observable<any> {
+    return this.http.post('/api/v1/secretaries/signup', payload);
   }
 
   loginSecretary(payload: any): Observable<any> {
