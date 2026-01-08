@@ -1,49 +1,41 @@
 <div class="inscription-shell">
   <div class="bg-decor"></div>
 
-
-  <!-- ===== Back to home ===== -->
-  <a class="back-to-home" [routerLink]="['/']">← back to home</a>
-  <!-- ===== User Switcher ===== -->
-<div class="user-switcher">
-  <button class="user-toggle" (click)="toggleUserMenu()">
-    Change User
-  </button>
-
-  <div class="user-menu" *ngIf="showUserMenu">
-    <div class="user-item" [routerLink]="['/doctor-inscription']">
-      Doctor
-    </div>
-    <div class="user-item" [routerLink]="['/patient-inscription']">
-      Patient
-    </div>
-    <div class="user-item" [routerLink]="['/secretary-inscription']">
-      Secretary
+  <!-- User Switcher -->
+  <div class="user-switcher">
+    <button class="user-toggle" (click)="toggleUserMenu()">Change User</button>
+    <div class="user-menu" *ngIf="showUserMenu">
+      <div class="user-item" [routerLink]="['/doctor-inscription']">Doctor</div>
+      <div class="user-item" [routerLink]="['/patient-inscription']">Patient</div>
+      <div class="user-item" [routerLink]="['/secretary-inscription']">Secretary</div>
     </div>
   </div>
-</div>
+
+  <!-- Back to home -->
+  <a class="back-to-home" [routerLink]="['/']">← {{ t('backToHome') }}</a>
+
   <div class="inscription-container">
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+      <div class="language-circle" (click)="toggleLanguageMenu()">
+        <img [src]="currentFlag" [alt]="currentLang === 'fr' ? 'Français' : 'English'" />
+      </div>
 
-    <!-- ===== Language Switcher ===== -->
-  <div class="language-switcher">
-  <div class="language-circle" (click)="toggleLanguage()">
-    <img
-      [src]="currentLang === 'fr'
-        ? 'https://flagcdn.com/fr.svg'
-        : 'https://flagcdn.com/gb.svg'"
-      alt="language"
-    />
-  </div>
+      <div class="language-menu" *ngIf="showLanguageMenu">
+        <div class="language-item" (click)="changeLanguage('en')">
+          <img src="https://flagcdn.com/gb.svg" alt="English" /> English
+        </div>
+        <div class="language-item" (click)="changeLanguage('fr')">
+          <img src="https://flagcdn.com/fr.svg" alt="Français" /> Français
+        </div>
+      </div>
+    </div>
 
-
-
-</div>
-
-    <!-- ===== Header ===== -->
+    <!-- Header -->
     <header class="inscription-header">
       <div class="icon-circle">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 2v20M2 12h20" stroke="white" stroke-width="2"/>
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2v20M2 12h20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div>
@@ -52,14 +44,13 @@
       </div>
     </header>
 
-    <!-- ===== Form ===== -->
+    <!-- Form -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-grid">
-
         <!-- Full Name -->
         <label class="form-field">
           <span>{{ t('fullName') }}<span class="required-star">*</span></span>
-          <input formControlName="fullName" />
+          <input formControlName="fullName" placeholder="{{ t('fullName') }}" />
         </label>
 
         <!-- Birth Date -->
@@ -71,30 +62,23 @@
         <!-- Email -->
         <label class="form-field">
           <span>{{ t('email') }}<span class="required-star">*</span></span>
-          <input type="email" formControlName="email" />
+          <input type="email" formControlName="email" placeholder="{{ t('email') }}" />
         </label>
 
         <!-- Password -->
         <label class="form-field">
           <span>{{ t('password') }}<span class="required-star">*</span></span>
-          <input type="password" formControlName="password" />
+          <input type="password" formControlName="password" placeholder="{{ t('password') }}" />
         </label>
 
         <!-- Gender -->
         <div class="form-field gender-field">
           <span>{{ t('gender') }}<span class="required-star">*</span></span>
           <div class="gender-options">
-            <div
-              class="gender-option"
-              [class.selected]="selectedGender === 'male'"
-              (click)="selectGender('male')">
+            <div class="gender-option" [class.selected]="selectedGender === 'male'" (click)="selectGender('male')">
               <span class="material-icons">male</span> Male
             </div>
-
-            <div
-              class="gender-option"
-              [class.selected]="selectedGender === 'female'"
-              (click)="selectGender('female')">
+            <div class="gender-option" [class.selected]="selectedGender === 'female'" (click)="selectGender('female')">
               <span class="material-icons">female</span> Female
             </div>
           </div>
@@ -103,6 +87,7 @@
         <!-- Allergies -->
         <label class="form-field">
           <span>{{ t('allergies') }}</span>
+<<<<<<< HEAD
           <input formControlName="allergies" />
         </label>
 
@@ -119,6 +104,20 @@
 
         <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
         <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+=======
+          <input formControlName="allergies" placeholder="{{ t('allergies') }}" />
+        </label>
+      </div>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <button class="btn-submit" type="submit" [disabled]="form.invalid || !selectedGender || submitting">
+          {{ t('register') }}
+        </button>
+
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+>>>>>>> 496039acdefb8500819be88086c3977f8808f9df
 
         <p class="login-link">
           {{ t('alreadyAccountPrefix') }}

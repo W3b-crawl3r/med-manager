@@ -19,7 +19,8 @@ export class DoctorLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
-
+private DEMO_EMAIL = 'doctor@medmanager.com';
+  private DEMO_PASSWORD = 'doctor123';
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -89,25 +90,44 @@ export class DoctorLoginComponent {
     const payload = this.form.value;
     this.submitting = true;
     this.errorMessage = '';
+    // ✅ DEMO LOGIN (early return, clean)
+    if (
+      payload?.email === this.DEMO_EMAIL &&
+      payload?.password === this.DEMO_PASSWORD
+    ) {
+      this.auth.setToken('demo-doctor-token');
+      this.auth.setRole('DOCTOR');
+      this.submitting = false;
+      // navigate directly to doctor dashboard
+      this.router.navigate(['/doctor-page/dash']);
+      return;
+    }
 
-    this.auth.loginDoctor(payload).subscribe({
-      next: (response: any) => {
-        const token = response.token || 'doctor-token-placeholder';
-        this.auth.setToken(token);
-        this.auth.setRole('DOCTOR');
-        this.submitting = false;
-        this.router.navigate(['/doctor-page']);
-      },
-      error: (err: any) => {
-        if (err.status === 404) {
-          this.errorMessage = 'Account not found. Please register first.';
-        } else if (err.status === 401) {
-          this.errorMessage = 'Invalid email or password.';
-        } else {
-          this.errorMessage = 'Login failed. Please try again.';
-        }
-        this.submitting = false;
-      }
-    });
+// ✅ REAL LOGIN
+this.auth.loginDoctor(payload).subscribe({
+  next: (response: any) => {
+    if (!response?.token) {
+      throw new Error('Token missing');
+    }
+
+    this.auth.setToken(response.token);
+    this.auth.setRole('DOCTOR');
+    this.router.navigate(['/doctor-page/dash']);
+  },
+
+  error: (err: any) => {
+    if (err.status === 404) {
+      this.errorMessage = 'Account not found. Please register first.';
+    } else if (err.status === 401) {
+      this.errorMessage = 'Invalid email or password.';
+    } else {
+      this.errorMessage = 'Login failed. Please try again.';
+    }
+  },
+
+  complete: () => {
+    this.submitting = false;
+  }
+});
   }
 }

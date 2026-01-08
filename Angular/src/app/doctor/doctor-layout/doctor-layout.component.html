@@ -4,17 +4,17 @@
   <aside class="sidebar">
     <!-- LOGO -->
     <div class="logo">
-      <img src="../../../assets/medMan-white.png" class="logo-img" alt="MedMan Logo" />
+      <img [src]="logoSrc" class="logo-img" alt="MedMan Logo" />
     </div>
 
-    <!-- PROFILE -->
-    <div class="profile">
+    <!-- PROFILE (clickable -> profile page) -->
+    <a class="profile" routerLink="/doctor-page/profile" title="View profile">
       <div class="avatar">D</div>
       <div>
         <p class="name">Dr. Johnson</p>
         <span class="role">DOCTOR</span>
       </div>
-    </div>
+    </a>
 
     <!-- MENU -->
     <nav class="menu">
@@ -25,7 +25,7 @@
     </nav>
 
     <!-- LOGOUT -->
-    <button class="logout" (click)="logout()">Logout</button>
+    <button class="logout" (click)="logout()"><span class="material-icons">logout</span> Logout</button>
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -34,31 +34,29 @@
     <header class="topbar">
       <h2>Welcome back!</h2>
 
-      <div class="notifications" (click)="toggleNotifications()">
-        <span class="material-icons">notifications</span>
+      <div class="topbar-controls">
+        <div class="notifications" (click)="toggleNotifications()">
+          <span class="material-icons">notifications</span>
 
-        <span class="badge-count" *ngIf="unreadCount > 0">
-          {{ unreadCount }}
-        </span>
+          <span class="badge-count" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
 
-        <!-- NOTIFICATIONS DROPDOWN -->
-        <div class="notif-dropdown" *ngIf="notificationsOpen">
-          <p class="notif-title">Notifications</p>
-
-          <div
-            class="notif-item"
-            *ngFor="let n of notifications"
-            [class.unread]="!n.read"
-            (click)="markAsRead(n)"
-          >
-            {{ n.message }}
+          <div class="notif-dropdown" *ngIf="notificationsOpen">
+            <p class="notif-title">Notifications</p>
+            <div class="notif-item" *ngFor="let n of notifications" [class.unread]="!n.read" (click)="markAsRead(n)">
+              {{ n.message }}
+            </div>
+            <p class="notif-empty" *ngIf="notifications.length === 0">No notifications</p>
           </div>
-
-          <p class="notif-empty" *ngIf="notifications.length === 0">
-            No notifications
-          </p>
         </div>
+
+        <button class="theme-toggle" (click)="toggleTheme()" title="Toggle theme">
+          <span class="material-icons">{{ getThemeIcon() }}</span>
+        </button>
+
+        <!-- single notifications control kept above -->
       </div>
+    
+      <!-- removed duplicate controls -->
     </header>
 
     <!-- PAGE CONTENT -->
@@ -68,3 +66,25 @@
   </div>
   </div>
 </div>
+
+<!-- CHAT PANEL -->
+<aside class="chat-panel" [class.open]="chatOpen">
+  <div class="chat-header">
+    <h4>Office Chat</h4>
+    <button class="close" (click)="toggleChat()">×</button>
+  </div>
+  <div class="chat-body">
+    <div *ngFor="let m of chatMessages" class="chat-message" [class.me]="m.from==='doctor'">
+      <div class="bubble">{{ m.text }} <div class="time">{{ m.time }}</div></div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <input [(ngModel)]="chatDraft" (keydown.enter)="sendChat()" placeholder="Type a message..." />
+    <button (click)="sendChat()">Send</button>
+  </div>
+</aside>
+
+<!-- CHAT FAB (hidden while chat panel is open) -->
+<button *ngIf="!chatOpen" class="chat-fab" (click)="toggleChat()" title="Open chat">
+  <span class="material-icons">chat</span>
+</button>
