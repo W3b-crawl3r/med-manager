@@ -1,7 +1,7 @@
 .login-shell {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@
   position: absolute;
   top: 2rem;
   left: 2rem;
-  color: #0277bd;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
@@ -35,13 +35,13 @@
 }
 
 .back-to-home:hover {
-  color: #01579b;
+  color: #b3e5fc;
 }
 
 .login-container {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   max-width: 450px;
   width: 100%;
   padding: 3rem;
@@ -65,18 +65,21 @@
   color: #1f2937;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .switch-btn:hover {
   background: #e5e7eb;
-  border-color: #0277bd;
-  color: #01579b;
+  border-color: #1a1a2e;
+  color: #16213e;
 }
 
 .switch-btn.active {
-  background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
-  border-color: #0277bd;
+  border-color: #1a1a2e;
 }
 
 .language-switcher {
@@ -91,7 +94,7 @@
   height: 48px;
   border-radius: 50%;
   background: white;
-  border: 2px solid #0277bd;
+  border: 2px solid #1a1a2e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,12 +158,12 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(2, 119, 189, 0.3);
+  box-shadow: 0 4px 16px rgba(26, 26, 46, 0.3);
 }
 
 .icon-circle svg {
@@ -210,8 +213,8 @@
 
 .form-field input:focus {
   outline: none;
-  border-color: #0277bd;
-  box-shadow: 0 0 0 3px rgba(2, 119, 189, 0.1);
+  border-color: #1a1a2e;
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
 }
 
 .required-star {
@@ -237,21 +240,21 @@
 }
 
 .error-message .register-link {
-  color: #0277bd;
+  color: #1a1a2e;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
 .error-message .register-link:hover {
-  color: #01579b;
+  color: #16213e;
   text-decoration: underline;
 }
 
 .btn-submit {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -263,7 +266,7 @@
 }
 
 .btn-submit:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(2, 119, 189, 0.4);
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.4);
   transform: translateY(-2px);
 }
 
@@ -280,13 +283,14 @@
 }
 
 .register-link a {
-  color: #0277bd;
+  color: #1a1a2e;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
 .register-link a:hover {
-  color: #01579b;
+  color: #16213e;
   text-decoration: underline;
 }
+

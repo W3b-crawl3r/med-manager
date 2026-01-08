@@ -87,7 +87,7 @@ export class App implements OnInit {
       title: 'Super Admin',
       icon: 'admin_panel_settings',
       description: 'Complete system management & monitoring',
-      route: '/login/admin',
+      route: '/admin-login',
       features: [
         { icon: 'check', text: 'Doctor validation & approval', restricted: false },
         { icon: 'check', text: 'Role-based permissions', restricted: false },
@@ -246,19 +246,14 @@ toggleTheme() {
            url === '/patients';
   }
 
+  isAdminRoute(): boolean {
+    const url = this.router.url;
+    return url.startsWith('/admin') || url.startsWith('/admin-login');
+  }
+
   isAuthRoute(): boolean {
     const url = this.router.url;
-    return this.isDoctorRoute() || 
-           this.isSecretaryRoute() || 
-           this.isPatientRoute() || 
-           url.startsWith('/book') ||
-           url.startsWith('/doctor-login') ||
-           url.startsWith('/patient-login') ||
-           url.startsWith('/secretary-login') ||
-           url.startsWith('/doctor-inscription') ||
-           url.startsWith('/patient-inscription') ||
-           url.startsWith('/secretary-inscription') ||
-           url.startsWith('/login');
+    return this.isDoctorRoute() || this.isSecretaryRoute() || this.isPatientRoute() || this.isAdminRoute() || url.startsWith('/book');
   }
 
   // ===== Click Outside =====

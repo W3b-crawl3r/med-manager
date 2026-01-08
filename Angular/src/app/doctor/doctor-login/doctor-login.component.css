@@ -73,6 +73,12 @@
   color: #01579b;
 }
 
+.switch-btn.active {
+  background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
+  color: white;
+  border-color: #0277bd;
+}
+
 .language-switcher {
   position: absolute;
   top: 2rem;

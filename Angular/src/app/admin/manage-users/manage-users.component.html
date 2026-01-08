@@ -1,0 +1,531 @@
+<div class="manage-doctors-container">
+    <!-- Header Section -->
+    <header class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">
+          <i class="fas fa-user-md"></i>
+          Gérer les médecins
+        </h1>
+        <p class="page-subtitle">Créez et gérez les comptes des médecins</p>
+      </div>
+  
+      <div class="header-actions">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            placeholder="Rechercher un médecin..."
+            [(ngModel)]="searchTerm"
+            (input)="filterDoctors()"
+          />
+        </div>
+        <button class="btn btn-primary" (click)="openAddDoctorModal()">
+          <i class="fas fa-plus"></i>
+          Ajouter un médecin
+        </button>
+        <button class="btn btn-secondary" (click)="exportDoctors()">
+          <i class="fas fa-download"></i>
+          Exporter
+        </button>
+      </div>
+    </header>
+  
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ totalDoctors }}</h3>
+          <p>Médecins totaux</p>
+        </div>
+      </div>
+  
+      <div class="stat-card">
+        <div class="stat-icon active">
+          <i class="fas fa-user-check"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ activeDoctors }}</h3>
+          <p>Médecins actifs</p>
+        </div>
+      </div>
+  
+      <div class="stat-card">
+        <div class="stat-icon patients">
+          <i class="fas fa-user-injured"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ totalPatients | number }}</h3>
+          <p>Patients totaux</p>
+        </div>
+      </div>
+  
+      <div class="stat-card">
+        <div class="stat-icon specialties">
+          <i class="fas fa-star-of-life"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ specialtiesCount }}</h3>
+          <p>Spécialités</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Doctors Table -->
+    <div class="doctors-table-container">
+      <div class="table-header">
+        <h3>
+          <i class="fas fa-list"></i>
+          Liste des médecins
+        </h3>
+        <div class="table-controls">
+          <div class="filter-controls">
+            <select [(ngModel)]="selectedSpecialty" (change)="filterDoctors()">
+              <option value="all">Toutes les spécialités</option>
+              <option *ngFor="let spec of specialties" [value]="spec">{{ spec }}</option>
+            </select>
+  
+            <select [(ngModel)]="selectedStatus" (change)="filterDoctors()">
+              <option value="all">Tous les statuts</option>
+              <option value="active">Actif</option>
+              <option value="inactive">Inactif</option>
+              <option value="pending">En attente</option>
+            </select>
+          </div>
+  
+          <div class="view-options">
+            <button
+              class="view-btn"
+              [class.active]="viewMode === 'grid'"
+              (click)="setViewMode('grid')"
+            >
+              <i class="fas fa-th-large"></i>
+            </button>
+            <button
+              class="view-btn"
+              [class.active]="viewMode === 'list'"
+              (click)="setViewMode('list')"
+            >
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Table View -->
+      <div *ngIf="viewMode === 'list'" class="table-responsive">
+        <table class="doctors-table">
+          <thead>
+            <tr>
+              <th>
+                <input type="checkbox" (change)="toggleSelectAll($event)" />
+              </th>
+              <th (click)="sortDoctors('name')">
+                Médecin
+                <i
+                  class="fas"
+                  [class.fa-sort-up]="sortColumn === 'name' && sortDirection === 'asc'"
+                  [class.fa-sort-down]="sortColumn === 'name' && sortDirection === 'desc'"
+                  [class.fa-sort]="sortColumn !== 'name'"
+                ></i>
+              </th>
+              <th (click)="sortDoctors('specialty')">
+                Spécialité
+                <i
+                  class="fas"
+                  [class.fa-sort-up]="sortColumn === 'specialty' && sortDirection === 'asc'"
+                  [class.fa-sort-down]="sortColumn === 'specialty' && sortDirection === 'desc'"
+                  [class.fa-sort]="sortColumn !== 'specialty'"
+                ></i>
+              </th>
+              <th (click)="sortDoctors('patients')">
+                Patients
+                <i
+                  class="fas"
+                  [class.fa-sort-up]="sortColumn === 'patients' && sortDirection === 'asc'"
+                  [class.fa-sort-down]="sortColumn === 'patients' && sortDirection === 'desc'"
+                  [class.fa-sort]="sortColumn !== 'patients'"
+                ></i>
+              </th>
+              <th>Contact</th>
+              <th (click)="sortDoctors('status')">
+                Statut
+                <i
+                  class="fas"
+                  [class.fa-sort-up]="sortColumn === 'status' && sortDirection === 'asc'"
+                  [class.fa-sort-down]="sortColumn === 'status' && sortDirection === 'desc'"
+                  [class.fa-sort]="sortColumn !== 'status'"
+                ></i>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doctor of filteredDoctors">
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="selectedDoctors.includes(doctor.id)"
+                  (change)="toggleDoctorSelection(doctor.id)"
+                />
+              </td>
+              <td class="doctor-info-cell">
+                <div class="doctor-avatar">
+                  <img [src]="doctor.avatar || 'assets/default-avatar.png'" [alt]="doctor.name" />
+                </div>
+                <div class="doctor-details">
+                  <strong>{{ doctor.name }}</strong>
+                  <small class="doctor-id">ID: {{ doctor.id }}</small>
+                </div>
+              </td>
+              <td>
+                <span class="specialty-badge" [style.background]="getSpecialtyColor(doctor.specialty)">
+                  {{ doctor.specialty }}
+                </span>
+              </td>
+              <td>
+                <div class="patients-count">
+                  <i class="fas fa-user-injured"></i>
+                  {{ doctor.patients | number }}
+                </div>
+                <div
+                  class="patients-trend"
+                  [ngClass]="{ positive: doctor.patientGrowth > 0, negative: doctor.patientGrowth < 0 }"
+                >
+                  <i class="fas" [class.fa-arrow-up]="doctor.patientGrowth >= 0" [class.fa-arrow-down]="doctor.patientGrowth < 0"></i>
+                  {{ doctor.patientGrowth }}% ce mois
+                </div>
+              </td>
+              <td class="contact-info">
+                <div class="email">
+                  <i class="fas fa-envelope"></i>
+                  {{ doctor.email }}
+                </div>
+                <div class="phone" *ngIf="doctor.phone">
+                  <i class="fas fa-phone"></i>
+                  {{ doctor.phone }}
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="'status-' + doctor.status">
+                  {{ getStatusText(doctor.status) }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="action-buttons">
+                  <button class="action-btn edit-btn" (click)="editDoctor(doctor)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn view-btn" (click)="viewDoctorDetails(doctor)">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="deleteDoctor(doctor)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredDoctors.length === 0">
+              <td colspan="7" class="empty-state">
+                <i class="fas fa-user-md"></i>
+                <p>Aucun médecin trouvé</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Grid View -->
+      <div *ngIf="viewMode === 'grid'" class="doctors-grid">
+        <div class="doctor-card" *ngFor="let doctor of filteredDoctors">
+          <div class="card-header">
+            <div class="doctor-avatar-large">
+              <img [src]="doctor.avatar || 'assets/default-avatar.png'" [alt]="doctor.name" />
+              <span class="online-status" [ngClass]="doctor.status"></span>
+            </div>
+            <div class="doctor-info">
+              <h4>{{ doctor.name }}</h4>
+              <p class="doctor-id">ID: {{ doctor.id }}</p>
+            </div>
+            <div class="card-actions">
+              <input
+                type="checkbox"
+                [checked]="selectedDoctors.includes(doctor.id)"
+                (change)="toggleDoctorSelection(doctor.id)"
+              />
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <div class="specialty-section">
+              <span class="specialty-badge" [style.background]="getSpecialtyColor(doctor.specialty)">
+                {{ doctor.specialty }}
+              </span>
+            </div>
+  
+            <div class="stats-section">
+              <div class="stat-item">
+                <i class="fas fa-user-injured"></i>
+                <div class="stat-details">
+                  <strong>{{ doctor.patients | number }}</strong>
+                  <small>Patients</small>
+                </div>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-calendar-check"></i>
+                <div class="stat-details">
+                  <strong>{{ doctor.appointmentsToday || 0 }}</strong>
+                  <small>RDV aujourd'hui</small>
+                </div>
+              </div>
+            </div>
+  
+            <div class="contact-section">
+              <p><i class="fas fa-envelope"></i> {{ doctor.email }}</p>
+              <p *ngIf="doctor.phone"><i class="fas fa-phone"></i> {{ doctor.phone }}</p>
+            </div>
+          </div>
+  
+          <div class="card-footer">
+            <span class="status-badge" [ngClass]="'status-' + doctor.status">
+              {{ getStatusText(doctor.status) }}
+            </span>
+            <div class="action-buttons">
+              <button class="action-btn edit-btn" (click)="editDoctor(doctor)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn view-btn" (click)="viewDoctorDetails(doctor)">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn delete-btn" (click)="deleteDoctor(doctor)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <div *ngIf="filteredDoctors.length === 0" class="empty-grid">
+          <i class="fas fa-user-md"></i>
+          <p>Aucun médecin trouvé</p>
+        </div>
+      </div>
+  
+      <!-- Pagination -->
+      <div class="table-footer">
+        <div class="selected-count">
+          <span *ngIf="selectedDoctors.length > 0">
+            {{ selectedDoctors.length }} médecins sélectionnés
+          </span>
+          <button *ngIf="selectedDoctors.length > 0" class="btn btn-danger btn-sm" (click)="deleteSelected()">
+            <i class="fas fa-trash"></i>
+            Supprimer sélection
+          </button>
+        </div>
+  
+        <div class="pagination-controls">
+          <span class="pagination-info">
+            Affichage de {{ (currentPage - 1) * itemsPerPage + 1 }}
+            à {{ getMin(currentPage * itemsPerPage, totalItems) }}
+            sur {{ totalItems }}
+          </span>
+          <div class="pagination-buttons">
+            <button class="pagination-btn" [disabled]="currentPage === 1" (click)="previousPage()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="page-number">{{ currentPage }}</span>
+            <button
+              class="pagination-btn"
+              [disabled]="currentPage * itemsPerPage >= totalItems"
+              (click)="nextPage()"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <select [(ngModel)]="itemsPerPage" (change)="updatePagination()">
+            <option value="10">10 par page</option>
+            <option value="25">25 par page</option>
+            <option value="50">50 par page</option>
+            <option value="100">100 par page</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add/Edit Doctor Modal -->
+  <div class="modal-overlay" [class.active]="showModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>
+          <i class="fas" [class]="isEditing ? 'fa-edit' : 'fa-user-plus'"></i>
+          {{ isEditing ? 'Modifier le médecin' : 'Ajouter un nouveau médecin' }}
+        </h3>
+        <button class="close-modal" (click)="closeModal()">&times;</button>
+      </div>
+  
+      <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nom complet *</label>
+              <input type="text" id="name" formControlName="name" placeholder="Ex: Dr. Sarah Johnson" />
+              <div *ngIf="doctorForm.get('name')?.invalid && doctorForm.get('name')?.touched" class="error-message">
+                Le nom est requis
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="specialty">Spécialité *</label>
+              <select id="specialty" formControlName="specialty">
+                <option value="">Sélectionner une spécialité</option>
+                <option *ngFor="let spec of specialties" [value]="spec">{{ spec }}</option>
+              </select>
+              <div *ngIf="doctorForm.get('specialty')?.invalid && doctorForm.get('specialty')?.touched" class="error-message">
+                La spécialité est requise
+              </div>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" formControlName="email" placeholder="exemple@medmanager.com" />
+              <div *ngIf="doctorForm.get('email')?.invalid && doctorForm.get('email')?.touched" class="error-message">
+                Email invalide
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <input type="tel" id="phone" formControlName="phone" placeholder="+33 1 23 45 67 89" />
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="licenseNumber">Numéro de licence</label>
+              <input
+                type="text"
+                id="licenseNumber"
+                formControlName="licenseNumber"
+                placeholder="Numéro de licence médicale"
+              />
+            </div>
+  
+            <div class="form-group">
+              <label for="status">Statut</label>
+              <select id="status" formControlName="status">
+                <option value="active">Actif</option>
+                <option value="inactive">Inactif</option>
+                <option value="pending">En attente</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" formControlName="notes" rows="3" placeholder="Notes supplémentaires..."></textarea>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="doctorForm.invalid">
+            {{ isEditing ? 'Mettre à jour' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Doctor Details Modal -->
+  <div class="modal-overlay" [class.active]="showDetailsModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3>
+          <i class="fas fa-user-md"></i>
+          Détails du médecin
+        </h3>
+        <button class="close-modal" (click)="closeDetailsModal()">&times;</button>
+      </div>
+  
+      <div class="modal-body" *ngIf="selectedDoctor">
+        <div class="doctor-detail-header">
+          <div class="detail-avatar">
+            <img [src]="selectedDoctor.avatar || 'assets/default-avatar.png'" [alt]="selectedDoctor.name" />
+          </div>
+          <div class="detail-info">
+            <h4>{{ selectedDoctor.name }}</h4>
+            <p class="doctor-id">ID: {{ selectedDoctor.id }}</p>
+            <span class="specialty-badge" [style.background]="getSpecialtyColor(selectedDoctor.specialty)">
+              {{ selectedDoctor.specialty }}
+            </span>
+            <span class="status-badge" [ngClass]="'status-' + selectedDoctor.status">
+              {{ getStatusText(selectedDoctor.status) }}
+            </span>
+          </div>
+        </div>
+  
+        <div class="detail-grid">
+          <div class="detail-card">
+            <h5><i class="fas fa-chart-line"></i> Statistiques</h5>
+            <div class="detail-stats">
+              <div class="stat">
+                <strong>{{ selectedDoctor.patients | number }}</strong>
+                <span>Patients</span>
+              </div>
+              <div class="stat">
+                <strong>{{ selectedDoctor.appointmentsToday || 0 }}</strong>
+                <span>RDV aujourd'hui</span>
+              </div>
+              <div class="stat">
+                <strong>{{ selectedDoctor.patientGrowth || 0 }}%</strong>
+                <span>Croissance patients</span>
+              </div>
+            </div>
+          </div>
+  
+          <div class="detail-card">
+            <h5><i class="fas fa-address-card"></i> Informations de contact</h5>
+            <div class="contact-details">
+              <p><i class="fas fa-envelope"></i> {{ selectedDoctor.email }}</p>
+              <p *ngIf="selectedDoctor.phone"><i class="fas fa-phone"></i> {{ selectedDoctor.phone }}</p>
+              <p *ngIf="selectedDoctor.licenseNumber"><i class="fas fa-id-card"></i> Licence: {{ selectedDoctor.licenseNumber }}</p>
+            </div>
+          </div>
+  
+          <div class="detail-card">
+            <h5><i class="fas fa-calendar-alt"></i> Horaires de travail</h5>
+            <div class="schedule">
+              <p>Lundi - Vendredi: 9h00 - 18h00</p>
+              <p>Samedi: 9h00 - 13h00</p>
+              <p>Dimanche: Fermé</p>
+            </div>
+          </div>
+  
+          <div class="detail-card">
+            <h5><i class="fas fa-sticky-note"></i> Notes</h5>
+            <p class="notes">{{ selectedDoctor.notes || 'Aucune note' }}</p>
+          </div>
+        </div>
+  
+        <div class="detail-actions">
+          <button class="btn btn-primary" (click)="editDoctor(selectedDoctor)">
+            <i class="fas fa-edit"></i>
+            Modifier
+          </button>
+          <button class="btn btn-secondary" (click)="sendReminder(selectedDoctor)">
+            <i class="fas fa-bell"></i>
+            Envoyer rappel
+          </button>
+          <button class="btn btn-danger" (click)="deleteDoctor(selectedDoctor)">
+            <i class="fas fa-trash"></i>
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

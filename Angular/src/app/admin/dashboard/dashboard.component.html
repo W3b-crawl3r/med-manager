@@ -1,0 +1,375 @@
+<div class="admin-dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <h1>
+                <i class="fas fa-tachometer-alt"></i>
+                Tableau de bord Admin
+            </h1>
+            <p class="subtitle">Vue d'ensemble du système et gestion</p>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="user-details">
+                    <h3>Admin User</h3>
+                    <p class="role">ADMIN</p>
+                </div>
+            </div>
+            <button class="btn btn-refresh" (click)="refreshDashboard()">
+                <i class="fas fa-sync-alt"></i>
+                Actualiser
+            </button>
+        </div>
+    </header>
+
+    <!-- Welcome Message -->
+    <div class="welcome-card">
+        <div class="welcome-content">
+            <h2>
+                <i class="fas fa-hand-wave"></i>
+                Bienvenue de retour, Admin !
+            </h2>
+            <p>Voici un aperçu de l'état de votre système Med Manager</p>
+        </div>
+        <div class="welcome-actions">
+            <button class="btn btn-primary" routerLink="/admin/manage-users">
+                <i class="fas fa-user-md"></i>
+                Gérer les médecins
+            </button>
+            <button class="btn btn-secondary" routerLink="/admin/settings">
+                <i class="fas fa-cog"></i>
+                Journaux système
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Stats Grid -->
+    <div class="stats-grid">
+        <!-- Total Doctors Card -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3><i class="fas fa-user-md"></i> Médecins totaux</h3>
+                <span class="stat-badge info">{{ totalDoctors }}</span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-main">
+                    <h2>{{ totalDoctors }}</h2>
+                    <p class="stat-subtitle">Médecins inscrits</p>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-detail">
+                        <span class="detail-label">Actifs:</span>
+                        <span class="detail-value success">{{ activeDoctors }}</span>
+                    </div>
+                    <div class="stat-detail">
+                        <span class="detail-label">Inactifs:</span>
+                        <span class="detail-value muted">{{ totalDoctors - activeDoctors }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-footer">
+                <a routerLink="/admin/manage-users" class="stat-link">
+                    Voir tous les médecins <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Active Doctors Card -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3><i class="fas fa-user-check"></i> Médecins actifs</h3>
+                <span class="stat-badge success">{{ activeDoctors }}</span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-main">
+                    <h2>{{ activeDoctors }}</h2>
+                    <p class="stat-subtitle">Médecins actuellement actifs</p>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" [style.width.%]="(activeDoctors / totalDoctors) * 100"></div>
+                    </div>
+                    <span class="progress-text">
+                        {{ ((activeDoctors / totalDoctors) * 100).toFixed(0) }}% d'activité
+                    </span>
+                </div>
+            </div>
+            <div class="stat-footer">
+                <span class="stat-info">
+                    <i class="fas fa-info-circle"></i>
+                    {{ totalDoctors - activeDoctors }} médecin(s) inactif(s)
+                </span>
+            </div>
+        </div>
+
+        <!-- Total Patients Card -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3><i class="fas fa-users"></i> Patients totaux</h3>
+                <span class="stat-badge primary">{{ totalPatients }}</span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-main">
+                    <h2>{{ totalPatients | number }}</h2>
+                    <p class="stat-subtitle">Patients dans le système</p>
+                </div>
+                <div class="stat-trend">
+                    <div class="trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12% ce mois</span>
+                    </div>
+                    <div class="patient-distribution">
+                        <div class="distribution-item">
+                            <span class="dot general"></span>
+                            <span>Médecine générale: 156</span>
+                        </div>
+                        <div class="distribution-item">
+                            <span class="dot cardiology"></span>
+                            <span>Cardiologie: 98</span>
+                        </div>
+                        <div class="distribution-item">
+                            <span class="dot pediatrics"></span>
+                            <span>Pédiatrie: 134</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Alerts Card -->
+        <div class="stat-card alert-card">
+            <div class="stat-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Alertes système</h3>
+                <span class="stat-badge" [class]="systemAlerts > 0 ? 'danger' : 'success'">
+                    {{ systemAlerts }}
+                </span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-main">
+                    <h2 [class]="systemAlerts > 0 ? 'text-danger' : 'text-success'">{{ systemAlerts }}</h2>
+                    <p class="stat-subtitle">Alertes en cours</p>
+                </div>
+                <div class="alert-status" [class]="systemAlerts > 0 ? 'has-alerts' : 'no-alerts'">
+                    <i class="fas" [class]="systemAlerts > 0 ? 'fa-exclamation-circle' : 'fa-check-circle'"></i>
+                    <span>{{ systemAlerts > 0 ? 'Action requise' : 'Système stable' }}</span>
+                </div>
+            </div>
+            <div class="stat-footer">
+                <button class="btn btn-sm btn-outline" *ngIf="systemAlerts > 0">
+                    <i class="fas fa-eye"></i>
+                    Voir les alertes
+                </button>
+                <span class="text-success" *ngIf="systemAlerts === 0">
+                    <i class="fas fa-check"></i>
+                    Aucune alerte
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Overview Section -->
+    <div class="overview-section">
+        <h2 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Vue d'ensemble du système
+        </h2>
+
+        <div class="overview-grid">
+            <!-- System Health -->
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3><i class="fas fa-heartbeat"></i> Santé du système</h3>
+                    <span class="status-badge" [class]="'status-' + getSystemHealthColor()">
+                        {{ systemHealth }}%
+                    </span>
+                </div>
+                <div class="health-indicator">
+                    <div class="health-bar">
+                        <div class="health-fill" [style.width.%]="systemHealth"></div>
+                    </div>
+                    <div class="health-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Performance:</span>
+                            <span class="metric-value">Excellent</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Dernière vérification:</span>
+                            <span class="metric-value">Il y a 5 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3><i class="fas fa-database"></i> Utilisation stockage</h3>
+                    <span class="status-badge" [class]="'status-' + getStorageUsageColor()">
+                        {{ storageUsage }}%
+                    </span>
+                </div>
+                <div class="storage-info">
+                    <div class="storage-visual">
+                        <div class="storage-circle">
+                            <div class="circle-progress" [style.transform]="'rotate(' + (storageUsage * 3.6) + 'deg)'">
+                            </div>
+                        </div>
+                        <div class="storage-details">
+                            <span class="storage-used">{{ storageUsage }}% utilisé</span>
+                            <span class="storage-total">2.3 Go / 3.5 Go</span>
+                        </div>
+                    </div>
+                    <div class="storage-actions">
+                        <button class="btn btn-sm">
+                            <i class="fas fa-trash"></i>
+                            Nettoyer
+                        </button>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Étendre
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Sessions -->
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3><i class="fas fa-user-clock"></i> Sessions actives</h3>
+                    <span class="status-badge status-info">{{ activeSessions }}</span>
+                </div>
+                <div class="sessions-info">
+                    <div class="sessions-list">
+                        <div class="session-item">
+                            <span class="session-type admin">Admin</span>
+                            <span class="session-user">Vous</span>
+                            <span class="session-time">Maintenant</span>
+                        </div>
+                        <div class="session-item">
+                            <span class="session-type doctor">Médecin</span>
+                            <span class="session-user">Dr. Johnson</span>
+                            <span class="session-time">15 min</span>
+                        </div>
+                        <div class="session-item">
+                            <span class="session-type nurse">Infirmier</span>
+                            <span class="session-user">Nurse Smith</span>
+                            <span class="session-time">30 min</span>
+                        </div>
+                    </div>
+                    <div class="sessions-summary">
+                        <span>{{ activeSessions }} sessions actives</span>
+                        <a href="#" class="view-all">Voir tout</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3><i class="fas fa-chart-pie"></i> Statistiques rapides</h3>
+                </div>
+                <div class="quick-stats-grid">
+                    <div class="quick-stat">
+                        <i class="fas fa-calendar-check stat-icon appointment"></i>
+                        <div class="quick-stat-info">
+                            <span class="stat-value">{{ quickStats.appointmentsToday }}</span>
+                            <span class="stat-label">Rendez-vous aujourd'hui</span>
+                        </div>
+                    </div>
+                    <div class="quick-stat">
+                        <i class="fas fa-user-plus stat-icon patient"></i>
+                        <div class="quick-stat-info">
+                            <span class="stat-value">{{ quickStats.newPatientsWeek }}</span>
+                            <span class="stat-label">Nouveaux patients (semaine)</span>
+                        </div>
+                    </div>
+                    <div class="quick-stat">
+                        <i class="fas fa-prescription stat-icon prescription"></i>
+                        <div class="quick-stat-info">
+                            <span class="stat-value">{{ quickStats.prescriptionsPending }}</span>
+                            <span class="stat-label">Ordonnances en attente</span>
+                        </div>
+                    </div>
+                    <div class="quick-stat">
+                        <i class="fas fa-euro-sign stat-icon revenue"></i>
+                        <div class="quick-stat-info">
+                            <span class="stat-value">{{ quickStats.revenueMonth }}</span>
+                            <span class="stat-label">Revenu (mois)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity & Doctor Stats -->
+    <div class="activity-section">
+        <div class="activity-column">
+            <div class="section-header">
+                <h3><i class="fas fa-history"></i> Activité récente</h3>
+                <a href="#" class="view-all-link">Voir tout <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item" *ngFor="let activity of recentActivities">
+                    <div class="activity-icon" [class]="'icon-' + activity.id">
+                        <i [class]="activity.icon"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">
+                            <strong>{{ activity.user }}</strong> {{ activity.action }}
+                        </p>
+                        <span class="activity-time">{{ activity.time }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-column">
+            <div class="section-header">
+                <h3><i class="fas fa-user-md"></i> Statistiques médecins</h3>
+            </div>
+            <div class="doctor-stats-list">
+                <div class="doctor-stat-item" *ngFor="let doctor of doctorStats">
+                    <div class="doctor-info">
+                        <span class="doctor-name">{{ doctor.name }}</span>
+                        <span class="doctor-specialty">{{ doctor.specialty }}</span>
+                    </div>
+                    <div class="doctor-numbers">
+                        <span class="patient-count">
+                            <i class="fas fa-user-injured"></i>
+                            {{ doctor.patients }} patients
+                        </span>
+                        <span class="doctor-status" [class]="'status-' + doctor.status">
+                            {{ doctor.status === 'active' ? 'Actif' : 'Inactif' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="dashboard-footer">
+        <div class="footer-note">
+            <i class="fas fa-info-circle"></i>
+            <p>
+                <strong>Note :</strong> Toutes les données sont fictives et servent uniquement à des fins de
+                démonstration.
+                Le système est surveillé 24/7 pour assurer la sécurité et la confidentialité des données médicales.
+            </p>
+        </div>
+        <div class="footer-actions">
+            <button class="btn btn-outline">
+                <i class="fas fa-download"></i>
+                Exporter le rapport
+            </button>
+            <button class="btn btn-primary">
+                <i class="fas fa-cog"></i>
+                Paramètres système
+            </button>
+        </div>
+    </div>
+</div>
