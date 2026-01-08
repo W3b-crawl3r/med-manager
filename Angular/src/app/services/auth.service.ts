@@ -25,7 +25,7 @@ registerPatient(data: FormData) {
 
   registerDoctor(payload: any): Observable<any> {
     // Payload may be FormData (multipart) or plain JSON depending on caller
-    return this.http.post(`${this.base}/register-doctor`, payload);
+    return this.http.post('/api/v1/doctors/signup', payload);
   }
 
   registerSecretary(payload: any): Observable<any> {

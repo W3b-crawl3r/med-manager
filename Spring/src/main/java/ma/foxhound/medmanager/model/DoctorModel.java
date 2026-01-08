@@ -22,6 +22,11 @@ public class DoctorModel extends UserModel {
     String specialty;
     String location;
     String clinic;
+    String email;
+    String phone;
+    String licenseNumber;
+    String hospital;
+    Integer experience;
 
         @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

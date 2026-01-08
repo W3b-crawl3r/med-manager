@@ -180,19 +180,20 @@ selectUser(user: string) {
       return;
     }
 
-    const fd = new FormData();
     const val = this.form.value;
-    fd.append('name', val.name);
-    fd.append('email', val.email);
-    fd.append('password', val.password);
-    fd.append('specialty', val.specialty);
-    fd.append('phone', val.phone);
-    fd.append('licenseNumber', val.licenseNumber);
-    if (this.identityFile) fd.append('identityCard', this.identityFile, this.identityFile.name);
-    if (this.certificateFile) fd.append('certificate', this.certificateFile, this.certificateFile.name);
+    const payload = {
+      username: val.email, // Use email as username for login
+      email: val.email,
+      password: val.password,
+      specialty: val.specialty,
+      phone: val.phone,
+      licenseNumber: val.licenseNumber,
+      hospital: val.hospital || '',
+      experience: val.experience || 0
+    };
 
     this.submitting = true;
-    this.auth.registerDoctor(fd).subscribe({
+    this.auth.registerDoctor(payload).subscribe({
       next: () => {
         this.successMessage = 'Registration successful';
         this.submitting = false;

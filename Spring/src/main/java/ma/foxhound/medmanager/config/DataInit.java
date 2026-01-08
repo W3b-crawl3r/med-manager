@@ -29,44 +29,74 @@ public class DataInit implements CommandLineRunner {
         DoctorModel d1 = new DoctorModel();
         d1.setUsername("Dr. Sarah Bennani");
         d1.setHashedPassword(passwordEncoder.encode("pass1"));
+        d1.setEmail("sarah.bennani@medmanager.com");
+        d1.setPhone("0612345601");
         d1.setSpecialty("Cardiologist");
+        d1.setLicenseNumber("MD001234");
+        d1.setHospital("Heart Care Clinic");
         d1.setLocation("Casablanca");
         d1.setClinic("Heart Care Clinic");
+        d1.setExperience(12);
 
         DoctorModel d2 = new DoctorModel();
         d2.setUsername("Dr. Youssef Amrani");
         d2.setHashedPassword(passwordEncoder.encode("pass2"));
+        d2.setEmail("youssef.amrani@medmanager.com");
+        d2.setPhone("0612345602");
         d2.setSpecialty("Dermatologist");
+        d2.setLicenseNumber("MD001235");
+        d2.setHospital("Skin Center");
         d2.setLocation("Rabat");
         d2.setClinic("Skin Center");
+        d2.setExperience(8);
 
         DoctorModel d3 = new DoctorModel();
         d3.setUsername("Dr. Amina El Fassi");
         d3.setHashedPassword(passwordEncoder.encode("pass3"));
+        d3.setEmail("amina.elfassi@medmanager.com");
+        d3.setPhone("0612345603");
         d3.setSpecialty("Pediatrician");
+        d3.setLicenseNumber("MD001236");
+        d3.setHospital("Children's Health Center");
         d3.setLocation("Marrakech");
         d3.setClinic("Children's Health Center");
+        d3.setExperience(10);
 
         DoctorModel d4 = new DoctorModel();
         d4.setUsername("Dr. Karim Bouzidi");
         d4.setHashedPassword(passwordEncoder.encode("pass4"));
+        d4.setEmail("karim.bouzidi@medmanager.com");
+        d4.setPhone("0612345604");
         d4.setSpecialty("Orthopedic Surgeon");
+        d4.setLicenseNumber("MD001237");
+        d4.setHospital("Bone & Joint Clinic");
         d4.setLocation("Casablanca");
         d4.setClinic("Bone & Joint Clinic");
+        d4.setExperience(15);
 
         DoctorModel d5 = new DoctorModel();
         d5.setUsername("Dr. Fatima Zahra Alaoui");
         d5.setHashedPassword(passwordEncoder.encode("pass5"));
+        d5.setEmail("fatima.alaoui@medmanager.com");
+        d5.setPhone("0612345605");
         d5.setSpecialty("Neurologist");
+        d5.setLicenseNumber("MD001238");
+        d5.setHospital("Neuro Care Center");
         d5.setLocation("Rabat");
         d5.setClinic("Neuro Care Center");
+        d5.setExperience(11);
 
         DoctorModel d6 = new DoctorModel();
         d6.setUsername("test");
         d6.setHashedPassword(passwordEncoder.encode("pass6"));
+        d6.setEmail("test.doctor@medmanager.com");
+        d6.setPhone("0612345606");
         d6.setSpecialty("Dentist");
+        d6.setLicenseNumber("MD001239");
+        d6.setHospital("Smile Dental Clinic");
         d6.setLocation("Tangier");
         d6.setClinic("Smile Dental Clinic");
+        d6.setExperience(9);
 
         // Seed secretaries
         SecretaryModel s1 = new SecretaryModel();
