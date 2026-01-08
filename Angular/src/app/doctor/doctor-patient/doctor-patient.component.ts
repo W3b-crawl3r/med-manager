@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // <-- for ngModel
+import { DoctorService } from '../../services/doctor.service';
+import { AuthService } from '../../services/auth.service';
 
 interface Patient {
-  id: string;
+  id: string | number;
   name: string;
-  age: number;
-  gender: string;
-  bloodType: string;
+  age?: number;
+  gender?: string;
+  bloodType?: string;
 }
 @Component({
   selector: 'app-patients',
@@ -16,16 +18,9 @@ interface Patient {
   templateUrl: './doctor-patient.component.html',
   styleUrls: ['./doctor-patient.component.css']
 })
-export class DoctorPatientComponent {
+export class DoctorPatientComponent implements OnInit {
 
-  patients: Patient[] = [
-    { id: 'P001', name: 'Michael Chen', age: 45, gender: 'Male', bloodType: 'O+' },
-    { id: 'P002', name: 'Emma Rodriguez', age: 32, gender: 'Female', bloodType: 'A+' },
-    { id: 'P003', name: 'David Thompson', age: 58, gender: 'Male', bloodType: 'B+' },
-    { id: 'P004', name: 'Sarah Williams', age: 27, gender: 'Female', bloodType: 'AB+' },
-    { id: 'P005', name: 'Aisha Ben', age: 36, gender: 'Female', bloodType: 'O-' },
-    { id: 'P006', name: 'Omar Haddad', age: 50, gender: 'Male', bloodType: 'A-' }
-  ];
+  patients: Patient[] = [];
   searchText: string = '';
 
   selectedPatient: Patient | null = null;
@@ -43,19 +38,14 @@ export class DoctorPatientComponent {
     if (!this.searchText) return this.patients;
     return this.patients.filter(p =>
       p.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      p.id.toLowerCase().includes(this.searchText.toLowerCase())
+      p.id.toString().toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
   viewPatient(patient: Patient) { this.selectedPatient = patient; this.showDetails = true; this.editingPatient = false; this.isNewPatient = false; }
   closeDetails() { this.selectedPatient = null; this.showDetails = false; this.editingPatient = false; this.isNewPatient = false; }
   addPatient() {
-    // open modal with empty patient for creation
-    const newId = this.generatePatientId();
-    this.selectedPatient = { id: newId, name: '', age: 0, gender: 'Other', bloodType: '' };
-    this.isNewPatient = true;
-    this.editingPatient = true;
-    this.showDetails = true;
+    alert('Adding patients from UI is not implemented yet.');
   }
 
   savePatient() {
@@ -79,11 +69,26 @@ export class DoctorPatientComponent {
     this.editingPatient = true;
   }
 
-  constructor() {
-    try {
-      const raw = localStorage.getItem('doctorPatients');
-      if (raw) this.patients = JSON.parse(raw);
-    } catch (e) {}
+  constructor(private doctorService: DoctorService, private auth: AuthService) {}
+
+  ngOnInit(): void {
+    const username = this.auth.getUsername();
+    if (!username) {
+      return;
+    }
+    this.doctorService.getPatients(username).subscribe({
+      next: (data) => {
+        // Map backend PatientSummaryDto to view model
+        this.patients = data.map(p => ({
+          id: p.id,
+          name: p.username,
+          // Age/Gender/BloodType are not in backend yet
+        }));
+      },
+      error: (err) => {
+        console.error('Failed to load patients', err);
+      }
+    });
   }
 
   generatePatientId(): string {

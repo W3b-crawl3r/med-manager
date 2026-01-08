@@ -25,4 +25,10 @@ export class DoctorService {
   getDashboard(username: string): Observable<DoctorDashboardDto> {
     return this.http.get<DoctorDashboardDto>(`/api/v1/doctors/${encodeURIComponent(username)}/dashboard`);
   }
+
+  getPatients(username: string): Observable<Array<{ id: number; username: string; visits: Array<{ id: number; summary: string; visitDate: string }> }>> {
+    return this.http.get<Array<{ id: number; username: string; visits: Array<{ id: number; summary: string; visitDate: string }> }>>(
+      `/api/v1/doctors/${encodeURIComponent(username)}/patients`
+    );
+  }
 }

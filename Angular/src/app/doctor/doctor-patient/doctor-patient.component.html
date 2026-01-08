@@ -7,7 +7,7 @@
       placeholder="Search by name or ID"
       [(ngModel)]="searchText"
     />
-    <button (click)="addPatient()">Add Patient</button>
+    <button (click)="addPatient()" title="Not implemented yet">Add Patient</button>
   </div>
   <div class="cards">
     <div class="card" *ngFor="let patient of filteredPatients">
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="card-right">
-        <div class="blood">{{ patient.bloodType }}</div>
+        <div class="blood">{{ patient.bloodType || '-' }}</div>
         <button class="btn" (click)="viewPatient(patient)">Details</button>
       </div>
     </div>
@@ -36,17 +36,17 @@
       <input [(ngModel)]="sp.name" [readonly]="!editingPatient" />
 
       <label>Age</label>
-      <input type="number" [(ngModel)]="sp.age" [readonly]="!editingPatient" />
+      <input type="number" [(ngModel)]="sp.age" [readonly]="true" />
 
       <label>Gender</label>
-      <select [(ngModel)]="sp.gender" [disabled]="!editingPatient">
+      <select [(ngModel)]="sp.gender" [disabled]="true">
         <option>Male</option>
         <option>Female</option>
         <option>Other</option>
       </select>
 
       <label>Blood Type</label>
-      <input [(ngModel)]="sp.bloodType" [readonly]="!editingPatient" />
+      <input [(ngModel)]="sp.bloodType" [readonly]="true" />
 
       <hr />
       <h4>Recent History (read-only)</h4>
@@ -57,9 +57,7 @@
 
       <div class="modal-actions">
         <button class="btn" *ngIf="!editingPatient" (click)="closeDetails()">Close</button>
-        <button class="btn" *ngIf="!editingPatient" (click)="enableEditing()">Update</button>
-        <button class="btn" *ngIf="editingPatient" (click)="closeDetails(); editingPatient=false">Cancel</button>
-        <button class="btn" *ngIf="editingPatient" (click)="savePatient()">Save</button>
+        
       </div>
     </div>
   </div>
