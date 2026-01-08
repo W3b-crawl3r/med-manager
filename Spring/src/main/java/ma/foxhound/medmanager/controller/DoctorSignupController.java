@@ -21,13 +21,13 @@ public class DoctorSignupController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody DoctorRegistrationDto request) {
+    public ResponseEntity<?> signup(@RequestBody DoctorRegistrationDto request) {
         if (request.getUsername() == null || request.getPassword() == null) {
-            return ResponseEntity.badRequest().body("username and password are required");
+            return ResponseEntity.badRequest().body(new ErrorResponse("username and password are required"));
         }
 
         if (userRepository.findByUsername(request.getUsername()) != null) {
-            return ResponseEntity.status(409).body("username already exists");
+            return ResponseEntity.status(409).body(new ErrorResponse("username already exists"));
         }
 
         DoctorModel doctor = new DoctorModel();
@@ -42,7 +42,38 @@ public class DoctorSignupController {
         
         userRepository.save(doctor);
 
-        return ResponseEntity.status(201).body("doctor created");
+        return ResponseEntity.status(201).body(new SuccessResponse("doctor created", "Doctor registered successfully"));
+    }
+
+    // Helper classes for responses
+    public static class SuccessResponse {
+        private String message;
+        private String details;
+
+        public SuccessResponse(String message, String details) {
+            this.message = message;
+            this.details = details;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+    }
+
+    public static class ErrorResponse {
+        private String error;
+
+        public ErrorResponse(String error) {
+            this.error = error;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 
 }

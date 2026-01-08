@@ -194,12 +194,17 @@ selectUser(user: string) {
 
     this.submitting = true;
     this.auth.registerDoctor(payload).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Registration response:', response);
         this.successMessage = 'Registration successful';
         this.submitting = false;
-        this.router.navigate(['/']);
+        
+        // Set user role and navigate to doctor dashboard
+        this.auth.setRole('DOCTOR');
+        this.router.navigate(['/doctor-page/dash']);
       },
-      error: () => {
+      error: (error) => {
+        console.error('Registration error:', error);
         this.errorMessage = 'Registration failed. Please try again.';
         this.submitting = false;
       }
