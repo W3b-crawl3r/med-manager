@@ -24,11 +24,10 @@ export class AuthService {
       this.username = savedUsername;
     }
   }
-  // In auth.service.ts
-registerPatient(data: FormData) {
-  // Replace the URL with your backend endpoint for patient registration
-  return this.http.post('/api/patients/register', data);
-}
+  // Patient registration: backend expects JSON { username, password }
+  registerPatient(payload: { username: string; password: string }) : Observable<any> {
+    return this.http.post('/api/v1/patients/signup', payload);
+  }
 
   registerDoctor(payload: any): Observable<any> {
     // Payload may be FormData (multipart) or plain JSON depending on caller

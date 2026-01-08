@@ -21,13 +21,13 @@ public class PatientSignupController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody LoginRequestDto request) {
+    public ResponseEntity<?> signup(@RequestBody LoginRequestDto request) {
         if (request.getUsername() == null || request.getPassword() == null) {
-            return ResponseEntity.badRequest().body("username and password are required");
+            return ResponseEntity.badRequest().body(java.util.Map.of("error", "username and password are required"));
         }
 
         if (userRepository.findByUsername(request.getUsername()) != null) {
-            return ResponseEntity.status(409).body("username already exists");
+            return ResponseEntity.status(409).body(java.util.Map.of("error", "username already exists"));
         }
 
         PatientModel patient = new PatientModel();
@@ -35,7 +35,7 @@ public class PatientSignupController {
         patient.setHashedPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(patient);
 
-        return ResponseEntity.status(201).body("patient created");
+        return ResponseEntity.status(201).body(java.util.Map.of("message", "patient created", "username", request.getUsername()));
     }
 
 }

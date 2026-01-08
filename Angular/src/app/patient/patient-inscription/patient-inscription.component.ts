@@ -91,22 +91,40 @@ export class PatientInscriptionComponent {
     }
 
     const val = this.form.value;
-    const fd = new FormData();
-    fd.append('fullName', val.fullName);
-    fd.append('birthDate', val.birthDate);
-    fd.append('email', val.email);
-    fd.append('password', val.password);
-    fd.append('gender', val.gender);
-    fd.append('allergies', val.allergies);
+    const payload = {
+      username: val.email,
+      password: val.password
+    };
 
     this.submitting = true;
-    this.auth.registerPatient(fd).subscribe({
-      next: () => {
-        this.successMessage = 'Registration successful';
-        this.submitting = false;
-        this.router.navigate(['/']); // redirect to home/login
+    this.auth.registerPatient(payload).subscribe({
+      next: (response) => {
+        console.log('Registration successful:', response);
+        this.successMessage = 'Registration successful! Redirecting...';
+        
+        // Set auth context immediately
+        this.auth.setRole('PATIENT');
+        this.auth.setUsername(val.email);
+        
+        // Navigate immediately after setting context
+        setTimeout(() => {
+          this.submitting = false;
+          console.log('Navigating to /patient-page/dash');
+          this.router.navigate(['/patient-page/dash'], { replaceUrl: true }).then(
+            (navSuccess) => {
+              console.log('Navigation result:', navSuccess);
+              if (!navSuccess) {
+                console.error('Navigation returned false');
+              }
+            },
+            (navError) => {
+              console.error('Navigation promise rejected:', navError);
+            }
+          );
+        }, 500);
       },
-      error: () => {
+      error: (err) => {
+        console.error('Patient registration failed', err);
         this.errorMessage = 'Registration failed. Please try again.';
         this.submitting = false;
       }
