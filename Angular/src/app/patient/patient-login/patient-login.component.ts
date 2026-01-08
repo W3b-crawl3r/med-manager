@@ -98,8 +98,9 @@ export class PatientLoginComponent {
     ) {
       this.auth.setToken('demo-patient-token');
       this.auth.setRole('PATIENT');
+      this.auth.setUsername(payload.email);
       this.submitting = false;
-      this.router.navigate(['/']);
+      this.router.navigate(['/patient-page/dash']);
       return;
     }
 
@@ -109,8 +110,9 @@ export class PatientLoginComponent {
         const token = response.token || 'patient-token-placeholder';
         this.auth.setToken(token);
         this.auth.setRole('PATIENT');
+        this.auth.setUsername(payload.email);
         this.submitting = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/patient-page/dash']);
       },
       error: (err: any) => {
         if (err.status === 404) {

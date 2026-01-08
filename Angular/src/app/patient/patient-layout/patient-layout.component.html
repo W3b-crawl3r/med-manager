@@ -1,0 +1,12 @@
+<div class="patient-layout">
+  <aside class="sidebar">
+    <div class="logo">MedManager</div>
+    <nav>
+      <a routerLink="/patient-page/dash" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

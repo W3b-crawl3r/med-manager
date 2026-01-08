@@ -240,10 +240,11 @@ toggleTheme() {
 
   isPatientRoute(): boolean {
     const url = this.router.url;
-    return url.startsWith('/patient-inscription') || 
-           url.startsWith('/patient-login') ||
-           url.startsWith('/patient/') ||
-           url === '/patients';
+      return url.startsWith('/patient-inscription') || 
+        url.startsWith('/patient-login') ||
+        url.startsWith('/patient/') ||
+        url.startsWith('/patient-page') ||
+        url === '/patients';
   }
 
   isAuthRoute(): boolean {

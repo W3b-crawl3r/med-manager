@@ -63,6 +63,19 @@ export const routes: Routes = [
         .then(m => m.PatientLoginComponent)
   },
 
+  // PATIENT LAYOUT + DASHBOARD
+  {
+    path: 'patient-page',
+    loadComponent: () => import('./patient/patient-layout/patient-layout.component').then(m => m.PatientLayoutComponent),
+    children: [
+      {
+        path: 'dash',
+        loadComponent: () => import('./patient/patient-dashboard/patient-dashboard.component').then(m => m.PatientDashboardComponent)
+      },
+      { path: '', pathMatch: 'full', redirectTo: 'dash' }
+    ]
+  },
+
   // SECRETARY LOGIN & DASHBOARD
   {
     path: 'secretary-login',
