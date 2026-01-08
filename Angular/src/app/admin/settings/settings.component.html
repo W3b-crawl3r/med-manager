@@ -1,1 +1,253 @@
-<p>settings works!</p>
+<div class="settings-container">
+    <!-- En-tête -->
+    <div class="settings-header">
+      <h1>Settings</h1>
+      <p>Manage your account and application preferences</p>
+    </div>
+  
+    <div class="settings-content">
+      <!-- Menu latéral -->
+      <div class="settings-sidebar">
+        <nav class="settings-nav">
+          <ul>
+            <li>
+              <a href="#" class="nav-item active" data-tab="profile">
+                <i class="icon">👤</i>
+                <span>Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-item" data-tab="security">
+                <i class="icon">🔒</i>
+                <span>Security</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-item" data-tab="notifications">
+                <i class="icon">🔔</i>
+                <span>Notifications</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-item" data-tab="privacy">
+                <i class="icon">🛡️</i>
+                <span>Privacy</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-item" data-tab="appearance">
+                <i class="icon">🎨</i>
+                <span>Appearance</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-item" data-tab="about">
+                <i class="icon">ℹ️</i>
+                <span>About</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+  
+      <!-- Contenu principal -->
+      <div class="settings-main">
+        <!-- Section Profil (active par défaut) -->
+        <div class="settings-section active" id="profile-tab">
+          <h2>Profile Settings</h2>
+          <p class="section-description">Update your personal information and contact details</p>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" value="Admin User" class="form-input">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" value="admin@medmanager.com" class="form-input">
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" value="+1 (555) 123-4567" class="form-input">
+            </div>
+            
+            <div class="form-group">
+              <label for="role">System Role</label>
+              <div class="role-display">
+                <span class="role-badge admin">Administrator</span>
+                <span class="role-id">ID: ADMIR001</span>
+              </div>
+            </div>
+            
+            <div class="form-group full-width">
+              <label for="bio">Bio</label>
+              <textarea id="bio" class="form-textarea" rows="4">System administrator with full access to all features and settings. Responsible for user management and system configuration.</textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+  
+        <!-- Section Sécurité -->
+        <div class="settings-section" id="security-tab">
+          <h2>Security Settings</h2>
+          <p class="section-description">Manage your password and account security</p>
+          
+          <div class="security-options">
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Password</h3>
+                <p>Last changed: 2024-12-01</p>
+              </div>
+              <button class="btn btn-outline">Change Password</button>
+            </div>
+            
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Two-Factor Authentication</h3>
+                <p>Add an extra layer of security to your account</p>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="twoFactor" checked>
+                <label for="twoFactor" class="toggle-slider"></label>
+              </div>
+            </div>
+            
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Session Management</h3>
+                <p>View and manage active sessions</p>
+              </div>
+              <button class="btn btn-outline">Manage Sessions</button>
+            </div>
+          </div>
+          
+          <div class="security-alerts">
+            <h3>Security Alerts</h3>
+            <div class="alert-item">
+              <input type="checkbox" id="loginAlert" checked>
+              <label for="loginAlert">Email me about new sign-ins</label>
+            </div>
+            <div class="alert-item">
+              <input type="checkbox" id="updateAlert" checked>
+              <label for="updateAlert">Notify me about security updates</label>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Section Notifications -->
+        <div class="settings-section" id="notifications-tab">
+          <h2>Notification Preferences</h2>
+          <p class="section-description">Configure how and when you receive notifications</p>
+          
+          <div class="notification-category">
+            <h3>Email Notifications</h3>
+            <div class="notification-option">
+              <div>
+                <h4>Appointment Reminders</h4>
+                <p>Receive reminders for upcoming appointments</p>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="appointmentEmail" checked>
+                <label for="appointmentEmail" class="toggle-slider"></label>
+              </div>
+            </div>
+            
+            <div class="notification-option">
+              <div>
+                <h4>System Alerts</h4>
+                <p>Important system updates and maintenance</p>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="systemEmail" checked>
+                <label for="systemEmail" class="toggle-slider"></label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="notification-category">
+            <h3>In-App Notifications</h3>
+            <div class="notification-option">
+              <div>
+                <h4>New Messages</h4>
+                <p>Notify when you receive new messages</p>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="messageNotif" checked>
+                <label for="messageNotif" class="toggle-slider"></label>
+              </div>
+            </div>
+            
+            <div class="notification-option">
+              <div>
+                <h4>Task Assignments</h4>
+                <p>Notify when new tasks are assigned to you</p>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="taskNotif" checked>
+                <label for="taskNotif" class="toggle-slider"></label>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Section À propos -->
+        <div class="settings-section" id="about-tab">
+          <h2>About Med Manager</h2>
+          <p class="section-description">Application information and version details</p>
+          
+          <div class="about-info">
+            <div class="about-card">
+              <h3>Application Version</h3>
+              <p class="version">v2.1.0</p>
+              <p class="update-status">Latest version</p>
+            </div>
+            
+            <div class="about-card">
+              <h3>Last Updated</h3>
+              <p>2024-12-15</p>
+            </div>
+            
+            <div class="about-card">
+              <h3>Support</h3>
+              <p>support@medmanager.com</p>
+              <p>+1 (800) 555-HELP</p>
+            </div>
+          </div>
+          
+          <div class="system-info">
+            <h3>System Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">User ID:</span>
+                <span class="info-value">ADMIR001</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Last Login:</span>
+                <span class="info-value">2024-12-19 14:30:22</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Account Created:</span>
+                <span class="info-value">2024-01-15</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Browser:</span>
+                <span class="info-value">Chrome 120.0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="legal-links">
+            <a href="#" class="legal-link">Privacy Policy</a>
+            <a href="#" class="legal-link">Terms of Service</a>
+            <a href="#" class="legal-link">Data Processing Agreement</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

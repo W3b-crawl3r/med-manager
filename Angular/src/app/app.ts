@@ -3,12 +3,11 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
-import { EcgLoaderComponent } from './components/ecg-loader/ecg-loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, RouterLink, FormsModule, EcgLoaderComponent],
+  imports: [RouterOutlet, CommonModule, RouterLink, FormsModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -17,7 +16,7 @@ export class App implements OnInit {
 
   // ===== Theme =====
   isDark = false;
-
+  
   // Live theme state
   currentTheme = signal('light');
 
@@ -94,7 +93,7 @@ export class App implements OnInit {
     private router: Router,
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Check for saved theme preference on init
@@ -102,28 +101,28 @@ export class App implements OnInit {
     this.isDark = savedTheme === 'dark';
     this.currentTheme.set(savedTheme);
     this.updateTheme(savedTheme);
-
+    
     // Simulate live chat messages
     this.simulateLiveChat();
-
+    
     // Debug log
     console.log('App initialized with theme:', savedTheme);
   }
 
-  toggleTheme() {
-    // Toggle local flag
-    this.isDark = !this.isDark;
+toggleTheme() {
+  // Toggle local flag
+  this.isDark = !this.isDark;
 
-    // Determine new theme string
-    const newTheme = this.isDark ? 'dark' : 'light';
+  // Determine new theme string
+  const newTheme = this.isDark ? 'dark' : 'light';
 
-    // Persist and update reactive state
-    localStorage.setItem('theme', newTheme);
-    this.currentTheme.set(newTheme);
+  // Persist and update reactive state
+  localStorage.setItem('theme', newTheme);
+  this.currentTheme.set(newTheme);
 
-    // Apply theme safely via updateTheme
-    this.updateTheme(newTheme);
-  }
+  // Apply theme safely via updateTheme
+  this.updateTheme(newTheme);
+}
 
   private updateTheme(theme: string) {
     console.log('Updating theme to:', theme);
@@ -167,13 +166,13 @@ export class App implements OnInit {
     console.log('  - class:', this.document.body.className);
     console.log('HTML data-theme:', this.document.documentElement.getAttribute('data-theme'));
     console.log('LocalStorage theme:', localStorage.getItem('theme'));
-
+    
     // Check CSS variables
     const bodyStyle = getComputedStyle(this.document.body);
     console.log('CSS Variables on body:');
     console.log('  --background:', bodyStyle.getPropertyValue('--background'));
     console.log('  --text-primary:', bodyStyle.getPropertyValue('--text-primary'));
-
+    
     // Try to force theme
     console.log('Trying to force dark theme...');
     this.document.body.setAttribute('data-theme', 'dark');
@@ -205,26 +204,26 @@ export class App implements OnInit {
   // ===== Route Helpers =====
   isDoctorRoute(): boolean {
     const url = this.router.url;
-    return url.startsWith('/doctor-inscription') ||
-      url.startsWith('/doctor-login') ||
-      url.startsWith('/doctor-page') ||
-      url === '/doctor-dashboard';
+    return url.startsWith('/doctor-inscription') || 
+           url.startsWith('/doctor-login') || 
+           url.startsWith('/doctor-page') ||
+           url === '/doctor-dashboard';
   }
 
   isSecretaryRoute(): boolean {
     const url = this.router.url;
-    return url.startsWith('/secretary-inscription') ||
-      url.startsWith('/secretary-login') ||
-      url === '/secretary-dashboard';
+    return url.startsWith('/secretary-inscription') || 
+           url.startsWith('/secretary-login') ||
+           url === '/secretary-dashboard';
   }
 
-
+  
 
   isPatientRoute(): boolean {
     const url = this.router.url;
-    return url.startsWith('/patient-inscription') ||
-      url.startsWith('/patient-login') ||
-      url === '/patient-dashboard';
+    return url.startsWith('/patient-inscription') || 
+           url.startsWith('/patient-login') ||
+           url === '/patient-dashboard';
   }
 
   isAdminRoute(): boolean {
@@ -243,11 +242,11 @@ export class App implements OnInit {
     const target = event.target as HTMLElement;
     const registerMenu = this.document.querySelector('.register-menu');
     const registerButton = this.document.querySelector('.primary-btn');
-
+    
     // Close register menu if clicked outside
-    if (registerMenu && registerButton &&
-      !registerMenu.contains(target) &&
-      !registerButton.contains(target)) {
+    if (registerMenu && registerButton && 
+        !registerMenu.contains(target) && 
+        !registerButton.contains(target)) {
       this.registerMenuOpen.set(false);
     }
   }
@@ -286,83 +285,83 @@ export class App implements OnInit {
 
   // Enhanced doctors data with live features
   doctors = [
-    {
-      id: 1,
-      name: 'Dr. Sarah Bennani',
-      specialty: 'Cardiologist',
-      clinic: 'Heart Care Clinic',
-      location: 'Casablanca',
-      experience: 12,
-      rating: 4.8,
+    { 
+      id: 1, 
+      name: 'Dr. Sarah Bennani', 
+      specialty: 'Cardiologist', 
+      clinic: 'Heart Care Clinic', 
+      location: 'Casablanca', 
+      experience: 12, 
+      rating: 4.8, 
       nextAvailable: 'Tomorrow 10 AM',
       availability: ['Mon', 'Wed', 'Fri', 'Sat'],
       online: true,
-      image: 'assets/doctors/doc1.jpg'
+      image: 'assets/doctors/doc1.jpg' 
     },
-    {
-      id: 2,
-      name: 'Dr. Youssef Amrani',
-      specialty: 'Dermatologist',
-      clinic: 'Skin Center',
-      location: 'Rabat',
-      experience: 9,
-      rating: 4.6,
+    { 
+      id: 2, 
+      name: 'Dr. Youssef Amrani', 
+      specialty: 'Dermatologist', 
+      clinic: 'Skin Center', 
+      location: 'Rabat', 
+      experience: 9, 
+      rating: 4.6, 
       nextAvailable: 'Today 3 PM',
       availability: ['Tue', 'Thu', 'Sat'],
       online: false,
-      image: 'assets/doctors/doc2.jpg'
+      image: 'assets/doctors/doc2.jpg' 
     },
-    {
-      id: 3,
-      name: 'Dr. Amina El Fassi',
-      specialty: 'Pediatrician',
-      clinic: 'Children\'s Health Center',
-      location: 'Marrakech',
-      experience: 15,
-      rating: 4.9,
+    { 
+      id: 3, 
+      name: 'Dr. Amina El Fassi', 
+      specialty: 'Pediatrician', 
+      clinic: 'Children\'s Health Center', 
+      location: 'Marrakech', 
+      experience: 15, 
+      rating: 4.9, 
       nextAvailable: 'Monday 9 AM',
       availability: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
       online: true,
-      image: 'assets/doctors/doc3.jpg'
+      image: 'assets/doctors/doc3.jpg' 
     },
-    {
-      id: 4,
-      name: 'Dr. Karim Bouzidi',
-      specialty: 'Orthopedic Surgeon',
-      clinic: 'Bone & Joint Clinic',
-      location: 'Casablanca',
-      experience: 18,
-      rating: 4.7,
+    { 
+      id: 4, 
+      name: 'Dr. Karim Bouzidi', 
+      specialty: 'Orthopedic Surgeon', 
+      clinic: 'Bone & Joint Clinic', 
+      location: 'Casablanca', 
+      experience: 18, 
+      rating: 4.7, 
       nextAvailable: 'Wednesday 2 PM',
       availability: ['Wed', 'Thu', 'Sat'],
       online: true,
-      image: 'assets/doctors/doc4.jpg'
+      image: 'assets/doctors/doc4.jpg' 
     },
-    {
-      id: 5,
-      name: 'Dr. Fatima Zahra Alaoui',
-      specialty: 'Neurologist',
-      clinic: 'Neuro Care Center',
-      location: 'Rabat',
-      experience: 11,
-      rating: 4.8,
+    { 
+      id: 5, 
+      name: 'Dr. Fatima Zahra Alaoui', 
+      specialty: 'Neurologist', 
+      clinic: 'Neuro Care Center', 
+      location: 'Rabat', 
+      experience: 11, 
+      rating: 4.8, 
       nextAvailable: 'Friday 11 AM',
       availability: ['Mon', 'Fri'],
       online: false,
-      image: 'assets/doctors/doc5.jpg'
+      image: 'assets/doctors/doc5.jpg' 
     },
-    {
-      id: 6,
-      name: 'Dr. Mehdi Benjelloun',
-      specialty: 'Dentist',
-      clinic: 'Smile Dental Clinic',
-      location: 'Tangier',
-      experience: 8,
-      rating: 4.5,
+    { 
+      id: 6, 
+      name: 'Dr. Mehdi Benjelloun', 
+      specialty: 'Dentist', 
+      clinic: 'Smile Dental Clinic', 
+      location: 'Tangier', 
+      experience: 8, 
+      rating: 4.5, 
       nextAvailable: 'Today 5 PM',
       availability: ['Tue', 'Wed', 'Thu', 'Fri'],
       online: true,
-      image: 'assets/doctors/doc6.jpg'
+      image: 'assets/doctors/doc6.jpg' 
     }
   ];
 
@@ -379,8 +378,8 @@ export class App implements OnInit {
       (this.selectedSpecialty === 'all' || d.specialty === this.selectedSpecialty) &&
       (this.selectedCity === 'all' || d.location === this.selectedCity) &&
       (d.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        d.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        d.clinic.toLowerCase().includes(this.searchTerm.toLowerCase()))
+       d.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+       d.clinic.toLowerCase().includes(this.searchTerm.toLowerCase()))
     );
   }
 
@@ -389,9 +388,9 @@ export class App implements OnInit {
   }
 
   hasActiveFilters(): boolean {
-    return this.searchTerm !== '' ||
-      this.selectedSpecialty !== 'all' ||
-      this.selectedCity !== 'all';
+    return this.searchTerm !== '' || 
+           this.selectedSpecialty !== 'all' || 
+           this.selectedCity !== 'all';
   }
 
   clearFilters() {
