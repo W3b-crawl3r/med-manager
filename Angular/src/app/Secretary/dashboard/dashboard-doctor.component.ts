@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AppointmentService, Appointment } from '../services/appointment.service';
-import { PatientService, Patient } from '../services/patient.service';
+import { AppointmentService, Appointment } from '../../services/appointment.service';
+import { PatientService, Patient } from '../../services/patient.service';
 
 @Component({
   selector: 'app-dashboard-doctor',

@@ -80,9 +80,30 @@ export class PatientService {
     });
   }
 
-  addPatient(patient: Omit<Patient, 'id'>): Observable<Patient> {
-    return this.http.post<Patient>(`${this.base}/add`, patient);
+  addPatient(patient: Patient): Observable<Patient> {
+    // Si tu as un backend, tu peux garder l'appel HTTP
+    return new Observable<Patient>(subscriber => {
+      try {
+        // Générer un ID unique si absent
+        if (!patient.id) {
+          patient.id = 'P' + (this.mockPatients.length + 1).toString().padStart(3, '0');
+        }
+  
+        // Ajouter en local
+        this.mockPatients.push(patient);
+  
+        // Mettre à jour le BehaviorSubject
+        this.patientsSubject.next(this.mockPatients);
+  
+        // Retourner le patient ajouté
+        subscriber.next(patient);
+        subscriber.complete();
+      } catch (err) {
+        subscriber.error(err);
+      }
+    });
   }
+  
 
   updatePatient(id: string, patient: Partial<Patient>): Observable<Patient> {
     return this.http.put<Patient>(`${this.base}/${id}`, patient);
@@ -103,4 +124,20 @@ export class PatientService {
       p.fullName.toLowerCase().includes(query.toLowerCase())
     );
   }
+ 
+    // ...
+  
+    generateNextId(): string {
+      const lastPatient = this.mockPatients[this.mockPatients.length - 1];
+      if (!lastPatient) {
+        return 'P001';
+      }
+      const lastIdNum = parseInt(lastPatient.id.replace('P', ''), 10);
+      const nextIdNum = lastIdNum + 1;
+      return 'P' + nextIdNum.toString().padStart(3, '0');
+    }
+  
+
+  
+  
 }

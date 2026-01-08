@@ -1,0 +1,73 @@
+<div class="patient-profile-container">
+    <div class="patient-profile" *ngIf="patient">
+      <div class="profile-header">
+        <button class="close-btn" (click)="goBack()">✕</button>
+        <div class="avatar-lg">{{ patient.fullName.charAt(0).toUpperCase() }}</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'info'" (click)="activeTab = 'info'">Info</button>
+        <button class="tab-btn" [class.active]="activeTab === 'visits'" (click)="activeTab = 'visits'">Visits</button>
+        <button class="tab-btn" [class.active]="activeTab === 'history'" (click)="activeTab = 'history'">History</button>
+      </div>
+
+      <div class="tab-content" *ngIf="activeTab === 'info'">
+        <div class="info-group">
+          <label>Full Name</label>
+          <p class="value">{{ patient.fullName }}</p>
+        </div>
+
+        <div class="info-row">
+          <div class="info-group">
+            <label>Age</label>
+            <p class="value">{{ patient.age }} years</p>
+          </div>
+          <div class="info-group">
+            <label>Blood Type</label>
+            <p class="value">{{ patient.bloodType }}</p>
+          </div>
+        </div>
+
+        <div class="info-group">
+          <label>Gender</label>
+          <p class="value">{{ patient.gender }}</p>
+        </div>
+
+        <div class="info-row">
+          <div class="info-group">
+            <label>Phone</label>
+            <p class="value">{{ patient.phone }}</p>
+          </div>
+          <div class="info-group">
+            <label>Email</label>
+            <p class="value">{{ patient.email }}</p>
+          </div>
+        </div>
+
+        <div class="info-group">
+          <label>Address</label>
+          <p class="value">{{ patient.address }}</p>
+        </div>
+
+        <div class="info-group">
+          <label>Allergies</label>
+          <div class="allergies">
+            <span class="allergy-tag" *ngFor="let allergy of patient.allergies">{{ allergy }}</span>
+            <span *ngIf="patient.allergies.length === 0" class="no-allergies">No known allergies</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="activeTab === 'visits'">
+        <p>Coming soon...</p>
+      </div>
+
+      <div class="tab-content" *ngIf="activeTab === 'history'">
+        <p>Coming soon...</p>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="!patient">
+      Loading patient information...
+    </div>
+  </div>

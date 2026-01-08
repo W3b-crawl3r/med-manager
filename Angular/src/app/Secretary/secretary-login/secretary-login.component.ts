@@ -54,7 +54,7 @@ export class SecretaryLoginComponent {
   t(key: string) {
     return this.translations[this.currentLang]?.[key] ?? key;
   }
-
+  
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -84,8 +84,6 @@ export class SecretaryLoginComponent {
 
     const payload = this.form.value;
     this.submitting = true;
-
-    // Quick frontend-only demo login (no backend)
     if (payload.email === this.DEMO_EMAIL && payload.password === this.DEMO_PASSWORD) {
       // simulate successful login
       this.auth.setToken('demo-secretary-token');
@@ -94,7 +92,6 @@ export class SecretaryLoginComponent {
       this.router.navigate(['/secretary/dashboard']);
       return;
     }
-
     this.auth.loginSecretary(payload).subscribe({
       next: (response: any) => {
         // Assuming the response contains a token

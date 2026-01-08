@@ -37,6 +37,13 @@ export class SecretaryInscriptionComponent {
       confirmPassword: 'Confirm Password',
       confirmPasswordPlaceholder: 'Confirm your password',
       passwordMismatch: 'Passwords do not match.',
+      passwordRequired: 'Password is required.',
+      passwordMinLength: 'Password must be at least 6 characters.',
+      confirmPasswordRequired: 'Confirm password is required.',
+      nameRequired: 'Full name is required.',
+      phoneRequired: 'Phone number is required.',
+      emailRequired: 'Email is required.',
+      emailInvalid: 'Please enter a valid email address.',
       phone: 'Phone Number',
       hospital: 'Hospital/Clinic',
       department: 'Department',
@@ -58,6 +65,13 @@ export class SecretaryInscriptionComponent {
       confirmPassword: 'Confirmez le mot de passe',
       confirmPasswordPlaceholder: 'Confirmez votre mot de passe',
       passwordMismatch: 'Les mots de passe ne correspondent pas.',
+      passwordRequired: 'Le mot de passe est requis.',
+      passwordMinLength: 'Le mot de passe doit contenir au moins 6 caractères.',
+      confirmPasswordRequired: 'La confirmation du mot de passe est requise.',
+      nameRequired: 'Le nom complet est requis.',
+      phoneRequired: 'Le numéro de téléphone est requis.',
+      emailRequired: 'L\'email est requis.',
+      emailInvalid: 'Veuillez entrer une adresse email valide.',
       phone: 'Numéro de téléphone',
       hospital: 'Hôpital / Clinique',
       department: 'Département',
@@ -105,6 +119,15 @@ export class SecretaryInscriptionComponent {
   selectUser(user: string) {
     this.currentUser = user;
     this.userMenuOpen = false;
+
+    // Redirect depending on user type
+    if (user === 'Doctor') {
+      this.router.navigate(['/doctor-inscription']);
+    } else if (user === 'Patient') {
+      this.router.navigate(['/patient-inscription']);
+    } else if (user === 'Secretaire') {
+      this.router.navigate(['/secretary-inscription']); // current page
+    }
   }
 
   goBack() {

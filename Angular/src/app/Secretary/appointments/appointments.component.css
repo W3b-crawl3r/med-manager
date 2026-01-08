@@ -1,7 +1,8 @@
     .patients-container {
       display: flex;
-      min-height: 70vh;
+      min-height: 100vh;
       background: #f9fafb;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     }
 
     .sidebar {
@@ -12,7 +13,11 @@
       position: sticky;
       top: 0;
       height: 100vh;
-      overflow-y: auto;
+      width: 250px;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .logo {
@@ -54,6 +59,10 @@
       display: block;
       width: 100%;
       padding: 0;
+      color: #111827;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.4;
     }
     .role {
       display: block;
@@ -158,8 +167,8 @@
 
 .form-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  /* padding: 0.75rem; */
+  border: 3px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
 }
@@ -259,14 +268,14 @@
 }
 
 .status-pending {
-  background: #fef3c7;
-  color: #92400e;
+  
+  
   padding: 0.25rem 0.75rem;
-        background: #0d6efd;
+        background: #666b72;
         color: white;
         border: none;
-        padding: 8px 14px;
-        border-radius: 6px;
+        padding: 5px 14px;
+        border-radius: 25px;
         cursor: pointer;
       }
   /* background: #3b82f6;

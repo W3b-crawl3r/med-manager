@@ -1,0 +1,70 @@
+  <div class="doctor-container">
+  <div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- LOGO -->
+    <div class="logo">
+      <img src="../../../assets/medMan-white.png" class="logo-img" alt="MedMan Logo" />
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile">
+      <div class="avatar">D</div>
+      <div>
+        <p class="name">Dr. Johnson</p>
+        <span class="role">DOCTOR</span>
+      </div>
+    </div>
+
+    <!-- MENU -->
+    <nav class="menu">
+      <a routerLink="/doctor-page/dash" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="/doctor-page/patients" routerLinkActive="active">Patients</a>
+      <a routerLink="/doctor-page/appointments" routerLinkActive="active">Appointments</a>
+      <a routerLink="/doctor-page/visits" routerLinkActive="active">Visits</a>
+    </nav>
+
+    <!-- LOGOUT -->
+    <button class="logout" (click)="logout()">Logout</button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <h2>Welcome back!</h2>
+
+      <div class="notifications" (click)="toggleNotifications()">
+        <span class="material-icons">notifications</span>
+
+        <span class="badge-count" *ngIf="unreadCount > 0">
+          {{ unreadCount }}
+        </span>
+
+        <!-- NOTIFICATIONS DROPDOWN -->
+        <div class="notif-dropdown" *ngIf="notificationsOpen">
+          <p class="notif-title">Notifications</p>
+
+          <div
+            class="notif-item"
+            *ngFor="let n of notifications"
+            [class.unread]="!n.read"
+            (click)="markAsRead(n)"
+          >
+            {{ n.message }}
+          </div>
+
+          <p class="notif-empty" *ngIf="notifications.length === 0">
+            No notifications
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="dashboard">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  </div>
+</div>

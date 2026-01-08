@@ -86,15 +86,20 @@ export class DoctorInscriptionComponent {
 
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-      specialty: ['', Validators.required],
-      phone: ['', Validators.required],
-      licenseNumber: ['', Validators.required]
-    }, { validators: DoctorInscriptionComponent.passwordsMatch });
+ this.form = this.fb.group({
+  name: ['', Validators.required],
+  email: ['', [Validators.required, Validators.email, Validators.pattern(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+  password: ['', [Validators.required, Validators.minLength(6)]],
+  confirmPassword: ['', Validators.required],
+  specialty: ['', Validators.required],
+  phone: ['', [Validators.required, Validators.pattern(/^0\d{9}$/)]], // <-- Phone regex
+  licenseNumber: ['', Validators.required],
+  hospital: [''],
+  experience: [''],
+  terms: [false, Validators.requiredTrue]
+}, { validators: DoctorInscriptionComponent.passwordsMatch });
+
+
   }
 
      toggleLanguageMenu() {
@@ -147,10 +152,20 @@ export class DoctorInscriptionComponent {
     }
   }
 
-  selectUser(user: string) {
-    this.currentUser = user;
-    this.userMenuOpen = false;
+selectUser(user: string) {
+  this.currentUser = user;
+  this.userMenuOpen = false;
+
+  // Redirect depending on user type
+  if (user === 'Doctor') {
+    this.router.navigate(['/doctor-inscription']);  // current page
+  } else if (user === 'Patient') {
+    this.router.navigate(['/patient-inscription']); // patient page
+  } else if (user === 'Secretaire') {
+    this.router.navigate(['/secretary-inscription']); // secretary page
   }
+}
+
 
   goBack() {
     this.router.navigate(['/']);
