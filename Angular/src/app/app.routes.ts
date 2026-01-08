@@ -97,5 +97,10 @@ export const routes: Routes = [
       import('./Secretary/patients-list/patients-list.component')
         .then(m => m.PatientsListComponent),
     canActivate: [secretaryGuard]
-  }
+  },
+  
+  
+    
+  
+  
 ];

@@ -308,3 +308,10 @@ nav a.active {
   background: #e5e7eb;
   border-color: #9ca3af;
 }
+.logout {
+  border: none;
+  background: transparent;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}

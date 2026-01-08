@@ -87,24 +87,6 @@
         <!-- Allergies -->
         <label class="form-field">
           <span>{{ t('allergies') }}</span>
-<<<<<<< HEAD
-          <input formControlName="allergies" />
-        </label>
-
-      </div>
-
-      <!-- ===== Footer ===== -->
-      <div class="form-footer">
-        <button
-          class="btn-submit"
-          type="submit"
-          [disabled]="form.invalid || !selectedGender || submitting">
-          {{ t('register') }}
-        </button>
-
-        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-        <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-=======
           <input formControlName="allergies" placeholder="{{ t('allergies') }}" />
         </label>
       </div>
@@ -117,7 +99,6 @@
 
         <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
         <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
->>>>>>> 496039acdefb8500819be88086c3977f8808f9df
 
         <p class="login-link">
           {{ t('alreadyAccountPrefix') }}

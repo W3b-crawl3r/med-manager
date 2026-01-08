@@ -90,4 +90,8 @@ export class PatientsListComponent implements OnInit {
     this.allergiesInput = '';
     this.showForm = false;
   }
+  logout() {
+    localStorage.clear();
+    location.href = '/';
+  }
 }
