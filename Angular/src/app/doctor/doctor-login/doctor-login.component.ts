@@ -19,8 +19,6 @@ export class DoctorLoginComponent {
   form: FormGroup;
   submitting = false;
   errorMessage = '';
-private DEMO_EMAIL = 'doctor@medmanager.com';
-  private DEMO_PASSWORD = 'doctor123';
   showLanguageMenu = false;
   currentLang = 'en';
   currentFlag = 'https://flagcdn.com/gb.svg';
@@ -66,14 +64,10 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
     private router: Router
   ) {
     this.form = this.fb.group({
+      // Treat this as username field (backend expects username, not necessarily an email)
       email: ['', [Validators.required]],
-      password: ['', [Validators.required]]
-    });
-    
-    // Pre-fill demo credentials for testing
-    this.form.patchValue({
-      email: this.DEMO_EMAIL,
-      password: this.DEMO_PASSWORD
+      // Match seeded backend passwords like "pass6" (length 5)
+      password: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -88,19 +82,9 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
   }
 
   onSubmit() {
-    console.log('Login form submitted');
-    console.log('Form status:', this.form.status);
+    console.log('onSubmit called');
+    console.log('Form valid:', this.form.valid);
     console.log('Form value:', this.form.value);
-    console.log('Email control:', { 
-      value: this.form.get('email')?.value,
-      valid: this.form.get('email')?.valid,
-      errors: this.form.get('email')?.errors
-    });
-    console.log('Password control:', { 
-      value: this.form.get('password')?.value,
-      valid: this.form.get('password')?.valid,
-      errors: this.form.get('password')?.errors
-    });
     
     if (this.form.invalid) {
       console.log('Form is invalid');
@@ -109,36 +93,16 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
     }
 
     const payload = this.form.value;
-    console.log('Login payload:', { email: payload.email, hasPassword: !!payload.password });
-    
     this.submitting = true;
     this.errorMessage = '';
-    
-    // ✅ DEMO LOGIN (early return, clean)
-    if (
-      payload?.email === this.DEMO_EMAIL &&
-      payload?.password === this.DEMO_PASSWORD
-    ) {
-      console.log('Demo login successful');
-      this.auth.setToken('demo-doctor-token');
-      this.auth.setRole('DOCTOR');
-      this.auth.setUsername(payload.email);
-      this.submitting = false;
-      this.router.navigate(['/doctor-page/dash']);
-      return;
-    }
 
     // ✅ REAL LOGIN
-    console.log('Attempting real backend login...');
+    console.log('Making login request with payload:', payload);
     this.auth.loginDoctor(payload).subscribe({
       next: (response: any) => {
         console.log('Login response received:', response);
-        
         if (!response?.token) {
-          console.error('No token in response');
-          this.errorMessage = 'Login failed: No token received.';
-          this.submitting = false;
-          return;
+          throw new Error('Token missing');
         }
 
         console.log('Login successful, setting token and navigating');
@@ -150,20 +114,22 @@ private DEMO_EMAIL = 'doctor@medmanager.com';
       },
 
       error: (err: any) => {
-        console.error('Login error:', err);
-        this.submitting = false;
-        
+        console.log('Login error:', err);
         if (err.status === 404) {
           this.errorMessage = 'Account not found. Please register first.';
         } else if (err.status === 401) {
           this.errorMessage = 'Invalid email or password.';
         } else if (err.status === 403) {
-          this.errorMessage = 'Access denied. Please ensure you are logging in as a Doctor.';
-        } else if (err.status === 0) {
-          this.errorMessage = 'Cannot connect to server. Please check if the backend is running.';
+          this.errorMessage = 'Access denied. Please check your credentials.';
         } else {
-          this.errorMessage = 'Login failed. Please try again. (Error: ' + (err.status || 'Unknown') + ')';
+          this.errorMessage = 'Login failed. Please try again.';
         }
+        this.submitting = false;
+      },
+
+      complete: () => {
+        console.log('Login request completed');
+        this.submitting = false;
       }
     });
   }

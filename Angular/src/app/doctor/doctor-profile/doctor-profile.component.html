@@ -1,0 +1,50 @@
+<div class="profile-page">
+  <div class="profile-header">
+    <div class="avatar-large">SB</div>
+    <div class="meta">
+      <h2>{{ profile.name }}</h2>
+      <p class="city">{{ profile.city }}</p>
+      <p class="specialty">{{ profile.specialty }}</p>
+    </div>
+    <div class="actions">
+      <button *ngIf="!edit" class="btn primary" (click)="startEdit()">Edit</button>
+      <div *ngIf="edit">
+        <button class="btn" (click)="cancel()">Cancel</button>
+        <button class="btn primary" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-body">
+    <form *ngIf="edit; else viewMode" (ngSubmit)="save()">
+      <label>Name</label>
+      <input [(ngModel)]="draft.name" name="name" />
+
+      <label>City</label>
+      <input [(ngModel)]="draft.city" name="city" />
+
+      <label>Address</label>
+      <input [(ngModel)]="draft.address" name="address" />
+
+      <label>Phone</label>
+      <input [(ngModel)]="draft.phone" name="phone" />
+
+      <label>Fax</label>
+      <input [(ngModel)]="draft.fax" name="fax" />
+
+      <label>Email</label>
+      <input [(ngModel)]="draft.email" name="email" />
+
+      <label>Medical / Specialty</label>
+      <textarea rows="3" [(ngModel)]="draft.specialty" name="specialty"></textarea>
+    </form>
+
+    <ng-template #viewMode>
+      <div class="row"><strong>Address:</strong> {{ profile.address }}</div>
+      <div class="row"><strong>Phone:</strong> {{ profile.phone }}</div>
+      <div class="row"><strong>Fax:</strong> {{ profile.fax }}</div>
+      <div class="row"><strong>Email:</strong> {{ profile.email }}</div>
+      <div class="row"><strong>Specialty:</strong> {{ profile.specialty }}</div>
+    </ng-template>
+  </div>
+</div>

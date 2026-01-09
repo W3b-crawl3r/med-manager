@@ -90,7 +90,7 @@ export class DoctorInscriptionComponent {
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
  this.form = this.fb.group({
   name: ['', Validators.required],
-  email: ['', [Validators.required]],
+  email: ['', [Validators.required, Validators.email, Validators.pattern(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
   password: ['', [Validators.required, Validators.minLength(6)]],
   confirmPassword: ['', Validators.required],
   specialty: ['', Validators.required],
@@ -180,22 +180,20 @@ selectUser(user: string) {
       return;
     }
 
+    const fd = new FormData();
     const val = this.form.value;
-    const payload = {
-      username: val.email, // Use email as username for login
-      email: val.email,
-      password: val.password,
-      specialty: val.specialty,
-      phone: val.phone,
-      licenseNumber: val.licenseNumber,
-      hospital: val.hospital || '',
-      experience: val.experience || 0
-    };
+    fd.append('name', val.name);
+    fd.append('email', val.email);
+    fd.append('password', val.password);
+    fd.append('specialty', val.specialty);
+    fd.append('phone', val.phone);
+    fd.append('licenseNumber', val.licenseNumber);
+    if (this.identityFile) fd.append('identityCard', this.identityFile, this.identityFile.name);
+    if (this.certificateFile) fd.append('certificate', this.certificateFile, this.certificateFile.name);
 
     this.submitting = true;
-    this.auth.registerDoctor(payload).subscribe({
-      next: (response) => {
-        console.log('Registration response:', response);
+    this.auth.registerDoctor(fd).subscribe({
+      next: () => {
         this.successMessage = 'Registration successful';
         this.submitting = false;
         
